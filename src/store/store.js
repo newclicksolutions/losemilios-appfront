@@ -6453,66 +6453,54 @@ userdata:[
   },
   // footer data
   footerData: {
-    content: "The world's first and largest digital marketplace for crypto collectibles and non-fungible tokens (NFTs).",
+    content: "¡Bienvenidos al paraíso de los sabores irresistibles! En los emilios te ofrecemos una explosión de delicias en cada bocado. ",
     footerList: [
       {
         id: 1,
-        title: 'Marketplace',
+        title: 'Combos',
         navList: [
           {
-            title: 'All NFTs',
+            title: 'Combo 1',
             path: 'explore'
           },
           {
-            title: 'Art',
+            title: 'Combo 2',
             path: 'explore'
           },
           {
-            title: 'Music',
+            title: 'Combo 3',
             path: 'explore'
           },
           {
-            title: 'Domain Names',
-            path: 'explore'
-          },
-          {
-            title: 'Virtual World',
+            title: 'Combo 4',
             path: 'explore'
           }
         ]
       },
       {
         id: 2,
-        title: 'My Account',
+        title: 'Menu',
         navList: [
           {
-            title: 'Profile',
+            title: 'Menu1',
             path: 'profile'
           },
           {
-            title: 'My Offers',
+            title: 'Menu2',
             path: 'offers'
           },
           {
-            title: 'Activity',
+            title: 'Menu3',
             path: 'activity'
-          },
-          {
-            title: 'Sales & Purchase',
-            path: 'purchases-sales'
-          },
-          {
-            title: 'Payment Methods',
-            path: 'payment-methods'
           }
         ]
       },
       {
         id: 3,
-        title: 'Company',
+        title: 'Domicilios',
         navList: [
           {
-            title: 'About',
+            title: 'Nosotros',
             path: 'about-us'
           },
           {
@@ -6520,36 +6508,25 @@ userdata:[
             path: 'blog'
           },
           {
-            title: 'Contact',
+            title: 'Contacto',
             path: 'contact'
-          },
-          {
-            title: 'Careers',
-            path: 'about-us'
           }
         ]
       }
     ],
     footerListTwo: [
       {
-        title: 'Explore',
-        path: 'explore'
-      },
-      {
-        title: 'Activity',
+        title: 'Pedidos',
         path: 'activity'
       },
       {
         title: 'Login',
         path: 'login'
       },
-      {
-        title: 'Wallet',
-        path: 'wallet'
-      }
+  
     ]
   },
-  copyTitle: 'Copyright © 2021 Maxibuku.'
+  copyTitle: 'Copyright © 2023 Newclicksoluciones.com'
 }
 
 export default SectionData

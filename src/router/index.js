@@ -49,7 +49,6 @@ const routes = [
     name: 'Register',
     component: () => import('../pages/Register.vue')
   },
-
 ];
 
 const router = createRouter({
