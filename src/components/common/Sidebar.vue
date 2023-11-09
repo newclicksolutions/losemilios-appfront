@@ -32,11 +32,13 @@
                                 <h4>{{ $formatoMoneda(totalSum + (5300 + 1000)) }}</h4>
                             </li>
                         </ul>
+
                     </div>
                 </div>
             </div>
             <a :href="SectionData.placeBidModal.btnLink" class="btn btn-primary d-block">Hacer pedido</a>
         </div><!-- end sidebar-widget -->
+
     </div><!-- end sidebar -->
 </template>
 <script>

@@ -33,51 +33,7 @@ const routes = [
     name: 'explore',
     component: () => import('../pages/Explore.vue')
   },
-  {
-    path: '/author',
-    name: 'author',
-    component: () => import('../pages/Author.vue')
-  },
-  {
-    path: '/about-us',
-    name: 'about-us',
-    component: () => import('../pages/AboutUs.vue')
-  },
-  {
-    path: '/activity',
-    name: 'activity',
-    component: () => import('../pages/Activity.vue')
-  },
-  {
-    path: '/ranking',
-    name: 'ranking',
-    component: () => import('../pages/Ranking.vue')
-  },
-  {
-    path: '/wallet',
-    name: 'wallet',
-    component: () => import('../pages/Wallet.vue')
-  },
-  {
-    path: '/wallet-v2',
-    name: 'wallet-v2',
-    component: () => import('../pages/WalletTwo.vue')
-  },
-  {
-    path: '/blog',
-    name: 'blog',
-    component: () => import('../pages/Blog.vue')
-  },
-  {
-    path: '/blog-detail-:id',
-    name:'NewsDetail',
-    component: () => import('../pages/NewsDetail.vue'),
-  },
-  {
-    path: '/blog-detail',
-    name: 'blog-details',
-    component: () => import('../pages/BlogDetail.vue')
-  },
+
   {
     path: '/pedido',
     name: 'pedido',
@@ -93,91 +49,7 @@ const routes = [
     name: 'Register',
     component: () => import('../pages/Register.vue')
   },
-  {
-    path: '/offers',
-    name: 'Offer',
-    component: () => import('../pages/Offers.vue')
-  },
-  {
-    path: '/activity-v2',
-    name: 'activity-v2',
-    component: () => import('../pages/Activity-v2.vue')
-  },
-  {
-    path: '/purchases-sales',
-    name: 'purchases-sales',
-    component: () => import('../pages/PurchasesSales.vue')
-  },
-  {
-    path: '/transactions',
-    name: 'transactions',
-    component: () => import('../pages/Transactions.vue')
-  },
-  {
-    path: '/display',
-    name: 'display',
-    component: () => import('../pages/Display.vue')
-  },
-  {
-    path: '/redeem',
-    name: 'redeem',
-    component: () => import('../pages/Redeem.vue')
-  },
-  {
-    path: '/deposit-enfties',
-    name: 'deposit-enfties',
-    component: () => import('../pages/DepositEnfties.vue')
-  },
-  {
-    path: '/profile',
-    name: 'profile',
-    component: () => import('../pages/Profile.vue')
-  },
-  {
-    path: '/account',
-    name: 'account',
-    component: () => import('../pages/Account.vue')
-  },
-  {
-    path: '/payment-methods',
-    name: 'payment-methods',
-    component: () => import('../pages/PaymentMethods.vue')
-  },
-  {
-    path: '/seller-settings',
-    name: 'seller-settings',
-    component: () => import('../pages/SellerSettings.vue')
-  },
-  {
-    path: '/notifications',
-    name: 'notifications',
-    component: () => import('../pages/Notifications.vue')
-  },
-  {
-    path: '/security',
-    name: 'security',
-    component: () => import('../pages/Security.vue')
-  },
-  {
-    path: '/create',
-    name: 'create',
-    component: () => import('../pages/Create.vue')
-  },
-  {
-    path: '/create-single',
-    name: 'create-single',
-    component: () => import('../pages/CreateSingle.vue')
-  },
-  {
-    path: '/create-multiple',
-    name: 'create-multiple',
-    component: () => import('../pages/CreateMultiple.vue')
-  },
-  {
-    path: '/contact',
-    name: 'contact',
-    component: () => import('../pages/Contact.vue')
-  }
+
 ];
 
 const router = createRouter({

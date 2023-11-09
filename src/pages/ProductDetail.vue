@@ -13,7 +13,7 @@
               <div class="item-detail-img-container mb-4">
                 <img :src="imgLg" alt="" class="w-100 rounded-3" />
               </div>
-             
+
             </div>
             <!-- end item-detail-content -->
           </div>
@@ -21,11 +21,9 @@
           <div class="col-lg-6">
             <div class="item-detail-content mt-4 mt-lg-0">
               <h1 class="item-detail-title mb-2">{{ title }}</h1>
-           
+
               <p class="item-detail-text mb-4">{{ content }}</p>
-              <div
-                class="card-price-wrap d-flex align-items-center justify-content-sm-between mb-3"
-              >
+              <div class="card-price-wrap d-flex align-items-center justify-content-sm-between mb-3">
                 <div class="me-5 me-sm-2">
                   <span class="card-price-number">{{ $formatoMoneda(price) }}</span>
                 </div>
@@ -39,7 +37,7 @@
                         <span class="description">{{ item.title }}</span>
                       </div>
                       <div class="dv2">
-                        <span class="addprice">+{{$formatoMoneda( item.price) }}</span>
+                        <span class="addprice">+{{ $formatoMoneda(item.price) }}</span>
                         <button @click="decrement(item)">-</button>
                         <input type="number" v-model="item.value" @input="limitInput(item)" />
                         <button @click="increment(item)">+</button>
@@ -57,15 +55,8 @@
                     <button @click="add()">+</button>
                   </li>
                   <li class="dv2">
-                    <a
-                    @click="saveCart"
-                      href="#"
-                      class="btn btn-primary d-block"
-                      >Agregar
-                      <span class="price-value"
-                        >{{ $formatoMoneda(parseInt(total))}}</span
-                      ></a
-                    >
+                    <a @click="saveCart" href="#" class="btn btn-primary d-block">Agregar
+                      <span class="price-value">{{ $formatoMoneda(parseInt(total)) }}</span></a>
                   </li>
                 </ul>
               </div>
@@ -79,66 +70,49 @@
       </div>
       <!-- .container -->
       <!-- Modal -->
-      <div
-        class="modal fade"
-        id="placeBidModal"
-        tabindex="-1"
-        aria-hidden="true"
-      >
+      <div class="modal fade" id="placeBidModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title">Tu pedido</h4>
-              <button
-                type="button"
-                class="btn-close icon-btn"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
+              <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close">
                 <em class="ni ni-cross"></em>
               </button>
             </div>
             <!-- end modal-header -->
             <div class="modal-body">
               <ul class="total-bid-list mb-4">
-                <li
-                  v-for="(list, i) in cart"
-                  :key="i"
-                >
+                <li v-for="(list, i) in cart" :key="i">
                   <span>({{ list.cant }}) {{ list.title }} </span> <span>${{ list.total }}</span>
                 </li>
               </ul>
               <div class="bottom-cartcontent">
                 <div class="colcart-father">
-                    <div class="colcart-child">
-                        <h5>Subtotal</h5>
-                    </div>
-                    <div class="colcart-child colcart-child-right priceFinalSub">
-                      ${{ totalSum }}
-                    </div>
+                  <div class="colcart-child">
+                    <h5>Subtotal</h5>
+                  </div>
+                  <div class="colcart-child colcart-child-right priceFinalSub">
+                    ${{ totalSum }}
+                  </div>
                 </div>
                 <div class="colcart-father">
-                    <div class="colcart-child">
-                        <h5>Domicilio</h5>
-                    </div>
-                    <div class="colcart-child colcart-child-right priceFinalDelivery">
-                      {{$formatoMoneda(5200)}}
-                    </div>
+                  <div class="colcart-child">
+                    <h5>Domicilio</h5>
+                  </div>
+                  <div class="colcart-child colcart-child-right priceFinalDelivery">
+                    {{ $formatoMoneda(5200) }}
+                  </div>
                 </div>
                 <div class="colcart-father">
-                    <div class="colcart-child">
-                        <h5>TOTAL</h5>
-                    </div>
-                    <div class="colcart-child colcart-child-right priceFinalCart">
-                       ${{ totalSum + 5200 }}
-                    </div>
+                  <div class="colcart-child">
+                    <h5>TOTAL</h5>
+                  </div>
+                  <div class="colcart-child colcart-child-right priceFinalCart">
+                    ${{ totalSum + 5200 }}
+                  </div>
                 </div>
-            </div>
-              <a
-                :href="SectionData.placeBidModal.btnLink"
-                class="btn btn-primary d-block"
-                >Hacer pedido</a
-              >
+              </div>
+              <a :href="SectionData.placeBidModal.btnLink" class="btn btn-primary d-block">Hacer pedido</a>
             </div>
             <!-- end modal-body -->
           </div>
@@ -180,8 +154,8 @@ export default {
       additions: [],
       totaladitions: 0,
       cartadditions: [],
-      cart:[],
-      storedCart:[]
+      cart: [],
+      storedCart: []
     };
   },
   mounted() {
@@ -205,29 +179,29 @@ export default {
   methods: {
     add() {
       this.cant = (this.cant || 0) + 1;
-      this.total = (parseInt(this.price) + parseInt(this.totaladitions) ) * parseInt(this.cant);
+      this.total = (parseInt(this.price) + parseInt(this.totaladitions)) * parseInt(this.cant);
       console.log(this.cant);
     },
     remove() {
       if (this.cant > 1) {
         this.cant--;
-        this.total = (parseInt(this.price) + parseInt(this.totaladitions) )  * this.cant;
+        this.total = (parseInt(this.price) + parseInt(this.totaladitions)) * this.cant;
       }
     },
     increment(item) {
       if (item.value < 1) {
         item.value++;
-      this.totaladitions = parseInt(this.totaladitions) + parseInt(item.price);
-      this.cartadditions = this.cartadditions.filter(
-        (cartItem) => cartItem.title !== item.title
-      );
-      this.cartadditions.push({
-        title: item.title,
-        value: item.value,
-      });
-      this.total = (parseInt(this.price) + parseInt(this.totaladitions) ) * parseInt(this.cant);
+        this.totaladitions = parseInt(this.totaladitions) + parseInt(item.price);
+        this.cartadditions = this.cartadditions.filter(
+          (cartItem) => cartItem.title !== item.title
+        );
+        this.cartadditions.push({
+          title: item.title,
+          value: item.value,
+        });
+        this.total = (parseInt(this.price) + parseInt(this.totaladitions)) * parseInt(this.cant);
       }
-   
+
     },
     decrement(item) {
       if (item.value > 0) {
@@ -242,8 +216,8 @@ export default {
         title: item.title,
         value: item.value,
       });
-        this.total = (parseInt(this.price) + parseInt(this.totaladitions) )  * this.cant;
-      
+      this.total = (parseInt(this.price) + parseInt(this.totaladitions)) * this.cant;
+
     },
     limitInput(item) {
       if (item.value > 1) {
@@ -251,17 +225,17 @@ export default {
       }
     },
     saveCart() {
-    // Recuperar los datos existentes en sessionStorage
-    let storedCart = sessionStorage.getItem("shopingcart");
-    if (storedCart) {
+      // Recuperar los datos existentes en sessionStorage
+      let storedCart = sessionStorage.getItem("shopingcart");
+      if (storedCart) {
         this.cart = JSON.parse(storedCart);
-    }
+      }
 
-    // Eliminar el producto existente con el mismo id
-    this.cart = this.cart.filter(cartItem => cartItem.id !== this.$route.params.id);
+      // Eliminar el producto existente con el mismo id
+      this.cart = this.cart.filter(cartItem => cartItem.id !== this.$route.params.id);
 
-    // Añadir el nuevo producto
-    this.cart.push({
+      // Añadir el nuevo producto
+      this.cart.push({
         id: this.$route.params.id,
         title: this.title,
         price: parseInt(this.price),
@@ -271,22 +245,22 @@ export default {
         cant: this.cant,
         totaladitions: this.totaladitions,
         cartadditions: this.cartadditions,
-    });
-    
-    // Guardar el carrito actualizado en el sessionStorage
-    const parsed = JSON.stringify(this.cart);
-    sessionStorage.setItem("shopingcart", parsed); 
-    this.storedCart = JSON.parse(sessionStorage.getItem("shopingcart"))
-    this.$store.dispatch('setcartcount',this.storedCart.length); 
-    this.$store.dispatch('updatecart',this.storedCart); 
-}
+      });
+
+      // Guardar el carrito actualizado en el sessionStorage
+      const parsed = JSON.stringify(this.cart);
+      sessionStorage.setItem("shopingcart", parsed);
+      this.storedCart = JSON.parse(sessionStorage.getItem("shopingcart"))
+      this.$store.dispatch('setcartcount', this.storedCart.length);
+      this.$store.dispatch('updatecart', this.storedCart);
+    }
   },
   computed: {
     subtotal() {
-        return this.cart.reduce((acc, item) => acc + item.total, 0);
+      return this.cart.reduce((acc, item) => acc + item.total, 0);
     },
     totalSum() {
-        return this.cart.reduce((acc, item) => acc + item.total, 0);
+      return this.cart.reduce((acc, item) => acc + item.total, 0);
     },
     enhancedItems() {
       return this.additions.map((item) => ({
@@ -310,6 +284,7 @@ ul {
   list-style-type: none;
   padding: 0;
 }
+
 input {
   width: 9px;
   height: 40px;
@@ -334,9 +309,10 @@ li {
   padding: 5px 0;
 }
 
-.dvul{
+.dvul {
   justify-content: space-between;
 }
+
 .dv1 {
   align-items: flex-start;
 }
@@ -344,8 +320,10 @@ li {
 .dv2 {
   align-items: flex-end;
 }
+
 .price-value {
-  margin-left: 50px; /* O puedes usar padding-left si prefieres */
+  margin-left: 50px;
+  /* O puedes usar padding-left si prefieres */
   font-size: 13px;
 }
 
@@ -354,7 +332,8 @@ li {
   color: black;
   font-size: 12px;
 }
-.card-price-overflow{
+
+.card-price-overflow {
   overflow: auto;
   max-height: 400px;
 }
@@ -363,11 +342,13 @@ li {
   display: flex;
   align-items: center;
 }
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
 .addprice {
   font-size: 12px;
 }

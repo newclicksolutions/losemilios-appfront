@@ -6,51 +6,17 @@
                 <div class="tittleleft">
                     <h6 class="card-s1-title">Direcion de entrega</h6>
                 </div>
-                <div v-if="UserData.length" class="tittlerigth"><a href="#" class="" data-bs-toggle="modal"
-                            data-bs-target="#addNewadressModal">
-                            Cambiar</a></div>
+                <div class="tittlerigth"><span>Cambiar</span></div>
             </div>
 
             <div class="card-body d-flex align-items-center">
+
                 <div class="flex-grow-1">
-                    <div class="" v-if="emptyUser">
-                        <a href="#" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#addNewadressModal">
-                            Agregar direccion de entrga</a>
-                        <!-- Modal -->
-                        <div class="modal fade" id="addNewadressModal" tabindex="-1" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Agregar Direccion de entrega</h4>
-                                        <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal"
-                                            aria-label="Close">
-                                            <em class="ni ni-cross"></em>
-                                        </button>
-                                    </div><!-- end modal-header -->
-                                    <div class="modal-body">
-                                        <div class="credit-card-form mb-4">
-                                            <input v-model="barrio" type="text" class="form-control form-control-s1 mb-3"
-                                                placeholder="Barrio">
-                                            <div class="row g-3">
-                                                <div class="col-lg-12">
-                                                    <input v-model="direccion" type="text"
-                                                        class="form-control form-control-s1" placeholder="Direccion exata">
-                                                </div><!-- end col -->
-                                            </div><!-- end row -->
-                                        </div><!-- end credit-card-form -->
-                                        <button @click="agragardireccion" class="btn btn-primary w-100" type="button"
-                                            data-bs-dismiss="modal">Agregar</button>
-                                    </div><!-- end modal-body -->
-                                </div><!-- end modal-content -->
-                            </div><!-- end modal-dialog -->
-                        </div><!-- end modal-->
-                    </div>
-                    <h6 v-if="UserData.length" class="card-s1-title">{{
-                        UserData[0].barrio }}, {{ UserData[0].direccion }}</h6>
-                    <p v-if="UserData.length" class="card-s1-text">
+                    <h6 class="card-s1-title">{{ JSON.parse(SectionData.userdata[0].shipping_address)[0].value }}</h6>
+                    <p class="card-s1-text">
                         Instrucciones de entrega (opcional)
                     </p>
-                    <input v-if="UserData.length" width="100%" type="area" placeholder="Detalles adicionales..."
+                    <input width="100%" type="area" placeholder="Detalles adicionales..."
                         aria-label="Detalles adicionales..." class="btn-dtInlm" value="">
 
                 </div>
@@ -79,8 +45,8 @@
                             <p class="card-s1-text" style="float: left: ;">
                                 ({{ list.cant }})
                             </p>
-                            <h4 class="card-s1-title"> {{ list.title }}</h4>
-                            <h6 class="card-s1-title"> {{ $formatoMoneda(list.total * list.cant) }}</h6>
+                            <h4 class="card-s1-title">  {{ list.title }}</h4>
+                            <h6 class="card-s1-title"> {{ $formatoMoneda(list.total * list.cant)}}</h6>
                             <p v-if="list.cartadditions.length" class="card-s1-text">
                                 <span v-for="listadd in list.cartadditions" :key="listadd">
                                     {{ listadd.title }} - </span>
@@ -115,90 +81,89 @@
 
                 <div class="flex-grow-1">
                     <div class="d-flex mb-4">
-                        <div class="tittleleft">
-                            <span>Métodos disponibles:</span>
-
-                        </div>
-                        <div class="tittlerigth">
-                            <div class="form-check check-order mb-2">
-                                <label class="form-check-label form-check-label-s1" for="paymentEfectivo"> Efectivo</label>
-                                <input class="form-check-input check-all-input" type="checkbox" id="paymentEfectivo"
-                                    v-model="selectedPaymentMethod" value="efectivo">
-                            </div>
-                            <div class="form-check check-order mb-2">
-                                <label class="form-check-label form-check-label-s1" for="paymentDatafono"> Datafono</label>
-                                <input class="form-check-input check-all-input" type="checkbox" id="paymentDatafono"
-                                    v-model="selectedPaymentMethod" value="datafono">
-                            </div>
-                        </div>
-                    </div>
+                <div class="tittleleft">
+                    <span>Métodos disponibles:</span>
+                    
+                </div>
+                <div class="tittlerigth">
+        <div class="form-check check-order mb-2">
+            <label class="form-check-label form-check-label-s1" for="paymentEfectivo"> Efectivo</label>
+            <input class="form-check-input check-all-input" 
+                   type="checkbox" 
+                   id="paymentEfectivo" 
+                   v-model="selectedPaymentMethod" 
+                   value="efectivo">
+        </div>
+        <div class="form-check check-order mb-2">
+            <label class="form-check-label form-check-label-s1" for="paymentDatafono"> Datafono</label>
+            <input class="form-check-input check-all-input" 
+                   type="checkbox" 
+                   id="paymentDatafono" 
+                   v-model="selectedPaymentMethod" 
+                   value="datafono">
+        </div>
+    </div>
+            </div>
                 </div>
             </div>
             <div class="card-body d-flex align-items-center">
 
-                <div class="flex-grow-1">
-                    <div class="d-flex mb-4">
-                        <div class="tittleleft">
-                            <span>Agregar método de pago:</span>
-
-                        </div>
-                        <div class="tittlerigth">
-                            <a href="#" class="btn btn-primary mt-4" data-bs-toggle="modal"
-                                data-bs-target="#addNewCardModal"> Agregar targeta de credito </a>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="addNewCardModal" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title">Agregar targeta de credito</h4>
-                                            <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal"
-                                                aria-label="Close">
-                                                <em class="ni ni-cross"></em>
-                                            </button>
-                                        </div><!-- end modal-header -->
-                                        <div class="modal-body">
-                                            <div class="credit-card-form mb-4">
-                                                <h5 class="mb-3">Información de tarjeta de crédito</h5>
-                                                <input type="text" class="form-control form-control-s1 mb-3"
-                                                    placeholder="Número de Tarjeta de Crédito">
-                                                <div class="row g-3">
-                                                    <div class="col-lg-8">
-                                                        <input type="text" class="form-control form-control-s1"
-                                                            placeholder="Exp. Fecha">
-                                                    </div><!-- end col -->
-                                                    <div class="col-lg-4">
-                                                        <input type="text" class="form-control form-control-s1"
-                                                            placeholder="CVC">
-                                                    </div><!-- end col -->
-                                                </div><!-- end row -->
-                                            </div><!-- end credit-card-form -->
-                                            <div class="billing-form-wrap">
-                                                <h5 class="mb-3">Información de facturación</h5>
-                                                <input type="text" class="form-control form-control-s1 mb-3"
-                                                    placeholder="Direccion  de facturación">
-                                                <div class="row g-3">
-                                                    <div class="col-lg-6">
-                                                        <input type="text" class="form-control form-control-s1"
-                                                            placeholder="Ciudad">
-                                                    </div><!-- end col -->
-                                                    <div class="col-lg-6">
-                                                        <input type="text" class="form-control form-control-s1"
-                                                            placeholder="Departamento">
-                                                    </div><!-- end col -->
-                                                </div><!-- end row -->
-                                                <input type="text" class="form-control form-control-s1 my-3"
-                                                    placeholder="Pais">
-                                                <button class="btn btn-primary w-100" type="button">Agregar targeta</button>
-                                            </div><!-- end billing-form-wrap -->
-                                        </div><!-- end modal-body -->
-                                    </div><!-- end modal-content -->
-                                </div><!-- end modal-dialog -->
-                            </div><!-- end modal-->
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="flex-grow-1">
+    <div class="d-flex mb-4">
+<div class="tittleleft">
+    <span>Agregar método de pago:</span>
+    
+</div>
+<div class="tittlerigth">
+    <a href="#" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#addNewCardModal"> Agregar targeta de credito </a>
+                                  
+         <!-- Modal -->
+         <div class="modal fade" id="addNewCardModal" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Agregar targeta de credito</h4>
+                                        <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close">
+                                            <em class="ni ni-cross"></em>
+                                        </button>
+                                    </div><!-- end modal-header -->
+                                    <div class="modal-body">
+                                        <div class="credit-card-form mb-4">
+                                            <h5 class="mb-3">Credit Card Info</h5>
+                                            <input type="text" class="form-control form-control-s1 mb-3" placeholder="Credit card number">
+                                            <div class="row g-3">
+                                                <div class="col-lg-8">
+                                                    <input type="text" class="form-control form-control-s1" placeholder="Exp. Date">
+                                                </div><!-- end col -->
+                                                <div class="col-lg-4">
+                                                    <input type="text" class="form-control form-control-s1" placeholder="CVC">
+                                                </div><!-- end col -->
+                                            </div><!-- end row -->
+                                        </div><!-- end credit-card-form -->
+                                        <div class="billing-form-wrap">
+                                            <h5 class="mb-3">Billing Info</h5>
+                                            <input type="text" class="form-control form-control-s1 mb-3" placeholder="Address line 1">
+                                            <input type="text" class="form-control form-control-s1 mb-3" placeholder="Address line 2">
+                                            <div class="row g-3">
+                                                <div class="col-lg-6">
+                                                    <input type="text" class="form-control form-control-s1" placeholder="City">
+                                                </div><!-- end col -->
+                                                <div class="col-lg-6">
+                                                    <input type="text" class="form-control form-control-s1" placeholder="State">
+                                                </div><!-- end col -->
+                                            </div><!-- end row -->
+                                            <input type="text" class="form-control form-control-s1 my-3" placeholder="Zip code">
+                                            <input type="text" class="form-control form-control-s1 mb-3" placeholder="Country">
+                                            <button class="btn btn-primary w-100" type="button">Save Card</button>
+                                        </div><!-- end billing-form-wrap -->
+                                    </div><!-- end modal-body -->
+                                </div><!-- end modal-content -->
+                            </div><!-- end modal-dialog -->
+                        </div><!-- end modal-->
+</div>
+</div>
+</div>
+</div>
         </div>
         <!-- end gap -->
 
@@ -214,15 +179,10 @@ export default {
     name: "BlogDetailSection",
     data() {
         return {
-            barrio: null,
-            direccion: null,
-            emptyUser: true,
             SectionData,
             isAccordionOpen: true,
             storedCart: [],
-            selectedPaymentMethod: [],
-            UserData: [],
-            showModal: false
+            selectedPaymentMethod: []
         };
     },
     mounted() {
@@ -234,59 +194,36 @@ export default {
                 this.emptyCart = false;
             }
         }
-
-        if (sessionStorage.getItem("UserData")) {
-            this.UserData = JSON.parse(sessionStorage.getItem("UserData"));
-            if (this.UserData.length === 0) {
-                this.emptyUser = true;
-            } else {
-                this.emptyUser = false;
-            }
-            console.log(this.UserData.length)
-        }
     },
     methods: {
-        agragardireccion() {
-            const userdata = [{
-                barrio: this.barrio,
-                direccion: this.direccion,
-            }]
-            console.log(userdata)
-            const parsed = JSON.stringify(userdata);
-            sessionStorage.setItem("UserData", parsed);
-            this.UserData = JSON.parse(sessionStorage.getItem("UserData"));
-            this.emptyUser = false
-            this.showModal = false;
-        },
         toggleAccordion() {
             this.isAccordionOpen = !this.isAccordionOpen;
         }
     },
     watch: {
-        selectedPaymentMethod(newVal) {
-            if (newVal.length > 1) {
-                this.selectedPaymentMethod.shift(); // Elimina el primer elemento si hay más de uno
-            }
-        }
+    selectedPaymentMethod(newVal) {
+      if (newVal.length > 1) {
+        this.selectedPaymentMethod.shift(); // Elimina el primer elemento si hay más de uno
+      }
     }
+  }
 };
 </script>
 <style lang="css" scoped>
+
 @media (max-width: 468px) {
     .card-creator-s1 .card-body {
-        flex-direction: row;
-        padding: 0px
-    }
-
-    .d-flex {
-        flex-direction: column;
-    }
-
-    .flex-grow-1 {
-        text-align: left;
-        flex-grow: 1 !important;
-        width: 100% !important;
-    }
+    flex-direction: row;
+    padding: 0px
+}
+.d-flex{
+    flex-direction: column;
+}
+.flex-grow-1 {
+    text-align: left;
+    flex-grow: 1 !important;
+    width: 100% !important;
+}
 }
 
 
@@ -295,7 +232,6 @@ export default {
     width: 9.375rem;
     height: 8.375rem;
 }
-
 .cardflex {
     display: flex;
     /* Convertir el contenedor en un contenedor flex */
@@ -355,19 +291,21 @@ export default {
 .tittlerigth {
     text-align: right;
 }
-
-.check-order {
+.check-order{
     padding: 10px;
     border: 1px #c7c7c7 solid;
     border-radius: 8px;
 }
-
-.check-order em {
+.check-order em{
     font-size: 30px;
 }
-
 .form-check .form-check-input {
     float: left;
     margin-left: 0px;
 }
+
+
+
+
+
 </style>
