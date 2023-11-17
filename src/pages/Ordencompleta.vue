@@ -5,19 +5,16 @@
         <!-- Header main -->
         <HeaderMain></HeaderMain>
         <!-- hero -->
-  
+        <HeroFour classname="hero-title" :title="SectionData.breadcrumbData.breadcrumbList.title" :lists="SectionData.breadcrumbData.breadcrumbList.navList"></HeroFour>
     </header>
     <!-- Blog  -->
     <section class="section-space-b blog-section">
         <div class="container">
             <!-- blog section -->
             <div class="row">
-                <div class="col-lg-8">
-                    <PedidoDetailSection></PedidoDetailSection>
+                <div class="col-lg-12">
+                    <Resumensection></Resumensection>
                 </div><!-- end col-lg-8 -->
-                <div class="col-lg-4 ps-lg-4">
-                    <Sidebar></Sidebar>
-                </div><!-- end col-lg-4 -->
             </div><!-- row -->
         </div><!-- .container -->
     </section><!-- end blog-section -->
@@ -31,7 +28,7 @@ import SectionData from '@/store/store.js'
 
 
 export default {
-  name: 'Pedido',
+  name: 'ordencompleta',
   components: {
     
   },

@@ -22,6 +22,13 @@
                                 </path>
                             </svg></span></div>
                 </div>
+                <div class="center mb-4"  v-if="!cart.length" style="text-align: center; display: flex; align-items: center; flex-direction: column;">
+                    <p>Aun no tienes productos en tu carrito </p>
+                    <a :disabled="isButtonDisabled" href="/"
+                            class="btn btn-primary d-block" style="width: 260px;">
+                            Comenzar a comprar </a>
+                </div>
+
                 <transition name="slide-fade">
                     <div class="acordeon-card" v-if="isAccordionOpen">
                         <div class="card-body d-flex d-flex-tras align-items-center" v-for="list in cart" :key="list.id">
@@ -49,14 +56,14 @@
                         </div>
                     </div>
                 </transition>
-                <spam class="sub-tlt">Subtotal: {{ $formatoMoneda( totalSum )}}</spam>
-                <div class="cardflexfooter mb-4">
+                <spam  v-if="cart.length" class="sub-tlt">Subtotal: {{ $formatoMoneda( totalSum )}}</spam>
+                <div class="cardflexfooter mb-4" v-if="cart.length">
                     <div class="tittleleft">
                         <em @click="clearCart" class="ni ni-trash" data-v-4a61c780=""></em>
                     </div>
-                    <div class="tittlerigth">
+                    <div class="tittlerigth" >
                         <a :disabled="isButtonDisabled" :href="SectionData.placeBidModal.btnLink"
-                            class="btn btn-primary d-block" style="width: 270px;">
+                            class="btn btn-primary d-block" style="width: 260px;">
                             Ir a pagar </a>
                     </div>
                 </div>
@@ -191,8 +198,8 @@ export default {
     border-bottom: 1px #efefef solid;
 }
 
-.card-creator-s {
-    padding: 5px;
+.card-creator-s1 {
+    padding: 10px;
 }
 
 .card-s1-text {
@@ -213,7 +220,7 @@ export default {
 
 .acordeon-card {
     overflow: auto;
-    min-height: 50vh;
+    min-height: 100%;
 }
 
 .enRnoF {

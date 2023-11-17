@@ -5902,7 +5902,8 @@ userdata:[
       },
     ],
     btnText: 'Place a Bid',
-    btnLink: 'Pedido'
+    btnLink: 'pedido',
+    btnLinkpedido: 'ordencompleta'
   },
   reportModalData: {
     title: 'Why are you reporting?',
@@ -6479,37 +6480,29 @@ userdata:[
       },
       {
         id: 2,
-        title: 'Menu',
+        title: 'Direccion',
         navList: [
           {
-            title: 'Menu1',
+            title: 'Boulevar de la cra 70 en Medellin',
             path: 'profile'
           },
           {
-            title: 'Menu2',
+            title: '3137681221',
             path: 'offers'
-          },
-          {
-            title: 'Menu3',
-            path: 'activity'
           }
         ]
       },
       {
         id: 3,
-        title: 'Domicilios',
+        title: 'Horarios',
         navList: [
           {
-            title: 'Nosotros',
+            title: 'Lunes a sábado',
             path: 'about-us'
           },
           {
-            title: 'Blog',
+            title: '6:00pm a 2:00am',
             path: 'blog'
-          },
-          {
-            title: 'Contacto',
-            path: 'contact'
           }
         ]
       }
@@ -6517,6 +6510,10 @@ userdata:[
     footerListTwo: [
       {
         title: 'Pedidos',
+        path: 'activity'
+      },
+      {
+        title: '3137681221',
         path: 'activity'
       },
       {

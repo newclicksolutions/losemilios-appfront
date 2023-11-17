@@ -36,16 +36,22 @@
                     </div>
                 </div>
             </div>
-            <a :href="SectionData.placeBidModal.btnLink" class="btn btn-primary d-block">Hacer pedido</a>
+            <a @click="irapagar" class="btn btn-primary d-block">Hacer pedido</a>
+            <Notification ref="notification" />
         </div><!-- end sidebar-widget -->
 
     </div><!-- end sidebar -->
+
 </template>
 <script>
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from '@/store/store.js'
+import Notification from './Notification.vue'
 
 export default {
+    components: {
+    Notification
+  },
     name: 'Sidebar',
     data() {
         return {
@@ -53,6 +59,7 @@ export default {
             storedCart: [],
         }
     },
+
     mounted() {
         if (sessionStorage.getItem("shopingcart")) {
             this.storedCart = JSON.parse(sessionStorage.getItem("shopingcart"));
@@ -62,6 +69,12 @@ export default {
                 this.emptyCart = false;
             }
         }
+    },
+    methods:{
+        irapagar(){
+            console.log("D")
+            this.$refs.notification.showNotification('¡Notificación exitosa!','#D11D23')
+        },
     },
     computed: {
         totalSum() {

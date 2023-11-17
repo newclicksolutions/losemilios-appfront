@@ -113,6 +113,7 @@
                 </div>
               </div>
               <a :href="SectionData.placeBidModal.btnLink" class="btn btn-primary d-block">Hacer pedido</a>
+              <Notification ref="notification" />
             </div>
             <!-- end modal-body -->
           </div>
@@ -135,8 +136,12 @@
 //import ProductDetailSection from '@/components/section/Products'
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from "@/store/store.js";
+import Notification from '../components/common/Notification.vue'
 
 export default {
+    components: {
+    Notification
+  },
   name: "ProductDetail",
   data() {
     return {

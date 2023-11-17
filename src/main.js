@@ -2,12 +2,13 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './bus'
-import { formatoMoneda } from './utils';
+import { formatoMoneda,getFormattedTime } from './utils';
 
 // vue app
 const app = createApp(App);
 
 // bootstrap
+import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
 // vue select
 import vSelect from 'vue-select'
@@ -23,6 +24,7 @@ app.use(VueClipboard, {
 })
 app.use(store)
 app.config.globalProperties.$formatoMoneda = formatoMoneda;
+app.config.globalProperties.$getFormattedTime = getFormattedTime;
 
 // template custom css
 import './assets/scss/bundles.scss'
@@ -37,13 +39,15 @@ import FooterSection from './components/section/FooterSection.vue';
 import ButtonLink from './components/common/ButtonLink.vue';
 import LogoLink from './components/common/LogoLink.vue';
 import RelatedProduct from './components/section/RelatedProduct.vue';
-import BlogDetailSection from './components/section/BlogDetailSection.vue';
+import PedidoDetailSection from './components/section/PedidoDetailSection.vue';
 import Form from './components/common/Form.vue';
 import Sidebar from './components/common/Sidebar.vue';
 import cart from './components/common/cart.vue';
 import LoginSection from './components/section/LoginSection.vue';
 import LoginSectionTwo from './components/section/LoginSectionTwo.vue';
 import RegisterSection from './components/section/RegisterSection.vue';
+import Resumensection from './components/section/Resumensection.vue';
+
 
 // Global page components register
 app.component('HeaderMain', HeaderMain);
@@ -54,12 +58,13 @@ app.component('ButtonLink', ButtonLink)
 app.component('LogoLink', LogoLink)
 app.component('RelatedProduct', RelatedProduct)
 app.component('ExploreSection', ExploreSection)
-app.component('BlogDetailSection', BlogDetailSection)
+app.component('PedidoDetailSection', PedidoDetailSection)
 app.component('Form', Form)
 app.component('Sidebar', Sidebar)
 app.component('cart', cart)
 app.component('LoginSection', LoginSection)
 app.component('LoginSectionTwo', LoginSectionTwo)
 app.component('RegisterSection', RegisterSection)
+app.component('Resumensection', Resumensection)
 // vue app
 app.use(router).mount('#app')
