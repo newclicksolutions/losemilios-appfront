@@ -39,7 +39,14 @@ export default {
     return {
       SectionData
     }
-  }
+  },
+  created() {
+    if (!sessionStorage.getItem("shopingcart")) {
+
+                this.$router.push('/');
+            
+        }
+  },
 }
 </script>
  

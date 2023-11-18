@@ -1,5 +1,5 @@
 <template>
-    <div class="header-search-form" :class="classname">
+    <div class="header-search-field" :class="classname">
         <input v-model="inputValue" @input="handleInputChange" type="search" class="form-control form-control-s1" :placeholder="[[ SectionData.headerData.inputPlaceholderText ]]">
     </div>
 </template>
@@ -31,3 +31,14 @@ export default {
     }
 }
 </script>
+<style>
+.header-search-field{
+  width: 100%;
+  margin: auto;
+  padding: 5px 25px;
+}
+.header-search-field input{
+ height: 50px;
+ font-size: 18px;
+}
+</style>

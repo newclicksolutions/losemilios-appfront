@@ -6,7 +6,7 @@
                 <div class="card card-creator-s1">
                     <div class="modal-header" data-v-289073a8="">
                         <h4 class="modal-title" data-v-289073a8="">Tu Carrito</h4><button @click="toggleCart" type="button"
-                            class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close" data-v-289073a8=""><em
+                            class="btn-close icon-btn" ><em
                                 class="ni ni-cross" data-v-289073a8=""></em></button>
                     </div>
                     <div class="cardflex mb-4">
@@ -106,6 +106,9 @@ export default {
         }
     },
     methods: {
+        setcart(){
+            this.storedCart = JSON.parse(sessionStorage.getItem("shopingcart"));
+        },
         toggleAccordion() {
             this.isAccordionOpen = !this.isAccordionOpen;
         },
@@ -118,17 +121,33 @@ export default {
             this.$store.dispatch('updatecart', []);
         },
         increment(index) {
+            console.log(this.$store.state.cart)
+            this.setcart()
             this.storedCart.find(item => item.id === index.id).cant = (index.cant + 1)
             const parsed = JSON.stringify(this.storedCart);
             sessionStorage.setItem("shopingcart", parsed);
             this.$store.dispatch('updatecart', this.storedCart);
         },
         decrement(index) {
-            this.storedCart.find(item => item.id === index.id);
-            this.storedCart.find(item => item.id === index.id).cant = (index.cant - 1)
-            const parsed = JSON.stringify(this.storedCart);
-            sessionStorage.setItem("shopingcart", parsed);
-            this.$store.dispatch('updatecart', this.storedCart);
+            this.setcart()
+            if (index.cant == 1) {
+                const i = this.storedCart.findIndex(item => item.id === index.id);
+                console.log(i)
+                if (i !== -1) {
+                    this.storedCart.splice(i, 1);
+                    const parsed = JSON.stringify(this.storedCart);
+                    sessionStorage.setItem("shopingcart", parsed);
+                    this.$store.dispatch('setcartcount', this.storedCart.length);
+                    this.$store.dispatch('updatecart', this.storedCart);
+                }
+            } else {
+                this.storedCart.find(item => item.id === index.id);
+                this.storedCart.find(item => item.id === index.id).cant = (index.cant - 1)
+                const parsed = JSON.stringify(this.storedCart);
+                sessionStorage.setItem("shopingcart", parsed);
+                this.$store.dispatch('updatecart', this.storedCart);
+            }
+
         },
 
     },
@@ -146,7 +165,7 @@ export default {
 }
 </script>
 <style>
-@media (max-width: 468px) {
+@media (max-width: 968px) {
     .card-creator-s1 .card-body {
         flex-direction: row;
         padding: 0px
@@ -337,4 +356,5 @@ input {
 .slide-fade-leave-to {
     max-height: 0;
     opacity: 0;
-}</style>
+}
+</style>

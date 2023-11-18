@@ -1,16 +1,24 @@
 <template>
     <ul class="menu-list ms-lg-auto">
-          <li class="menu-item ">
-              <a href="#" class="menu-link"><em class="menu-on menu-icon ni ni-menu"></em></a>
-              <div class="menu-sub menu-mega">
-                
+          <li class="menu-item " v-if="Userdata.length">
+              <a href="#" class="menu-link"><em class="menu-on menu-icon ni ni-user"></em></a>
+              <div class="menu-sub ">
+                <ul class="menu-list">
+                        <li class="menu-item"><router-link to="/" class="menu-link">Mi cuenta</router-link></li>
+                        <li class="menu-item"><router-link to="/" class="menu-link">Mis pedidos</router-link></li>
+                        <li class="menu-item"><router-link to="/" class="menu-link">Cerrar sesion</router-link></li>
+                    </ul>
               </div>
+          </li>
+          <li class="menu-item " v-else>
+              <a href="/login" class="menu-link"><em class="menu-on menu-icon ni ni-user"> </em>Ingresar</a>
+             
           </li>
           <li class="menu-item ">
               <a href="#" @click="showcart" class="menu-link"><em class="menu-on menu-icon ni ni-cart"></em></a>
               <i v-if="count" class="countbubble">{{count}}</i>
           </li>
-     </ul>
+     </ul> 
 </template>
 
 <script>
@@ -40,6 +48,9 @@ export default {
     count() {
       return this.$store.state.cartcount;
     },
+    Userdata() {
+      return this.$store.state.userdata;
+    },
     doubleCount() {
       return this.$store.getters.doubleCount;
     }
@@ -55,6 +66,9 @@ export default {
 }
 </script>
 <style>
+em{
+  font-size: 25px;
+}
 .countbubble{
   background: red;
     position: absolute;

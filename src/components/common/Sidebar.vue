@@ -57,6 +57,7 @@ export default {
         return {
             SectionData,
             storedCart: [],
+            userdata: [],
         }
     },
 
@@ -72,10 +73,27 @@ export default {
     },
     methods:{
         irapagar(){
-            this.$refs.notification.showNotification('¡Notificación exitosa!','#D11D23')
+            console.log(this.validarCampos())
+          /*   if (this.validarCampos()) {
+                this.$router.push('/ordencompleta')
+            }else{
+                this.$refs.notification.showNotification('¡Notificación exitosa!','#D11D23')
+            } */
+            
 
-            this.$router.push('/ordencompleta')
+            
         },
+
+ validarCampos() {
+    this.userdata = JSON.parse(sessionStorage.getItem("shopingcart"));
+  for (const key in this.userdata) {
+    // Ignora el campo 'adicionalinst' en la validación
+    if (key !== 'adicionalinst' && !this.userdata[key]) {
+      return false; // Retorna false si encuentra algún campo vacío (excepto 'adicionalinst')
+    }
+  }
+  return true; // Retorna true si todos los campos están llenos (excepto 'adicionalinst')
+}
     },
     computed: {
         totalSum() {

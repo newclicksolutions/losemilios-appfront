@@ -26,16 +26,16 @@
                             <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="" id="logMeIn">
-                                    <label class="form-check-label form-check-label-s1" for="logMeIn"> Remember me </label>
+                                    <label class="form-check-label form-check-label-s1" for="logMeIn"> Recuerdame </label>
                                 </div>
-                                <router-link to="login" class="btn-link form-forget-password">Forgot Password</router-link>
+                                <router-link to="login" class="btn-link form-forget-password">Olvidaste la contrasena?</router-link>
                             </div>
                             <button class="btn btn-primary w-100" type="submit">{{ SectionData.loginData.btnText }}</button>
-                            <span class="d-block my-4">— or login with —</span>
+                            <!-- <span class="d-block my-4">— or login with —</span>
                             <ul class="btns-group d-flex">
                                 <li class="flex-grow-1" v-for="(list, i) in SectionData.loginData.btns" :key="i"><router-link :to="list.path" class="btn d-block" :class="list.btnClass"><em class="ni" :class="list.icon"></em> {{ list.title }} </router-link></li>
-                            </ul>
-                            <p class="mt-3 form-text">{{ SectionData.loginData.haveAccountText }} <router-link :to="SectionData.loginData.btnTextLink" class="btn-link">{{ SectionData.loginData.btnTextTwo }}</router-link></p>
+                            </ul> -->
+                            <p class="mt-3 form-text">{{ SectionData.loginData.haveAccountText }} <router-link :to="SectionData.loginData.btnTextLink" class="btn-link">{{ SectionData.loginData.btnTextTwo }}</router-link> O <router-link to="/" class="btn-link">Comprar sin una cuanta</router-link></p>
                         </form>
                     </div><!-- end col-lg-6 -->
                 </div><!-- end row -->

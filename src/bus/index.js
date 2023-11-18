@@ -7,6 +7,7 @@ export default createStore({
     // tus datos o variables de estado van aquí
     cartcount:0,
     cart: [],
+    userdata: [],
     cartview:false,
     searhinput:""
   },
@@ -31,6 +32,9 @@ export default createStore({
     updatecart(state,payload) {
       state.cart = payload;
     },
+    updatedataUser(state,payload) {
+      state.userdata = payload;
+    },
 
   },
   actions: {
@@ -44,7 +48,7 @@ export default createStore({
     hidecart({ commit }) {
       commit('hide');
     },
-    searhinput: (context, payload) => {
+    searhinput: (context, payload) => { 
       context.commit('searhinput', payload)
     },
     setcartcount: (context, payload) => {
@@ -52,6 +56,9 @@ export default createStore({
     },
     updatecart: (context, payload) => {
       context.commit('updatecart', payload)
+    },
+    updatedataUser: (context, payload) => {
+      context.commit('updatedataUser', payload)
     },
     
     
@@ -61,6 +68,10 @@ export default createStore({
     // tus getters para obtener valores derivados del estado van aquí
     doubleCount: state => {
       return state.count * 2;
+    },
+    Userdata: state => {
+      return state.userdata;
     }
+
   }
 });

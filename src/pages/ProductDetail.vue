@@ -115,7 +115,7 @@
                   </div>
                 </div>
               </div>
-              <a :href="SectionData.placeBidModal.btnLink" class="btn btn-primary d-block">Hacer pedido</a>
+              <a :href="pedido" class="btn btn-primary d-block">Hacer pedido</a>
               <Notification ref="notification" />
             </div>
             <!-- end modal-body -->
@@ -233,16 +233,11 @@ export default {
       }
     },
     saveCart() {
-      // Recuperar los datos existentes en sessionStorage
       let storedCart = sessionStorage.getItem("shopingcart");
       if (storedCart) {
         this.cart = JSON.parse(storedCart);
       }
-
-      // Eliminar el producto existente con el mismo id
       this.cart = this.cart.filter(cartItem => cartItem.id !== this.$route.params.id);
-
-      // Añadir el nuevo producto
       this.cart.push({
         id: this.$route.params.id,
         title: this.title,
@@ -262,7 +257,7 @@ export default {
       this.$store.dispatch('setcartcount', this.storedCart.length);
       this.$store.dispatch('updatecart', this.storedCart);
     }
-  },
+  }, 
   computed: {
     subtotal() {
       return this.cart.reduce((acc, item) => acc + item.total, 0);

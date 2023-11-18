@@ -20,7 +20,10 @@
 
                     </div>
                     <h6 v-if="UserData.length" class="card-s1-title">{{ UserData[0].nombre }}</h6>
+                    
                     <h6 v-if="UserData.length" class="card-s1-title">
+                        <em
+                                class="ni ni-map-pin-fill" ></em>
                         {{ UserData[0].direccion }}</h6>
                     <p v-if="UserData.length" class="card-s1-text">
                         Instrucciones de entrega (opcional)

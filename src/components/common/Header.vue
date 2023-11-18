@@ -1,11 +1,10 @@
 <template>
-    <div class="header-main is-sticky" :class="isTransparent">
+    <div class="header-main fixed-top is-sticky" :class="isTransparent">
                 <div class="container">
                     <div class="header-wrap">
                          <!-- logo -->
                         <Logo></Logo>
                         <!-- mobile action -->
-                        <MobileAction></MobileAction>
                         <!-- heder search -->
                         <HeaderSearch></HeaderSearch>
                         <!-- menu -->
@@ -35,3 +34,9 @@ import Menu from '@/components/common/Menu.vue'
     },
   };
 </script>
+<style>
+   .fixed-top{
+    position: fixed !important;
+   }
+
+</style>

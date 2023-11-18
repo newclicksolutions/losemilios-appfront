@@ -1,7 +1,7 @@
 <template>
   <cart></cart>
   <MobileAction></MobileAction>
-    <div class="header-main is-sticky" :class="isTransparent">
+    <div class="header-main  fixed-top is-sticky" :class="isTransparent">
         <div class="container">
             <div class="header-wrap">
                 <!-- logo -->
@@ -36,5 +36,10 @@ export default {
 }
 </script>
 <style scoped>
+
+   .fixed-top{
+    position: fixed !important;
+   }
+
 
 </style>
