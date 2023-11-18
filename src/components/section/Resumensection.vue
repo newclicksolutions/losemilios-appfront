@@ -150,6 +150,9 @@ export default {
             } else {
                 this.emptyCart = false;
             }
+            sessionStorage.removeItem("shopingcart")
+            this.$store.dispatch('setcartcount', 0);
+            this.$store.dispatch('updatecart', []);
         }
         if (sessionStorage.getItem("UserData")) {
             this.UserData = JSON.parse(sessionStorage.getItem("UserData"));
@@ -160,6 +163,7 @@ export default {
             }
             console.log(this.UserData.length)
         }
+
     },
     methods: {
         toggleAccordion(key) {

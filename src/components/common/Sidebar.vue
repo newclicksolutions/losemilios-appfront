@@ -17,15 +17,15 @@
                         <ul class="total-bid-list mb-4">
                             <li>
                                 <span>Costo de productos</span>
-                                <p>{{  $formatoMoneda(totalSum) }}</p>
+                                <p>{{ $formatoMoneda(totalSum) }}</p>
                             </li>
                             <li>
                                 <span>Costo de envío</span>
-                                <p> {{$formatoMoneda(5300)}}</p>
+                                <p> {{ $formatoMoneda(5300) }}</p>
                             </li>
                             <li>
                                 <span>Propina del Repartidor</span>
-                                <p> {{$formatoMoneda(1000)}}</p>
+                                <p> {{ $formatoMoneda(1000) }}</p>
                             </li>
                             <li>
                                 <h4>Total</h4>
@@ -41,7 +41,6 @@
         </div><!-- end sidebar-widget -->
 
     </div><!-- end sidebar -->
-
 </template>
 <script>
 // Import component data. You can change the data in the store to reflect in all component
@@ -50,8 +49,8 @@ import Notification from './Notification.vue'
 
 export default {
     components: {
-    Notification
-  },
+        Notification
+    },
     name: 'Sidebar',
     data() {
         return {
@@ -71,29 +70,31 @@ export default {
             }
         }
     },
-    methods:{
-        irapagar(){
-            console.log(this.validarCampos())
-          /*   if (this.validarCampos()) {
+    methods: {
+        irapagar() {
+            if (this.validarCampos()) {
+                //sessionStorage.removeItem("shopingcart")
+                //this.$store.dispatch('setcartcount', 0);
+               // this.$store.dispatch('updatecart', []);
                 this.$router.push('/ordencompleta')
-            }else{
-                this.$refs.notification.showNotification('¡Notificación exitosa!','#D11D23')
-            } */
-            
-
-            
+            } else {
+                this.$refs.notification.showNotification('Debes seleccionar un metodo de pago', '#D11D23')
+            }
         },
 
- validarCampos() {
-    this.userdata = JSON.parse(sessionStorage.getItem("shopingcart"));
-  for (const key in this.userdata) {
-    // Ignora el campo 'adicionalinst' en la validación
-    if (key !== 'adicionalinst' && !this.userdata[key]) {
-      return false; // Retorna false si encuentra algún campo vacío (excepto 'adicionalinst')
-    }
-  }
-  return true; // Retorna true si todos los campos están llenos (excepto 'adicionalinst')
-}
+        validarCampos() {
+            this.userdata = JSON.parse(sessionStorage.getItem("UserData"));
+            if (this.userdata) {
+                for (const key in this.userdata) {
+                    console.log(this.userdata[key].PaymentMethod.length);
+                    if (this.userdata[key].PaymentMethod.length === 0) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
     },
     computed: {
         totalSum() {

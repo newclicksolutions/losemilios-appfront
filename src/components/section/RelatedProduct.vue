@@ -22,7 +22,7 @@
               }
             }"
             :pagination="{ clickable: true }">
-            <swiper-slide v-for="item in SectionData.products" :key="item.id">
+            <swiper-slide v-for="item in productosAleatorios" :key="item.id">
                 <div class="card card-full">
                     <div to="item.path" class="card-image">
                         <img :src="item.img" class="card-img-top" alt="art image">
@@ -96,6 +96,27 @@ export default {
   setup() {
     return{
        modules: [Pagination]
+    }
+  },
+  computed: {
+    productosAleatorios() {
+      // Crea una copia del arreglo original y mézclala
+      return this.shuffleArray([...this.SectionData.products]);
+    }
+  },
+  methods: {
+    shuffleArray(array) {
+      // Algoritmo de Fisher-Yates para mezclar el arreglo
+      let currentIndex = array.length, randomIndex;
+
+      while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+      }
+
+      return array;
     }
   }
 }

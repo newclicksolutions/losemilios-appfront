@@ -20,11 +20,10 @@
 
                     </div>
                     <h6 v-if="UserData.length" class="card-s1-title">{{ UserData[0].nombre }}</h6>
-                    
                     <h6 v-if="UserData.length" class="card-s1-title">
-                        <em
-                                class="ni ni-map-pin-fill" ></em>
-                        {{ UserData[0].direccion }}</h6>
+                        <em class="ni ni-map-pin-fill"></em>
+                        {{ UserData[0].direccion }}
+                    </h6>
                     <p v-if="UserData.length" class="card-s1-text">
                         Instrucciones de entrega (opcional)
                     </p>
@@ -46,20 +45,25 @@
                             </button>
                         </div><!-- end modal-header -->
                         <div class="modal-body">
-                            <div class="credit-card-form mb-4">
-                                <input v-model="nombre" type="text" class="form-control form-control-s1 mb-3"
-                                    placeholder="Nombre">
-                                <input v-model="telefono" type="text" class="form-control form-control-s1 mb-3"
-                                    placeholder="Telefono">
-                                <div class="row g-3">
-                                    <div class="col-lg-12">
-                                        <input v-model="direccion" type="text" class="form-control form-control-s1"
-                                            placeholder="Escribe la direccion de entrega">
-                                    </div><!-- end col -->
-                                </div><!-- end row -->
-                            </div><!-- end credit-card-form -->
-                            <button @click="agragardireccion" class="btn btn-primary w-100" type="button"
-                                data-bs-dismiss="modal">Agregar</button>
+                            <form @submit.prevent="agragardireccion">
+                                <div class="credit-card-form mb-4">
+                                    <div class="form-floating mb-4">
+                                        <input type="text" class="form-control" v-model="nombre"  id="Nombre"  placeholder="Nombre" required>
+                                        <label for="Nombre">Nombre</label>
+                                    </div>
+                                    <div class="form-floating mb-4">
+                                        <input v-model="telefono" type="text" class="form-control mb-3" placeholder="Telefono"
+                                        required>
+                                        <label for="Telefono">Telefono</label>
+                                    </div>
+                                    <div class="form-floating mb-4">
+                                        <input type="text" class="form-control" v-model="direccion" id="direccion" placeholder="Direccion de entrega"
+                                required>
+                                        <label for="direccion">Escribe la direccion de entrega</label>
+                                    </div>
+                                </div><!-- end credit-card-form -->
+                                <button class="btn btn-primary w-100" type="submit">Agregar</button>
+                            </form>
                         </div><!-- end modal-body -->
                     </div><!-- end modal-content -->
                 </div><!-- end modal-dialog -->
@@ -159,12 +163,13 @@
 
                     </div>
                     <div class="tittlerigth">
-                        <a v-if="!creditcart.length" href="#" @click="openAddNewCardModal" ref="addNewCardModal" class="btn btn-primary mt-4" data-bs-toggle="modal"
-                            data-bs-target="#addNewCardModal" >
+                        <a v-if="!creditcart.length" href="#" @click="openAddNewCardModal" ref="addNewCardModal"
+                            class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#addNewCardModal">
                             Agregar targeta de credito </a>
 
                         <!-- Modal -->
-                        <div :class="{ 'modal': true, 'fade': true, 'show': showModal }" id="addNewCardModal" tabindex="-1" aria-hidden="true">
+                        <div :class="{ 'modal': true, 'fade': true, 'show': showModal }" id="addNewCardModal" tabindex="-1"
+                            aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -297,58 +302,58 @@ export default {
                         crtdate: this.crtdate,
                         crtcvc: this.crtcvc,
                     }]
-                
+
+                } else {
+                    this.selectedPaymentMethod = []
+                    this.$refs.notification.showNotification('Debes ingresar una dirección de envío?', '#D11D23')
+                }
+            }
+
+
+        },
+        validateForm() {
+            // Lógica de validación personalizada
+            return this.crtname && this.crtnumber && this.crtdate && this.crtcvc;
+        },
+        toggleAccordion() {
+            this.isAccordionOpen = !this.isAccordionOpen;
+        },
+        agragardireccion() {
+            const userdata = [{
+                direccion: this.direccion,
+                nombre: this.nombre,
+                telefono: this.telefono,
+                adicionalinst: this.adicionalinst,
+                PaymentMethod: this.selectedPaymentMethod,
+                cartinfo: this.creditcart
+            }]
+            const parsed = JSON.stringify(userdata);
+            sessionStorage.setItem("UserData", parsed);
+            this.UserData = JSON.parse(sessionStorage.getItem("UserData"));
+            this.emptyUser = false
+            this.showModal = false;
+        },
+        openAddNewCardModal() {
+            this.showModal = !this.showModal;
+        },
+
+    },
+    watch: {
+        selectedPaymentMethod(newVal) {
+            if (newVal.length > 1) {
+                this.selectedPaymentMethod.shift(); // Elimina el primer elemento si hay más de uno
+            }
+            if (this.UserData.length) {
+                this.agragardireccion()
             } else {
                 this.selectedPaymentMethod = []
                 this.$refs.notification.showNotification('Debes ingresar una dirección de envío?', '#D11D23')
             }
+
+
+
         }
-
-
-    },
-    validateForm() {
-        // Lógica de validación personalizada
-        return this.crtname && this.crtnumber && this.crtdate && this.crtcvc;
-    },
-    toggleAccordion() {
-        this.isAccordionOpen = !this.isAccordionOpen;
-    },
-    agragardireccion() {
-        const userdata = [{
-            direccion: this.direccion,
-            nombre: this.nombre,
-            telefono: this.telefono,
-            adicionalinst: this.adicionalinst,
-            PaymentMethod: this.selectedPaymentMethod,
-            cartinfo: this.creditcart
-        }]
-        const parsed = JSON.stringify(userdata);
-        sessionStorage.setItem("UserData", parsed);
-        this.UserData = JSON.parse(sessionStorage.getItem("UserData"));
-        this.emptyUser = false
-        this.showModal = false;
-    },
-    openAddNewCardModal() {
-        this.showModal = !this.showModal;
-  },
-
-},
-watch: {
-    selectedPaymentMethod(newVal) {
-        if (newVal.length > 1) {
-            this.selectedPaymentMethod.shift(); // Elimina el primer elemento si hay más de uno
-        }
-        if (this.UserData.length) {
-            this.agragardireccion()
-        } else {
-            this.selectedPaymentMethod = []
-            this.$refs.notification.showNotification('Debes ingresar una dirección de envío?', '#D11D23')
-        }
-
-
-
     }
-}
 };
 </script>
 <style lang="css" scoped>
@@ -449,4 +454,5 @@ watch: {
 .form-check .form-check-input {
     float: left;
     margin-left: 0px;
-}</style>
+}
+</style>
