@@ -5,8 +5,11 @@
       <!-- Header main -->
       <HeaderMain></HeaderMain>
     </header>
+
     <section class="item-detail-section section-space">
+
       <div class="container">
+        <router-link to="/"><em style="font-size: 36px;" class="ni ni-arrow-left-round-fill" data-v-289073a8=""></em></router-link>
         <div class="row">
           <div class="col-lg-6 pe-xl-5">
             <div class="item-detail-content">
@@ -139,7 +142,7 @@ import SectionData from "@/store/store.js";
 import Notification from '../components/common/Notification.vue'
 
 export default {
-    components: {
+  components: {
     Notification
   },
   name: "ProductDetail",

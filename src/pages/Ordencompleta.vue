@@ -5,7 +5,7 @@
         <!-- Header main -->
         <HeaderMain></HeaderMain>
         <!-- hero -->
-        <HeroFour classname="hero-title" :title="SectionData.breadcrumbData.breadcrumbList.title" :lists="SectionData.breadcrumbData.breadcrumbList.navList"></HeroFour>
+        <HeroThree classname="hero-title" :title="SectionData.breadcrumbData.breadcrumbList.title" :lists="SectionData.breadcrumbData.breadcrumbList.navList"></HeroThree>
     </header>
     <!-- Blog  -->
     <section class="section-space-b blog-section">
@@ -25,12 +25,12 @@
 <script>
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from '@/store/store.js'
-
+import HeroThree from '@/components/section/HeroThree.vue'
 
 export default {
   name: 'ordencompleta',
   components: {
-    
+    HeroThree
   },
   data () {
     return {

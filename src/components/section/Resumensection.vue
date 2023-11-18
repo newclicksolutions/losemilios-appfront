@@ -118,7 +118,9 @@
     <!-- end gap -->
 
     <!-- end comment-wrapper -->
-
+<div class="mx-auto text-center "> 
+    <a href="/">Volver al inicio</a>
+</div>
     <!-- end single-entry -->
 </template>
 <script>

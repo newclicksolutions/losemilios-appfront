@@ -36,7 +36,7 @@
                     </div>
                 </div>
             </div>
-            <a @click="irapagar" class="btn btn-primary d-block">Hacer pedido</a>
+            <button @click="irapagar" class="btn btn-primary d-block">Hacer pedido</button>
             <Notification ref="notification" />
         </div><!-- end sidebar-widget -->
 
@@ -72,8 +72,9 @@ export default {
     },
     methods:{
         irapagar(){
-            console.log("D")
             this.$refs.notification.showNotification('¡Notificación exitosa!','#D11D23')
+
+            this.$router.push('/ordencompleta')
         },
     },
     computed: {

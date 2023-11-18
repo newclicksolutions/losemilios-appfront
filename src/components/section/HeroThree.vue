@@ -1,34 +1,28 @@
 <template>
-    <div class="hero-wrap hero-wrap-2 section-space">
-        <div class="container">
-                    <div class="row flex-lg-row-reverse justify-content-between align-items-center align-items-xl-start">
-                        <div class="col-lg-5">
-                            <!-- Featured Item Slider -->
-                            <FeaturedItemSlider></FeaturedItemSlider>
-                        </div><!-- end col-lg-5 -->
-                        <div class="col-lg-6">
-                            <div class="hero-content pt-xl-3 pb-0">
-                                <h1 class="hero-title hero-title-s1 mb-3">{{ SectionData.heroDataThree.title }}</h1>
-                                <p class="hero-text mb-4 pb-1">{{ SectionData.heroDataThree.content }}</p>
-                                <!-- button group -->
-                                <ButtonGroup :btns="SectionData.btnDataFour" classname="hero-btns"></ButtonGroup>
-                            </div><!-- hero-content -->
-                        </div><!-- col-lg-6 -->
-                    </div><!-- end row -->
-        </div><!-- .container-->
-    </div><!-- end hero-wrap -->
+  <div class="hero-wrap">
+    <div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-12 d-flex align-items-center text-center mx-auto">
+      <div class="item-detail-content mt-4 mt-lg-0 mx-auto">
+        <img :src="imgLg" alt="" class="w-50 rounded-3" />
+        <h1 class="item-detail-title mb-2">Muchas gracias</h1>
+        <p class="item-detail-text mb-4">Recibimos tu pedido correctamente!</p>
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
 </template>
-
 <script>
-// Import component data. You can change the data in the store to reflect in all component
-import SectionData from '@/store/store.js'
 
 export default {
   name: 'HeroThree',
-  data () {
+  props: ['title', 'lists', 'classname'],
+  data() {
     return {
-      SectionData
+      imgLg: require('@/images/thumb/check.png'),
     }
   }
 }
 </script>
+

@@ -1,80 +1,81 @@
 <template>
     <transition name="sidebar-cart">
-    <div class="sidebar sidebar-cart  row" v-if="stateshowcart">
-        <div class="col-lg-12 sidebar-widget sidebar-widget-cart">
+        <div class="sidebar sidebar-cart  row" v-if="stateshowcart">
+            <div class="col-lg-12 sidebar-widget sidebar-widget-cart">
 
-            <div class="card card-creator-s1">
-                <div class="modal-header" data-v-289073a8="">
-                    <h4 class="modal-title" data-v-289073a8="">Tu Carrito</h4><button @click="toggleCart" type="button"
-                        class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close" data-v-289073a8=""><em
-                            class="ni ni-cross" data-v-289073a8=""></em></button>
-                </div>
-                <div class="cardflex mb-4">
-
-                    <div class="tittleleft">
-                        <h6 class="card-s1-title"></h6>
+                <div class="card card-creator-s1">
+                    <div class="modal-header" data-v-289073a8="">
+                        <h4 class="modal-title" data-v-289073a8="">Tu Carrito</h4><button @click="toggleCart" type="button"
+                            class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close" data-v-289073a8=""><em
+                                class="ni ni-cross" data-v-289073a8=""></em></button>
                     </div>
-                    <div class="tittlerigth"><span @click="toggleAccordion" class="enRnoF">{{ cart.length }}
-                            Productos<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                viewBox="0 0 24 24">
-                                <path fill="#6A696E"
-                                    d="M15.88 9.29L12 13.17 8.12 9.29a.996.996 0 10-1.41 1.41l4.59 4.59c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 000-1.41c-.39-.38-1.03-.39-1.42 0z">
-                                </path>
-                            </svg></span></div>
-                </div>
-                <div class="center mb-4"  v-if="!cart.length" style="text-align: center; display: flex; align-items: center; flex-direction: column;">
-                    <p>Aun no tienes productos en tu carrito </p>
-                    <a :disabled="isButtonDisabled" href="/"
-                            class="btn btn-primary d-block" style="width: 260px;">
+                    <div class="cardflex mb-4">
+
+                        <div class="tittleleft">
+                            <h6 class="card-s1-title"></h6>
+                        </div>
+                        <div class="tittlerigth"><span @click="toggleAccordion" class="enRnoF">{{ cart.length }}
+                                Productos<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                    viewBox="0 0 24 24">
+                                    <path fill="#6A696E"
+                                        d="M15.88 9.29L12 13.17 8.12 9.29a.996.996 0 10-1.41 1.41l4.59 4.59c.39.39 1.02.39 1.41 0l4.59-4.59a.996.996 0 000-1.41c-.39-.38-1.03-.39-1.42 0z">
+                                    </path>
+                                </svg></span></div>
+                    </div>
+                    <div class="center mb-4" v-if="!cart.length"
+                        style="text-align: center; display: flex; align-items: center; flex-direction: column;">
+                        <p>Aun no tienes productos en tu carrito </p>
+                        <a :disabled="isButtonDisabled" href="/" class="btn btn-primary d-block" style="width: 260px;">
                             Comenzar a comprar </a>
-                </div>
+                    </div>
 
-                <transition name="slide-fade">
-                    <div class="acordeon-card" v-if="isAccordionOpen">
-                        <div class="card-body d-flex d-flex-tras align-items-center" v-for="list in cart" :key="list.id">
-                            <div class="avatar avatar-1 flex-shrink-0">
-                                <img :src="list.imgLg" alt="avatar" />
-                            </div>
-                            <div class="flex-grow-1">
-                                <div class="dv1">
-                                    <p class="card-s1-title"> {{ list.title }}</p>
-                                    <h6 class="card-s1-title"> {{ $formatoMoneda(list.total * list.cant)}}</h6>
-                                    <p v-if="list.cartadditions.length" class="card-s1-text">
-                                        <span v-for="listadd in list.cartadditions" :key="listadd">
-                                            {{ listadd.title }} - </span>
-
-
-                                    </p>
+                    <transition name="slide-fade">
+                        <div class="acordeon-card" v-if="isAccordionOpen">
+                            <div class="card-body d-flex d-flex-tras align-items-center" v-for="list in cart"
+                                :key="list.id">
+                                <div class="avatar avatar-1 flex-shrink-0">
+                                    <img :src="list.imgLg" alt="avatar" />
                                 </div>
+                                <div class="flex-grow-1">
+                                    <div class="dv1">
+                                        <p class="card-s1-title"> {{ list.title }}</p>
+                                        <h6 class="card-s1-title"> {{ $formatoMoneda(list.total * list.cant) }}</h6>
+                                        <p v-if="list.cartadditions.length" class="card-s1-text">
+                                            <span v-for="listadd in list.cartadditions" :key="listadd">
+                                                {{ listadd.title }} - </span>
 
-                                <div class="dv3">
-                                    <button @click="increment(list)">+</button>
-                                    <input type="number" v-model="list.cant" />
-                                    <button @click="decrement(list)">-</button>
+
+                                        </p>
+                                    </div>
+
+                                    <div class="dv3">
+                                        <button @click="increment(list)">+</button>
+                                        <input type="number" v-model="list.cant" />
+                                        <button @click="decrement(list)">-</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </transition>
+                    <spam v-if="cart.length" class="sub-tlt">Subtotal: {{ $formatoMoneda(totalSum) }}</spam>
+                    <div class="cardflexfooter mb-4" v-if="cart.length">
+                        <div class="tittleleft">
+                            <em @click="clearCart" class="ni ni-trash" data-v-4a61c780=""></em>
+                        </div>
+                        <div class="tittlerigth">
+                            <a :disabled="isButtonDisabled" :href="SectionData.placeBidModal.btnLink"
+                                class="btn btn-primary d-block" style="width: 260px;">
+                                Ir a pagar </a>
+                        </div>
                     </div>
-                </transition>
-                <spam  v-if="cart.length" class="sub-tlt">Subtotal: {{ $formatoMoneda( totalSum )}}</spam>
-                <div class="cardflexfooter mb-4" v-if="cart.length">
-                    <div class="tittleleft">
-                        <em @click="clearCart" class="ni ni-trash" data-v-4a61c780=""></em>
-                    </div>
-                    <div class="tittlerigth" >
-                        <a :disabled="isButtonDisabled" :href="SectionData.placeBidModal.btnLink"
-                            class="btn btn-primary d-block" style="width: 260px;">
-                            Ir a pagar </a>
-                    </div>
+
                 </div>
 
-            </div>
 
+            </div><!-- end sidebar-widget -->
 
-        </div><!-- end sidebar-widget -->
-
-    </div><!-- end sidebar -->
-</transition>
+        </div><!-- end sidebar -->
+    </transition>
 </template>
 <script>
 // Import component data. You can change the data in the store to reflect in all component
@@ -117,18 +118,18 @@ export default {
             this.$store.dispatch('updatecart', []);
         },
         increment(index) {
-           this.storedCart.find(item => item.id === index.id).cant = (index.cant + 1)
-           const parsed = JSON.stringify(this.storedCart);
-           sessionStorage.setItem("shopingcart", parsed);
-           this.$store.dispatch('updatecart', this.storedCart);
-    },
-    decrement(index) {
-           this.storedCart.find(item => item.id === index.id);
-           this.storedCart.find(item => item.id === index.id).cant = (index.cant - 1)
-           const parsed = JSON.stringify(this.storedCart);
-           sessionStorage.setItem("shopingcart", parsed);
-           this.$store.dispatch('updatecart', this.storedCart);
-    },
+            this.storedCart.find(item => item.id === index.id).cant = (index.cant + 1)
+            const parsed = JSON.stringify(this.storedCart);
+            sessionStorage.setItem("shopingcart", parsed);
+            this.$store.dispatch('updatecart', this.storedCart);
+        },
+        decrement(index) {
+            this.storedCart.find(item => item.id === index.id);
+            this.storedCart.find(item => item.id === index.id).cant = (index.cant - 1)
+            const parsed = JSON.stringify(this.storedCart);
+            sessionStorage.setItem("shopingcart", parsed);
+            this.$store.dispatch('updatecart', this.storedCart);
+        },
 
     },
     computed: {
@@ -139,7 +140,7 @@ export default {
             return this.$store.state.cart;
         },
         totalSum() {
-            return this.$store.state.cart.reduce((acc, item) => acc + (item.total)*(item.cant), 0);
+            return this.$store.state.cart.reduce((acc, item) => acc + (item.total) * (item.cant), 0);
         },
     }
 }
@@ -165,18 +166,31 @@ export default {
         width: 100% !important;
     }
 }
-.sidebar-cart-enter-active, .sidebar-cart-leave-active {
-  transition: opacity 0.5s;
+
+.sidebar-cart-enter-active,
+.sidebar-cart-leave-active {
+    transition: opacity 0.5s;
 }
-.sidebar-cart-enter, .sidebar-cart-leave-to /* .sidebar-cart-leave-active a partir de Vue 2.1.8 */ {
-  opacity: 0;
+
+.sidebar-cart-enter,
+.sidebar-cart-leave-to
+
+/* .sidebar-cart-leave-active a partir de Vue 2.1.8 */
+    {
+    opacity: 0;
 }
-.sidebar-cart-enter-active, .sidebar-cart-leave-active {
-  transition: opacity 0.5s;
+
+.sidebar-cart-enter-active,
+.sidebar-cart-leave-active {
+    transition: opacity 0.5s;
 }
-.sidebar-cart-enter, .sidebar-cart-leave-to, .sidebar-cart-leave-active {
-  opacity: 0;
+
+.sidebar-cart-enter,
+.sidebar-cart-leave-to,
+.sidebar-cart-leave-active {
+    opacity: 0;
 }
+
 .flex-grow-sidebar {
     width: 100%;
 }
@@ -232,7 +246,7 @@ export default {
     font-size: 37px;
 }
 
-.tittleleft em:hover{
+.tittleleft em:hover {
     cursor: pointer;
     font-size: 40px;
 }
