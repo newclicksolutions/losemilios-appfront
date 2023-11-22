@@ -154,9 +154,6 @@ export default {
       price: "",
       total: 0,
       imgLg: "",
-      metaText: "",
-      metaTextTwo: "",
-      metaTextThree: "",
       content: "",
       cant: 1,
       additions: [],
@@ -170,16 +167,13 @@ export default {
     if (sessionStorage.getItem("shopingcart")) {
       this.storedCart = sessionStorage.getItem("shopingcart");
     }
-    SectionData.products.forEach((element) => {
-      if (this.id == element.id) {
-        this.imgLg = element.imgLg;
+    this.$store.state.products.forEach((element) => {
+      if (this.id == element.product_id) {
+        this.imgLg = require('@/images/thumb/products/'+element.img);
         this.title = element.title;
         this.price = element.price;
-        this.metaText = element.metaText;
-        this.metaTextTwo = element.metaTextTwo;
-        this.metaTextThree = element.metaTextThree;
         this.content = element.content;
-        this.additions = element.additions;
+        this.additions = element.addition;
         this.total = element.price;
       }
     });

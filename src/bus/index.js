@@ -5,14 +5,25 @@ import { createStore } from 'vuex';
 export default createStore({
   state: {
     // tus datos o variables de estado van aquí
+    products:[],
     cartcount:0,
     cart: [],
     userdata: [],
     cartview:false,
-    searhinput:""
+    searhinput:"",
+    loading: false,
+    error: null,
   },
   mutations: {
-    // tus mutaciones para cambiar el estado van aquí
+    setData(state, payload) {
+      state.products = payload;
+    },
+    setLoading(state, payload) {
+      state.loading = payload;
+    },
+    setError(state, payload) {
+      state.error = payload;
+    },
     increment(state) {
       state.count++;
     },
@@ -35,10 +46,24 @@ export default createStore({
     updatedataUser(state,payload) {
       state.userdata = payload;
     },
+    updateproducts(state,payload) {
+      state.products = payload;
+    },
 
   },
   actions: {
-    // tus acciones para invocar mutaciones (y posiblemente hacer lógica asíncrona) van aquí
+    async fetchData({ commit }) {
+      try {
+        commit('setLoading', true);
+        const response = await fetch('http://localhost:4000/api/v1/products');
+        const data = await response.json();
+        commit('setData', data);
+      } catch (error) {
+        commit('setError', error.message);
+      } finally {
+        commit('setLoading', false);
+      }
+    },
     incrementCount({ commit }) {
       commit('increment');
     },
@@ -60,6 +85,9 @@ export default createStore({
     updatedataUser: (context, payload) => {
       context.commit('updatedataUser', payload)
     },
+    updateproducts: (context, payload) => {
+      context.commit('updateproducts', payload)
+    },
     
     
     
@@ -71,6 +99,9 @@ export default createStore({
     },
     Userdata: state => {
       return state.userdata;
+    },
+    Productsdata: state => {
+      return state.products;
     }
 
   }

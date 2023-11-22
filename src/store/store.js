@@ -442,7 +442,7 @@ userdata:[
       authorLink: 'author',
       name: 'art',
       price: '8000',
-      metaText: 'Not for sale',
+      metaText: 'Not for sale', 
       metaTextTwo: '500 editions',
       metaTextThree: 'Highest bid <span class="text-primary fw-semibold">0.072 wETH</span>',
       currentPrice: '1.32 ETH',

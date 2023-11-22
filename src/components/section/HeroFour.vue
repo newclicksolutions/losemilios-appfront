@@ -12,7 +12,7 @@
           <div class="col-lg-6 pe-xl-5">
             <div class="item-detail-content">
               <div class="item-detail-img-container mb-4">
-                <img :src="imgLg" alt="" class="w-100 rounded-3" />
+                <img :src="imgLg" alt="" class="w-70 rounded-3" />
               </div>
             </div>
           </div>

@@ -33,10 +33,10 @@
           :aria-labelledby="'pills-' + categoryMenu.title + '-tab'" v-for="categoryMenu in categoryMenu"
           :key="categoryMenu.id">
           <div class="row g-gs">
-            <div class="col-xl-3 col-lg-4 col-sm-6" v-for="product in filteredProducts" :key="product.id">
+            <div class="col-xl-3 col-lg-4 col-sm-6" v-for="product in filteredProducts" :key="product.product_id ">
               <div class="card card-product mb-0 d-flex">
                 <div class="card-image">
-                  <img :src="product.img" class="card-img-top" alt="art image" />
+                  <img :src="require('@/images/thumb/products/'+product.img)" class="card-img-top" alt="art image" />
                 </div>
                 <div class="card-body p-4">
                   <h5 class="card-title text-truncate mb-0">
@@ -61,7 +61,7 @@
                 <router-link class="details" :to="{
                   name: 'ProductDetail',
                   params: {
-                    id: product.id,
+                    id: product.product_id ,
                     title: product.title,
                     metaText: product.metaText,
                     price: product.price,
@@ -108,7 +108,7 @@ Swiper.use([Navigation]);
 export default {
   name: "ExploreSection",
   data() {
-    return {
+    return { 
       SectionData,
       filtersproduct: "",
       filtersCategory: "Todos",
@@ -144,6 +144,11 @@ export default {
           title: "Bebidas",
           img: require('@/images/thumb/products/Group_33.png'),
         },
+        {
+          id: 6,
+          title: "Adiciones",
+          img: require('@/images/thumb/products/Group_33.png'),
+        },
       ],
       isFIlter: false,
       selectedTab: null,
@@ -153,7 +158,11 @@ export default {
     };
   },
   mounted() {
-    // eslint-disable-next-line no-unused-vars
+    if (this.$store.state.products.length == 0) {
+      console.log("rmax")
+      this.$store.dispatch('fetchData');
+    }
+    
     new Swiper('.swiper-container', {
       slidesPerView: 3,  // Por defecto mostrará 1 slide
       spaceBetween: 1,  // Espacio entre slides
@@ -207,19 +216,25 @@ export default {
     },
   },
   computed: {
+    data() {
+      return this.$store.state.data;
+    },
     stateshowcart() {
       return this.$store.state.searhinput;
     },
+    prd() {
+      return this.$store.state.data;
+    },
     filteredProducts() {
       if (this.$store.state.searhinput) {
-        if (this.filtersCategory == this.$store.state.searhinput) return this.SectionData.products;
-        return this.SectionData.products.filter(
-          (product) => product.title.toLowerCase().includes(this.$store.state.searhinput.toLowerCase()) || product.category.toLowerCase().includes(this.$store.state.searhinput.toLowerCase())
+        if (this.filtersCategory == this.$store.state.searhinput) return this.$store.state.products;
+        return this.$store.state.products.filter(
+          (product) => product.title.toLowerCase().includes(this.$store.state.searhinput.toLowerCase()) || product.Category.title.toLowerCase().includes(this.$store.state.searhinput.toLowerCase())
         );
       } else {
-        if (this.filtersCategory == "Todos") return this.SectionData.products;
-        return this.SectionData.products.filter(
-          (product) => product.category === this.filtersCategory
+        if (this.filtersCategory == "Todos") return this.$store.state.products;
+        return this.$store.state.products.filter(
+          (product) => product.Category.title === this.filtersCategory
         );
       }
 

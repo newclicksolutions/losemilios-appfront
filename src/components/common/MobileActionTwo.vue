@@ -3,10 +3,12 @@
 <template>
   <div id="app">
     <div class="menu-container">
+      <router-link to="/">
       <div class="menu-item" @click="navigate('inicio')">
         <em class="ni ni-home"></em>
-        <span>Inicio</span>
+        <span> Inicio</span>
       </div>
+    </router-link>
       <div class="menu-item" @click="showcart()">
         <i v-if="count" class="countbubbleMb">{{count}}</i>
         <em class="ni ni-cart"></em>
@@ -16,9 +18,13 @@
         <em class="ni ni-list"></em>
         <span>Pedidos</span>
       </div> -->
-      <div class="menu-item" @click="navigate('perfil')">
+      <div v-if="Userdata.length" class="menu-item" @click="navigate('perfil')">
         <em class="ni ni-user"></em>
         <span>Perfil</span>
+      </div>
+      <div v-else class="menu-item" @click="navigate('perfil')">
+        <em class="ni ni-user"></em>
+        <span>Ingresar</span>
       </div>
     </div>
   </div>
@@ -47,6 +53,9 @@ export default {
   computed: {
     count() {
       return this.$store.state.cartcount;
+    },
+    Userdata() {
+      return this.$store.state.userdata;
     },
     doubleCount() {
       return this.$store.getters.doubleCount;
