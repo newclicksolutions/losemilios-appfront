@@ -55,7 +55,7 @@ export default createStore({
     async fetchData({ commit }) {
       try {
         commit('setLoading', true);
-        const response = await fetch('http://localhost:4000/api/v1/products');
+        const response = await fetch('http://localhost:3001/api/v1/products');
         const data = await response.json();
         commit('setData', data);
       } catch (error) {
@@ -86,6 +86,9 @@ export default createStore({
       context.commit('updatedataUser', payload)
     },
     updateproducts: (context, payload) => {
+      context.commit('updateproducts', payload)
+    },
+    registarusuario: (context, payload) => {
       context.commit('updateproducts', payload)
     },
     

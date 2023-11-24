@@ -8,10 +8,8 @@
                                 <LogoLink class="footer-logo-link"></LogoLink>
                                 <p class="my-4 footer-para" v-if="SectionData.footerData.content">{{ SectionData.footerData.content }}</p>
                                 <ul class="styled-icon">
-                                    <li><a href="https://twitter.com/MxbuToken"><em class="icon ni ni-twitter"></em></a></li>
-                                    <li><a href="https://www.facebook.com/people/Maxibuku-Mxbu/100071740446133/"><em class="icon ni ni-facebook-f"></em></a></li>
-                                    <li><a href="https://www.instagram.com/maxibuku_mxbu/"><em class="icon ni ni-instagram"></em></a></li>
-                                    <li><a href="https://t.me/joinchat/HqEiNzWR7xE0MDI1"><em class="icon ni ni-telegram"></em></a></li>
+                                    <li><a href=""><em class="icon ni ni-facebook-f"></em></a></li>
+                                    <li><a href=""><em class="icon ni ni-instagram"></em></a></li>
                                 </ul>
                             </div><!-- end footer-item -->
                         </div><!-- end col-lg-3 -->
