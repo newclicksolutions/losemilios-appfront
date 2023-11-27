@@ -61,7 +61,7 @@ export default createStore({
     async fetchData({ commit }) {
       try {
         commit("setLoading", true);
-        const response = await fetch("http://localhost:3001/api/v1/products");
+        const response = await fetch("https://api.losemilios.com/api/v1/products");
         const data = await response.json();
         commit("setData", data);
       } catch (error) {
@@ -108,7 +108,7 @@ export default createStore({
       };
       try {
         const response = await fetch(
-          "http://localhost:3001/api/v1/auth/login",
+          "https://api.losemilios.com/api/v1/auth/login",
           options
         );
         if (!response.ok) {
@@ -134,7 +134,7 @@ export default createStore({
       };
       try {
         const response = await fetch(
-          "http://localhost:3001/api/v1/auth/user",
+          "https://api.losemilios.com/api/v1/auth/user",
           options
         );
         if (!response.ok) {
@@ -171,13 +171,13 @@ export default createStore({
         body: JSON.stringify(data),
       };
       try {
-        /*  const validemail = await fetch('http://localhost:3001/api/v1/users/validemail/'+payload.emailAddress+'');
+        /*  const validemail = await fetch('https://api.losemilios.com/api/v1/users/validemail/'+payload.emailAddress+'');
         if (await validemail.json().length) {
           console.log("epa")
         }
          */
         const response = await fetch(
-          "http://localhost:3001/api/v1/auth/register",
+          "https://api.losemilios.com/api/v1/auth/register",
           options
         );
 
