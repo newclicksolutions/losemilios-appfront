@@ -13,30 +13,30 @@
                     <form @submit.prevent="registrar">
                         <div class="row">
                             <div class="col-md-6"><div class="form-floating mb-4">
-                            <input type="text" class="form-control" v-model="fullName" id="fullName" placeholder="Nombre"
+                            <input type="text" class="form-control" v-model="regisData.fullName" id="fullName" placeholder="Nombre"
                                 required>
                             <label for="fullName">Nombre</label>
                         </div></div>
                             <div class="col-md-6"><div class="form-floating mb-4">
-                            <input type="text" class="form-control" v-model="apellido" id="apellido" placeholder="Apellido"
+                            <input type="text" class="form-control" v-model="regisData.apellido" id="apellido" placeholder="Apellido"
                                 required>
                             <label for="fullName">Apellido</label>
                         </div></div>
                         </div>
                         <!-- end form-floating -->
                         <div class="form-floating mb-4">
-                            <input type="email" class="form-control" v-model="emailAddress" id="emailAddress"
+                            <input type="email" class="form-control" v-model="regisData.emailAddress" id="emailAddress"
                                 placeholder="name@example.com" required>
                             <label for="emailAddress">Correo</label>
                         </div>
                         <div class="form-floating mb-4">
-                            <input type="number" class="form-control" v-model="tel" id="tel" placeholder="Telefono"
+                            <input type="number" class="form-control" v-model="regisData.tel" id="tel" placeholder="Telefono"
                                 required>
                             <label for="userName">Telefono</label>
                         </div><!-- end form-floating -->
                         <!-- end form-floating -->
                         <div class="form-floating mb-4">
-                            <input type="password" class="form-control password" id="password" placeholder="Password"
+                            <input type="password" class="form-control password" v-model="regisData.password" id="password" placeholder="Password"
                                 required>
                             <label for="password">Password</label>
                             <a href="password" class="password-toggle" title="Toggle show/hide pasword">
@@ -45,7 +45,7 @@
                             </a>
                         </div>
                         <div class="form-floating mb-4">
-                            <input type="text" class="form-control" v-model="direccion" id="direccion" placeholder="Direccion de entrega"
+                            <input type="text" class="form-control" v-model="regisData.direccion" id="direccion" placeholder="Direccion de entrega"
                                 required>
                             <label for="userName">Direccion de entrega</label>
                         </div>
@@ -73,7 +73,9 @@ export default {
     name: 'RegisterSection',
     data() {
         return {
-            SectionData
+            SectionData,
+            regisData:[],
+            UserData:[]
         }
     },
     mounted() {
@@ -102,9 +104,30 @@ export default {
 
     },
     methods:{
-        registrar(){
-            alert("reg")
+        async registrar(){
+            const result = await this.$store.dispatch('registarusuario',this.regisData)
+            if (result.success) {
+                const userdata = [{
+                direccion: this.regisData.direccion,
+                nombre: this.regisData.fullName,
+                telefono: this.regisData.tel,
+               adicionalinst: [],
+                PaymentMethod: [],
+                cartinfo: [] 
+            }]
+            const parsed = JSON.stringify(userdata);
+            sessionStorage.setItem("UserData", parsed);
+            this.UserData = JSON.parse(sessionStorage.getItem("UserData"));
+            this.$store.dispatch('updatedataUser', this.UserData)
+            this.$router.push('/');
+            }
+            
         }
     }
 }
 </script>
+
+
+
+
+

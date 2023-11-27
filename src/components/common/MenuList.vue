@@ -6,7 +6,7 @@
                 <ul class="menu-list">
                         <li class="menu-item"><router-link to="/" class="menu-link">Mi cuenta</router-link></li>
                         <li class="menu-item"><router-link to="/" class="menu-link">Mis pedidos</router-link></li>
-                        <li class="menu-item"><router-link to="/" class="menu-link">Cerrar sesion</router-link></li>
+                        <li class="menu-item"><a @click="sessionclose" class="menu-link">Cerrar sesion</a></li>
                     </ul>
               </div>
           </li>
@@ -31,6 +31,7 @@ export default {
     return {
       SectionData,
       storedCart: [],
+      UserData:[]
     }
   },
   mounted() {
@@ -42,6 +43,10 @@ export default {
                 this.emptyCart = false;
                 this.$store.dispatch('setcartcount',this.storedCart.length); 
             }
+        }
+        if (sessionStorage.getItem("UserData")) {
+          this.UserData = JSON.parse(sessionStorage.getItem("UserData"));
+          this.$store.dispatch('updatedataUser',this.UserData); 
         }
     },
   computed: {
@@ -56,6 +61,12 @@ export default {
     }
   },
   methods: {
+    sessionclose(){
+       sessionStorage.removeItem("UserData")
+       this.$store.dispatch('updatedataUser', [])
+       this.$store.dispatch('setcartcount', 0);
+       this.$store.dispatch('updatecart', []);
+    },
     showcart(){
       this.$store.dispatch('showcart');
     },
