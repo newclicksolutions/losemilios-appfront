@@ -176,6 +176,34 @@ export default createStore({
         return error;
       }
     },
+    
+    getorderBYuser: async (context, payload) => {
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      try {
+        context.commit("setLoading", true);
+        const response = await fetch(
+          CONSTANTS_TEST.URL_API+"/users/orders/" + payload,
+          options
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        context.commit("updatedataOrder", responseData.Order);
+        context.commit("setLoading", false);
+        return responseData;
+      } catch (error) {
+        console.error("Error:", error);
+        /// commit('setError', error.message);
+        return error;
+      }
+    },
     getorder: async (context, payload) => {
       const options = {
         method: "GET",

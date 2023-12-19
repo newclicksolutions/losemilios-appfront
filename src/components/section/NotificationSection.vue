@@ -140,7 +140,7 @@ export default {
             Check/Uncheck all checkboxes  with single click
         ===================================================== */
         this.userdata = JSON.parse(localStorage.getItem("UserData"));
-        this.$store.dispatch('getorder', this.userdata[0]?.user_id ?? 33);
+        this.$store.dispatch('getorderBYuser', this.userdata[0]?.user_id ?? 33);
         function checkboxAllToggle(selector, selectorInputText) {
             let checkAllBtn = document.querySelectorAll(selector)
             let checkAllInput = document.querySelectorAll(selectorInputText)

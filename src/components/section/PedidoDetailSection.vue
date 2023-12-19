@@ -58,6 +58,11 @@
                                         <label for="Telefono">Telefono</label>
                                     </div>
                                     <div class="form-floating mb-4">
+                                        <input v-model="email" type="text" class="form-control mb-3"
+                                            placeholder="Telefono" required>
+                                        <label for="Telefono">Correo</label>
+                                    </div>
+                                    <div class="form-floating mb-4">
                                         <input type="text" class="form-control" v-model="direccion" id="direccion"
                                             placeholder="Direccion de entrega" required>
                                         <label for="direccion">Escribe la direccion de entrega</label>
@@ -156,7 +161,7 @@
         </div>
         <div class="card-body d-flex align-items-center">
 
-            <div class="flex-grow-1">
+            <div class="flex-grow-1" hidden>
                 <div class="d-flex mb-4">
                     <div class="tittleleft">
                         <span>Agregar método de pago:</span>
@@ -245,6 +250,7 @@ export default {
             crtnumber: '',
             crtdate: '',
             crtcvc: '',
+            email:null,
             direccion: null,
             nombre: null,
             telefono: null,
@@ -312,6 +318,7 @@ export default {
             const userdata = [{
                 direccion: this.direccion,
                 nombre: this.nombre,
+                email:this.email,
                 telefono: this.telefono,
                 adicionalinst: this.adicionalinst,
                 PaymentMethod: this.selectedPaymentMethod,

@@ -95,16 +95,20 @@ export default {
                     shipping_amount: this.configvar[0].shipvalue,
                     tiping_amount: this.configvar[0].dealertip,
                     subtotal: this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0),
-                    total_sale: this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0)  + (this.configvar[0].shipvalue + this.configvar[0].dealertip),
+                    total_sale: this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0) + (this.configvar[0].shipvalue + this.configvar[0].dealertip),
                     shipping: this.userdata[0].direccion,
                     ship: this.userdata[0]?.adicionalinst ?? "",
                     reference_code: "",
                     customername: this.userdata[0].nombre,
                     customertel: this.userdata[0].telefono,
                     customeremail: "",
-                    User: {
-                        user_id: this.userdata[0]?.user_id ?? 33,
+                    User: [{
+                        user_id: this.userdata[0]?.user_id ?? 0,
                     },
+                    {
+                        user_id: 32,
+                    }
+                    ],
                     OrderStatus: {
                         order_status_id: 1
                     },
@@ -121,9 +125,9 @@ export default {
                 };
                 const result = await this.$store.dispatch('createorder', data)
                 if (result.order_id) {
-                   this.orderproducts = []
-                   this.$router.push('/ordencompleta-'+result.order_id)
-                }else{
+                    this.orderproducts = []
+                    this.$router.push('/ordencompleta-' + result.order_id)
+                } else {
                     this.$refs.notification.showNotification('Hubo un error procesando la orden, intentalo de nuevo mas tarde', '#D11D23')
                 }
             } else {
@@ -145,11 +149,11 @@ export default {
         }
     },
     computed: {
-        totalSum() { 
+        totalSum() {
             return this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0);
         },
         configvar() {
-             return this.$store.state.configvar;
+            return this.$store.state.configvar;
         },
 
     }
