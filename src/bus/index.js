@@ -195,7 +195,7 @@ export default createStore({
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const responseData = await response.json();
-        context.commit("updatedataOrder", responseData.Order);
+        context.commit("updatedataOrder", responseData[0].Order);
         context.commit("setLoading", false);
         return responseData;
       } catch (error) {
