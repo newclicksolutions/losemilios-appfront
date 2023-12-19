@@ -4,10 +4,10 @@ const routes = [
  /*  {
     path: "/",
     name: "Home",
-    component: () => import('../pages/Home-v2.vue'),
+    component: () => import('../pages/Home-v2.vue') ,
   }, */
   {
-    path:'/product-details-v1-:id',
+    path:'/product-details-:id',
     name:'ProductDetail',
     component: () => import('../pages/ProductDetail.vue'),
     props: true
@@ -24,6 +24,17 @@ const routes = [
     component: () => import('../pages/ItemDetails.vue')
   },
   {
+    path: '/notifications',
+    name: 'notifications',
+    component: () => import('../pages/Notifications.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/Pedidos',
+    name: 'Mis pedidos',
+    component: () => import('../pages/Activity.vue')
+  },
+  {
     path: '/item-details-v2',
     name: 'itemDetailsV2',
     component: () => import('../pages/ItemDetails-v2.vue')
@@ -33,7 +44,12 @@ const routes = [
     name: 'explore',
     component: () => import('../pages/Explore.vue')
   },
-
+  {
+    path: '/account',
+    name: 'account',
+    component: () => import('../pages/Account.vue'),
+    meta: { requiresAuth: true },
+  },
   {
     path: '/pedido',
     name: 'pedido',
@@ -50,7 +66,7 @@ const routes = [
     component: () => import('../pages/Register.vue')
   },
   {
-    path: '/ordencompleta',
+    path: '/ordencompleta-:id',
     name: 'ordencompleta',
     component: () => import('../pages/Ordencompleta.vue')
   },
@@ -68,6 +84,14 @@ const router = createRouter({
         top: 0
       }
     }
+  }
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth && !localStorage.getItem('token')) {
+    next('/login');
+  } else {
+    next();
   }
 });
 

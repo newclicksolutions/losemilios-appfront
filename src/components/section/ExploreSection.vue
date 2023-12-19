@@ -159,8 +159,8 @@ export default {
   },
   mounted() {
     if (this.$store.state.products.length == 0) {
-      console.log("rmax")
       this.$store.dispatch('fetchData');
+      this.$store.dispatch('fetchOptions');
     }
     
     new Swiper('.swiper-container', {

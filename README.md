@@ -22,3 +22,6 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### node legacy provider
+export NODE_OPTIONS=--openssl-legacy-provider

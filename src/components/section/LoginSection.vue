@@ -12,11 +12,13 @@
                     </div>
                     <form @submit.prevent="login">
                         <div class="form-floating mb-4">
-                            <input type="email" class="form-control" v-model="regisData.emailAddress" id="emailAddress" placeholder="name@example.com" required>
+                            <input type="email" class="form-control" v-model="regisData.emailAddress" id="emailAddress"
+                                placeholder="name@example.com" required>
                             <label for="emailAddress">Email address</label>
                         </div><!-- end form-floating -->
                         <div class="form-floating mb-4">
-                            <input type="password" class="form-control password" v-model="regisData.password" id="password" placeholder="Password">
+                            <input type="password" class="form-control password" v-model="regisData.password" id="password"
+                                placeholder="Password">
                             <label for="password">Password</label>
                             <a href="password" class="password-toggle" title="Toggle show/hide pasword">
                                 <em class="password-shown ni ni-eye-off"></em>
@@ -45,16 +47,21 @@
             </div><!-- end row -->
         </div><!-- end container -->
     </section>
+    <Notification ref="notification" />
 </template>
 <script>
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from '@/store/store.js'
+import Notification from '../common/Notification.vue'
 export default {
+    components: {
+        Notification
+    },
     name: 'LoginSection',
     data() {
         return {
             SectionData,
-            regisData:[]
+            regisData: []
         }
     },
     mounted() {
@@ -86,22 +93,30 @@ export default {
         async login() {
             const result = await this.$store.dispatch('login', this.regisData)
             console.log(result)
-            await this.$store.dispatch('getUsers')
-            /* if (result.success) {
-                const userdata = [{
-                    direccion: this.regisData.direccion,
-                    nombre: this.regisData.fullName,
-                    telefono: this.regisData.tel,
-                    adicionalinst: [],
+
+            if (result.accessToken) {
+                console.log("pass")
+                const resultuser = await this.$store.dispatch('getUsers')
+                console.log(resultuser)
+                 
+                 const userdata = [{
+                    user_id:resultuser.user_id,
+                    direccion: resultuser.shipping_address,
+                    nombre:resultuser.name +" "+resultuser.last_name,
+                    correo: resultuser.email,
+                    telefono: resultuser.phone,
+                    adicionalinst: null,
                     PaymentMethod: [],
                     cartinfo: []
                 }]
                 const parsed = JSON.stringify(userdata);
-                sessionStorage.setItem("UserData", parsed);
-                this.UserData = JSON.parse(sessionStorage.getItem("UserData"));
+                localStorage.setItem("UserData", parsed);
+                this.UserData = JSON.parse(localStorage.getItem("UserData"));
                 this.$store.dispatch('updatedataUser', this.UserData)
-                this.$router.push('/');
-            } */
+                this.$router.push('/');  
+            }else{
+                this.$refs.notification.showNotification('Usuario o contraseña incorrecta', '#D11D23')
+            }
 
         }
     }

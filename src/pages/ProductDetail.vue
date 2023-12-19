@@ -9,7 +9,8 @@
     <section class="item-detail-section section-space">
 
       <div class="container">
-        <router-link to="/"><em style="font-size: 36px;" class="ni ni-arrow-left-round-fill" data-v-289073a8=""></em></router-link>
+        <router-link to="/"><em style="font-size: 36px;" class="ni ni-arrow-left-round-fill"
+            data-v-289073a8=""></em></router-link>
         <div class="row">
           <div class="col-lg-6 pe-xl-5">
             <div class="item-detail-content">
@@ -164,12 +165,12 @@ export default {
     };
   },
   mounted() {
-    if (sessionStorage.getItem("shopingcart")) {
-      this.storedCart = sessionStorage.getItem("shopingcart");
+    if (localStorage.getItem("shopingcart")) {
+      this.storedCart = localStorage.getItem("shopingcart");
     }
     this.$store.state.products.forEach((element) => {
       if (this.id == element.product_id) {
-        this.imgLg = require('@/images/thumb/products/'+element.img);
+        this.imgLg = require('@/images/thumb/products/' + element.img);
         this.title = element.title;
         this.price = element.price;
         this.content = element.content;
@@ -200,6 +201,10 @@ export default {
         this.cartadditions.push({
           title: item.title,
           value: item.value,
+          id: item.product_id,
+          price: item.price,
+          content: item.content,
+          img: item.img
         });
         this.total = (parseInt(this.price) + parseInt(this.totaladitions)) * parseInt(this.cant);
       }
@@ -217,6 +222,10 @@ export default {
       this.cartadditions.push({
         title: item.title,
         value: item.value,
+        id: item.product_id,
+        price: item.price,
+        content: item.content,
+        img: item.img
       });
       this.total = (parseInt(this.price) + parseInt(this.totaladitions)) * this.cant;
 
@@ -227,7 +236,7 @@ export default {
       }
     },
     saveCart() {
-      let storedCart = sessionStorage.getItem("shopingcart");
+      let storedCart = localStorage.getItem("shopingcart");
       if (storedCart) {
         this.cart = JSON.parse(storedCart);
       }
@@ -244,14 +253,14 @@ export default {
         cartadditions: this.cartadditions,
       });
 
-      // Guardar el carrito actualizado en el sessionStorage
+      // Guardar el carrito actualizado en el localStorage
       const parsed = JSON.stringify(this.cart);
-      sessionStorage.setItem("shopingcart", parsed);
-      this.storedCart = JSON.parse(sessionStorage.getItem("shopingcart"))
+      localStorage.setItem("shopingcart", parsed);
+      this.storedCart = JSON.parse(localStorage.getItem("shopingcart"))
       this.$store.dispatch('setcartcount', this.storedCart.length);
       this.$store.dispatch('updatecart', this.storedCart);
     }
-  }, 
+  },
   computed: {
     subtotal() {
       return this.cart.reduce((acc, item) => acc + item.total, 0);

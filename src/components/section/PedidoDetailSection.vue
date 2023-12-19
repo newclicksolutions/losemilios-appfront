@@ -48,17 +48,18 @@
                             <form @submit.prevent="agragardireccion">
                                 <div class="credit-card-form mb-4">
                                     <div class="form-floating mb-4">
-                                        <input type="text" class="form-control" v-model="nombre"  id="Nombre"  placeholder="Nombre" required>
+                                        <input type="text" class="form-control" v-model="nombre" id="Nombre"
+                                            placeholder="Nombre" required>
                                         <label for="Nombre">Nombre</label>
                                     </div>
                                     <div class="form-floating mb-4">
-                                        <input v-model="telefono" type="text" class="form-control mb-3" placeholder="Telefono"
-                                        required>
+                                        <input v-model="telefono" type="text" class="form-control mb-3"
+                                            placeholder="Telefono" required>
                                         <label for="Telefono">Telefono</label>
                                     </div>
                                     <div class="form-floating mb-4">
-                                        <input type="text" class="form-control" v-model="direccion" id="direccion" placeholder="Direccion de entrega"
-                                required>
+                                        <input type="text" class="form-control" v-model="direccion" id="direccion"
+                                            placeholder="Direccion de entrega" required>
                                         <label for="direccion">Escribe la direccion de entrega</label>
                                     </div>
                                 </div><!-- end credit-card-form -->
@@ -137,18 +138,17 @@
                         <div class="form-check check-order mb-2">
                             <label class="form-check-label form-check-label-s1" for="paymentEfectivo"> Efectivo</label>
                             <input class="form-check-input check-all-input" type="checkbox" id="paymentEfectivo"
-                                v-model="selectedPaymentMethod" value="efectivo">
+                                v-model="selectedPaymentMethod" value="1">
                         </div>
                         <div class="form-check check-order mb-2">
                             <label class="form-check-label form-check-label-s1" for="paymentDatafono"> Datafono</label>
                             <input class="form-check-input check-all-input" type="checkbox" id="paymentDatafono"
-                                v-model="selectedPaymentMethod" value="datafono">
+                                v-model="selectedPaymentMethod" value="2">
                         </div>
-                        <div v-if="creditcart.length" class="form-check check-order mb-2">
-                            <label class="form-check-label form-check-label-s1" for="paymentCredito"> Targeta de credito
-                                terminada en: </label>
+                        <div v-if="UserData[0]?.cartinfo.length" class="form-check check-order mb-2">
+                            <label class="form-check-label form-check-label-s1" for="paymentCredito"> Targeta de credito: {{ lastFourDigits }}</label>
                             <input class="form-check-input check-all-input" type="checkbox" id="paymentCredito"
-                                v-model="selectedPaymentMethod" value="credito">
+                                v-model="selectedPaymentMethod" value="3">
                         </div>
                     </div>
                 </div>
@@ -163,7 +163,7 @@
 
                     </div>
                     <div class="tittlerigth">
-                        <a v-if="!creditcart.length" href="#" @click="openAddNewCardModal" ref="addNewCardModal"
+                        <a  href="#" @click="openAddNewCardModal" ref="addNewCardModal"
                             class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#addNewCardModal">
                             Agregar targeta de credito </a>
 
@@ -198,35 +198,27 @@
                                                         Crédito</label>
                                                     <input v-model="crtnumber" type="number" class="form-control"
                                                         id="crtnumber" required>
-                                                    <div v-if="!crtnumber" class="invalid-feedback">Este campo es
-                                                        obligatorio</div>
                                                 </div>
 
                                                 <div class="row g-3">
                                                     <div class="col-lg-8 mb-3">
                                                         <label for="crtdate" class="form-label">Exp. Fecha</label>
-                                                        <input v-model="crtdate" type="numer" class="form-control"
+                                                        <input v-model="crtdate" type="date" class="form-control"
                                                             id="crtdate" required>
-                                                        <div v-if="!crtdate" class="invalid-feedback">Este campo es
-                                                            obligatorio</div>
                                                     </div>
                                                     <div class="col-lg-4 mb-3">
                                                         <label for="crtcvc" class="form-label">CVC</label>
-                                                        <input v-model="crtcvc" type="number" class="form-control"
+                                                        <input v-model="crtcvc" type="password" class="form-control"
                                                             id="crtcvc" required>
-                                                        <div v-if="!crtcvc" class="invalid-feedback">Este campo es
-                                                            obligatorio</div>
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="billing-form-wrap">
-                                                <button disabled class="btn btn-primary w-100" data-bs-dismiss="modal"
-                                                    type="submit">Guardar tarjeta</button>
+                                                <button class="btn btn-primary w-100" type="submit">Guardar tarjeta</button>
                                             </div>
                                         </form>
                                     </div><!-- end modal-body -->
-                                </div><!-- end modal-content -->
+                                </div><!-- end modal-content --> 
                             </div><!-- end modal-dialog -->
                         </div><!-- end modal-->
                     </div>
@@ -244,12 +236,8 @@
 <script>
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from "@/store/store.js";
-import Notification from '../common/Notification.vue'
 
 export default {
-    components: {
-        Notification
-    },
     name: "PedidoDetailSection",
     data() {
         return {
@@ -272,16 +260,16 @@ export default {
         };
     },
     mounted() {
-        if (sessionStorage.getItem("shopingcart")) {
-            this.storedCart = JSON.parse(sessionStorage.getItem("shopingcart"));
+        if (localStorage.getItem("shopingcart")) {
+            this.storedCart = JSON.parse(localStorage.getItem("shopingcart"));
             if (this.storedCart.length === 0) {
                 this.emptyCart = true;
             } else {
                 this.emptyCart = false;
             }
         }
-        if (sessionStorage.getItem("UserData")) {
-            this.UserData = JSON.parse(sessionStorage.getItem("UserData"));
+        if (localStorage.getItem("UserData")) {
+            this.UserData = JSON.parse(localStorage.getItem("UserData"));
             if (this.UserData.length === 0) {
                 this.emptyUser = true;
             } else {
@@ -293,7 +281,6 @@ export default {
     methods: {
         savecard() {
             if (this.UserData.length) {
-                this.agragardireccion()
                 if (this.validateForm()) {
                     // Realiza la acción de guardar
                     this.creditcart = [{
@@ -302,10 +289,13 @@ export default {
                         crtdate: this.crtdate,
                         crtcvc: this.crtcvc,
                     }]
-
+                    this.UserData[0].cartinfo = this.creditcart
+                    this.UserData[0].PaymentMethod[0] = "3"
+                    localStorage.setItem("UserData", JSON.stringify(this.UserData));
                 } else {
                     this.selectedPaymentMethod = []
-                    this.$refs.notification.showNotification('Debes ingresar una dirección de envío?', '#D11D23')
+                    localStorage.setItem("UserData", JSON.stringify(this.UserData));
+                    this.$refs.notification.showNotification('Debes ingresar una dirección de envío', '#D11D23')
                 }
             }
 
@@ -328,8 +318,8 @@ export default {
                 cartinfo: this.creditcart
             }]
             const parsed = JSON.stringify(userdata);
-            sessionStorage.setItem("UserData", parsed);
-            this.UserData = JSON.parse(sessionStorage.getItem("UserData"));
+            localStorage.setItem("UserData", parsed);
+            this.UserData = JSON.parse(localStorage.getItem("UserData"));
             this.emptyUser = false
             this.showModal = false;
         },
@@ -338,20 +328,30 @@ export default {
         },
 
     },
+    computed: {
+        lastFourDigits() {
+                const crtnumber = parseInt(this.UserData[0]?.cartinfo[0]?.crtnumber)
+                console.log(crtnumber.toString())
+                return crtnumber.toString().slice(-4); 
+        },
+        cartinfo() {
+            if (this.UserData.length) {
+                return this.UserData[0].cartinfo.length
+            }
+            return 0
+        }
+    },
     watch: {
         selectedPaymentMethod(newVal) {
             if (newVal.length > 1) {
                 this.selectedPaymentMethod.shift(); // Elimina el primer elemento si hay más de uno
             }
             if (this.UserData.length) {
-                this.agragardireccion()
+                this.UserData[0].PaymentMethod = this.selectedPaymentMethod
+                localStorage.setItem("UserData", JSON.stringify(this.UserData));
             } else {
-                this.selectedPaymentMethod = []
                 this.$refs.notification.showNotification('Debes ingresar una dirección de envío?', '#D11D23')
             }
-
-
-
         }
     }
 };

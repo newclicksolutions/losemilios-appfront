@@ -843,27 +843,21 @@ userdata:[
   ],
 
    editProfileData: {
-     title: 'Account Settings',
+     title: 'Configuracion de tu cuenta',
      editProfileTabNav: [
       {
         id: 1,
         isActive: 'active',
-        title: 'Edit Info',
+        title: 'Editar informacion',
         slug: 'account-information-tab',
         bsTarget: '#account-information'
       },
       {
         id: 2,
-        title: 'Password',
+        title: 'Contraseña',
         slug: 'change-password-tab',
         bsTarget: '#change-password'
       },
-      {
-        id: 3,
-        title: 'Verify Profile',
-        slug: 'validate-profile-tab',
-        bsTarget: '#validate-profile'
-      }
     ],
     // edit profile tab mobile
      editProfileTabNavMobile: [
@@ -935,6 +929,42 @@ userdata:[
     }
   ],
 },
+notificationSidebarData: {
+  title: 'Notifications',
+  navList: [
+    {
+      id: 1,
+      icon: 'ni-edit',
+      title: 'Edit Profile',
+      path: 'account'
+    },
+    {
+      id: 2,
+      icon: 'ni-money',
+      title: 'Payment Methods',
+      path: 'payment-methods'
+    },
+    {
+      id: 3,
+      icon: 'ni-user',
+      title: 'Seller Settings',
+      path: 'seller-settings'
+    },
+    {
+      id: 4,
+      class: 'active',
+      icon: 'ni-bell',
+      title: 'Mis pedidos',
+      path: 'notifications'
+    },
+    {
+      id: 5,
+      icon: 'ni-lock',
+      title: 'Security',
+      path: 'security'
+    }
+  ]
+},
    
   // notification data
   notificationData: {
@@ -971,6 +1001,37 @@ userdata:[
       }
     ],
   },
+
+  accountSidebarData: {
+    title: 'Configuracion de la cuenta',
+    navList: [
+      {
+        id: 1,
+        class: 'active',
+        icon: 'ni-edit',
+        title: 'Editar perfil',
+        path: 'account'
+      },
+      {
+        id: 2,
+        icon: 'ni-bell',
+        title: 'Mis Pedidos',
+        path: 'notifications'
+      }
+    ]
+  },
+
+  authorPersonalData: {
+    title: 'Kamran Ahmed',
+    userName: '@kamran_76',
+    btnText: 'Edit Profile',
+    img: require('@/images/thumb/avatar-9.jpg'),
+    coverImg: require('@/images/thumb/bread-bg-2.jpg'),
+    btnLink: 'account',
+    btnTextTwo: 'Profile',
+    btnLinkTwo: 'profile',
+  },
+
   // credit card data
   creditCardList: [
     {
@@ -2153,13 +2214,10 @@ userdata:[
   ],
   // activity table head
   activityTableHead: [
-    'Event',
-    'Item',
-    'Unit Price',
-    'Quantity',
-    'From',
-    'To',
-    'Date',
+    'No pedido',
+    'Detalle pedido',
+    'Total',
+    'Fecha',
   ],
   // activity table body
   activityTableBody: {
@@ -2613,8 +2671,8 @@ userdata:[
     ],
     footerListTwo: [
       {
-        title: 'Pedidos',
-        path: 'activity'
+        title: 'Buscar Pedidos',
+        path: 'pedidos'
       },
       {
         title: '3137681221',

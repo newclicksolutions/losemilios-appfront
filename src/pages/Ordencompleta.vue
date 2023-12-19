@@ -34,7 +34,8 @@ export default {
   },
   data () {
     return {
-      SectionData
+      SectionData,
+      id: this.$route.params.id,
     }
   }
 }

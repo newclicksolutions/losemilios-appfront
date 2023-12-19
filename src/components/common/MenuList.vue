@@ -1,11 +1,11 @@
 <template>
     <ul class="menu-list ms-lg-auto">
-          <li class="menu-item " v-if="Userdata.length">
+          <li class="menu-item " v-if="Userdata[0]?.user_id">
               <a href="#" class="menu-link"><em class="menu-on menu-icon ni ni-user"></em></a>
               <div class="menu-sub ">
                 <ul class="menu-list">
-                        <li class="menu-item"><router-link to="/" class="menu-link">Mi cuenta</router-link></li>
-                        <li class="menu-item"><router-link to="/" class="menu-link">Mis pedidos</router-link></li>
+                        <li class="menu-item"><router-link to="/Account" class="menu-link">Mi cuenta</router-link></li>
+                        <li class="menu-item"><router-link to="/notifications" class="menu-link">Mis pedidos</router-link></li>
                         <li class="menu-item"><a @click="sessionclose" class="menu-link">Cerrar sesion</a></li>
                     </ul>
               </div>
@@ -35,8 +35,8 @@ export default {
     }
   },
   mounted() {
-        if (sessionStorage.getItem("shopingcart")) {
-            this.storedCart = JSON.parse(sessionStorage.getItem("shopingcart"));
+        if (localStorage.getItem("shopingcart")) {
+            this.storedCart = JSON.parse(localStorage.getItem("shopingcart"));
             if (this.storedCart.length === 0) {
                 this.emptyCart = true;
             } else {
@@ -44,8 +44,8 @@ export default {
                 this.$store.dispatch('setcartcount',this.storedCart.length); 
             }
         }
-        if (sessionStorage.getItem("UserData")) {
-          this.UserData = JSON.parse(sessionStorage.getItem("UserData"));
+        if (localStorage.getItem("UserData")) {
+          this.UserData = JSON.parse(localStorage.getItem("UserData"));
           this.$store.dispatch('updatedataUser',this.UserData); 
         }
     },
@@ -62,10 +62,12 @@ export default {
   },
   methods: {
     sessionclose(){
-       sessionStorage.removeItem("UserData")
+       localStorage.removeItem("UserData")
+       localStorage.removeItem("token")
        this.$store.dispatch('updatedataUser', [])
        this.$store.dispatch('setcartcount', 0);
        this.$store.dispatch('updatecart', []);
+       this.$router.push('/');
     },
     showcart(){
       this.$store.dispatch('showcart');

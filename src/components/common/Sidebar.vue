@@ -21,15 +21,15 @@
                             </li>
                             <li>
                                 <span>Costo de envío</span>
-                                <p> {{ $formatoMoneda(5300) }}</p>
+                                <p> {{ $formatoMoneda(configvar[0].shipvalue) }}</p>
                             </li>
                             <li>
                                 <span>Propina del Repartidor</span>
-                                <p> {{ $formatoMoneda(1000) }}</p>
+                                <p> {{ $formatoMoneda(configvar[0].dealertip) }}</p>
                             </li>
                             <li>
                                 <h4>Total</h4>
-                                <h4>{{ $formatoMoneda(totalSum + (5300 + 1000)) }}</h4>
+                                <h4>{{ $formatoMoneda(totalSum + (configvar[0].shipvalue + configvar[0].dealertip)) }}</h4>
                             </li>
                         </ul>
 
@@ -57,12 +57,14 @@ export default {
             SectionData,
             storedCart: [],
             userdata: [],
+            orderproducts: [],
+            load: false
         }
     },
 
     mounted() {
-        if (sessionStorage.getItem("shopingcart")) {
-            this.storedCart = JSON.parse(sessionStorage.getItem("shopingcart"));
+        if (localStorage.getItem("shopingcart")) {
+            this.storedCart = JSON.parse(localStorage.getItem("shopingcart"));
             if (this.storedCart.length === 0) {
                 this.emptyCart = true;
             } else {
@@ -71,22 +73,68 @@ export default {
         }
     },
     methods: {
-        irapagar() {
+        async irapagar() {
             if (this.validarCampos()) {
-                //sessionStorage.removeItem("shopingcart")
-                //this.$store.dispatch('setcartcount', 0);
-               // this.$store.dispatch('updatecart', []);
-                this.$router.push('/ordencompleta')
+                for (const key in this.storedCart) {
+                    const element = this.storedCart[key];
+                    this.orderproducts.push({
+                        product_id: element.id,
+                        sku: "sku-" + element.id,
+                        total: element.total,
+                        totaladitions: element.totaladitions,
+                        unit: "",
+                        nota: "",
+                        quantity: element.cant,
+                        price: element.price,
+                        name: element.title,
+                        aditions: JSON.stringify(element.cartadditions)
+                    });
+                }
+                const data = {
+                    tax_amount: 0,
+                    shipping_amount: this.configvar[0].shipvalue,
+                    tiping_amount: this.configvar[0].dealertip,
+                    subtotal: this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0),
+                    total_sale: this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0)  + (this.configvar[0].shipvalue + this.configvar[0].dealertip),
+                    shipping: this.userdata[0].direccion,
+                    ship: this.userdata[0]?.adicionalinst ?? "",
+                    reference_code: "",
+                    customername: this.userdata[0].nombre,
+                    customertel: this.userdata[0].telefono,
+                    customeremail: "",
+                    User: {
+                        user_id: this.userdata[0]?.user_id ?? 33,
+                    },
+                    OrderStatus: {
+                        order_status_id: 1
+                    },
+                    Paymethod: [
+                        {
+                            paymethod_id: this.userdata[0].PaymentMethod[0]
+                        }
+                    ],
+                    orderproduct: this.orderproducts,
+                    Restaurant: {
+                        restaurant_id: 1
+                    },
+                    Transaction: null
+                };
+                const result = await this.$store.dispatch('createorder', data)
+                if (result.order_id) {
+                   this.orderproducts = []
+                   this.$router.push('/ordencompleta-'+result.order_id)
+                }else{
+                    this.$refs.notification.showNotification('Hubo un error procesando la orden, intentalo de nuevo mas tarde', '#D11D23')
+                }
             } else {
                 this.$refs.notification.showNotification('Debes seleccionar un metodo de pago', '#D11D23')
             }
         },
 
         validarCampos() {
-            this.userdata = JSON.parse(sessionStorage.getItem("UserData"));
+            this.userdata = JSON.parse(localStorage.getItem("UserData"));
             if (this.userdata) {
                 for (const key in this.userdata) {
-                    console.log(this.userdata[key].PaymentMethod.length);
                     if (this.userdata[key].PaymentMethod.length === 0) {
                         return false;
                     }
@@ -97,8 +145,11 @@ export default {
         }
     },
     computed: {
-        totalSum() {
+        totalSum() { 
             return this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0);
+        },
+        configvar() {
+             return this.$store.state.configvar;
         },
 
     }

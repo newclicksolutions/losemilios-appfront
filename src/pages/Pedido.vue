@@ -41,7 +41,7 @@ export default {
     }
   },
   created() {
-    if (!sessionStorage.getItem("shopingcart")) {
+    if (!localStorage.getItem("shopingcart")) {
 
                 this.$router.push('/');
             

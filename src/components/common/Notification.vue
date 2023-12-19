@@ -1,5 +1,5 @@
 <template>
-    <div v-if="show" :style="{ backgroundColor: bgColor }" class="notification">
+    <div v-if="show" :style="{ backgroundColor: localBgColor }" class="notification">
       {{ message }}
     </div>
   </template>
@@ -9,17 +9,19 @@
     props: {
       bgColor: {
         type: String,
-        default: '#4CAF50' // Color por defecto o el que desees
+        default: '#4CAF50'
       }
     },
     data() {
       return {
         show: false,
-        message: ''
+        message: '',
+        localBgColor: this.bgColor,
       };
     },
     methods: {
-      showNotification(message) {
+      showNotification(message,color) {
+        this.localBgColor = color
         this.message = message;
         this.show = true;
         setTimeout(() => {

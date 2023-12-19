@@ -4,7 +4,7 @@ const CONSTANTS_PROD = {
   IMG_PATH: "https://acrefiles.s3.us-east-2.amazonaws.com/files/"
 };
 const CONSTANTS_TEST = {
-  URL_API: "http://localhost:4000/api/",
+  URL_API:"http://localhost:3001/api/v1",
   VERSION_API: "v1",
   IMG_PATH: "https://acrefiles.s3.us-east-2.amazonaws.com/files/"
 };

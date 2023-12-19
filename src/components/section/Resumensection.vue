@@ -5,6 +5,7 @@
             <div class="tittleleft" style="padding: 48px 16px;">
                 <h6 class="card-s1-title">Recibimos tu pedido</h6>
                 <p>Creado: {{ $getFormattedTime() }}</p>
+                <p><b> Nuemero de pedido: {{id }}</b></p>
             </div>
         </div>
     </div>
@@ -81,7 +82,8 @@
     <div class="card card-creator-s1 mb-4">
         <div class="cardflex mb-4">
             <div class="tittleleft">
-                <h6 class="card-s1-title">Tu cobro : {{ $formatoMoneda(totalSum + (5300 + 1000)) }}</h6>
+                <h6 class="card-s1-title">Tu cobro : {{ $formatoMoneda(totalSum + (configvar[0].shipvalue + configvar[0].dealertip)) }}</h6>
+           <!--      <h6 class="card-s1-title">Pago con {{  metododepago( UserData[0]?.PaymentMethod[0]) }} </h6> -->
             </div>
             <div class="tittlerigth"><span @click="toggleAccordion(3)" class="enRnoF">Ver detalles<svg
                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -99,16 +101,16 @@
                             <p>{{ $formatoMoneda(totalSum) }}</p>
                         </li>
                         <li>
-                            <span>Costo de envío: </span>
-                            <p> {{ $formatoMoneda(5300) }}</p>
+                            <span>Costo de envío:   </span>
+                            <p> {{ $formatoMoneda(configvar[0].shipvalue) }}</p>
                         </li>
                         <li>
-                            <span>Propina del Repartidor: </span>
-                            <p> {{ $formatoMoneda(1000) }}</p>
+                            <span>Propina del Repartidor:   </span>
+                            <p> {{ $formatoMoneda(configvar[0].dealertip) }}</p>
                         </li>
                         <li>
                             <h4>Total </h4>
-                            <h4>{{ $formatoMoneda(totalSum + (5300 + 1000)) }}</h4>
+                            <h4>{{ $formatoMoneda(totalSum + (configvar[0].shipvalue + configvar[0].dealertip)) }}</h4>
                         </li>
                     </ul>
                 </div>
@@ -137,25 +139,29 @@ export default {
             isAccordionOpen1: false,
             isAccordionOpen2: false,
             storedCart: [],
-            selectedPaymentMethod: [],
+            selectedPaymentMethod: null,
             UserData: [],
-            showModal: false
+            showModal: false,
+            id: this.$route.params.id,
         };
     },
     mounted() {
-        if (sessionStorage.getItem("shopingcart")) {
-            this.storedCart = JSON.parse(sessionStorage.getItem("shopingcart"));
+        console.log(this.id)
+        if (localStorage.getItem("shopingcart")) {
+            this.storedCart = JSON.parse(localStorage.getItem("shopingcart"));
             if (this.storedCart.length === 0) {
                 this.emptyCart = true;
             } else {
                 this.emptyCart = false;
             }
-            sessionStorage.removeItem("shopingcart")
+            localStorage.removeItem("shopingcart")
             this.$store.dispatch('setcartcount', 0);
             this.$store.dispatch('updatecart', []);
+        }else{
+            this.$router.push('/')
         }
-        if (sessionStorage.getItem("UserData")) {
-            this.UserData = JSON.parse(sessionStorage.getItem("UserData"));
+        if (localStorage.getItem("UserData")) { 
+            this.UserData = JSON.parse(localStorage.getItem("UserData"));
             if (this.UserData.length === 0) {
                 this.emptyUser = true;
             } else {
@@ -182,20 +188,42 @@ export default {
                     break;
             }
 
+        },
+        metododepago(key){
+            switch (key) {
+                case 1:
+                   this.selectedPaymentMethod ="Efectivo";
+                    break;
+                    case 2:
+                    this.selectedPaymentMethod = "Datafono"
+                    break;
+                    case 3:
+                    this.selectedPaymentMethod = "Targeta de credito: "+this.lastFourDigits
+                    break;
+            
+                default:
+                    break;
+            }
+
+            return this.selectedPaymentMethod 
         }
+
+     
+
     },
     computed: {
         totalSum() {
             return this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0);
         },
+        lastFourDigits() {
+                const crtnumber = parseInt(this.UserData[0]?.cartinfo[0]?.crtnumber)
+                console.log(crtnumber.toString())
+                return crtnumber.toString().slice(-4); 
+        },
+        configvar() {
+             return this.$store.state.configvar;
+        },
 
-    },
-    watch: {
-        selectedPaymentMethod(newVal) {
-            if (newVal.length > 1) {
-                this.selectedPaymentMethod.shift(); // Elimina el primer elemento si hay más de uno
-            }
-        }
     }
 };
 </script>

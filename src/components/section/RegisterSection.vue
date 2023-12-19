@@ -12,16 +12,20 @@
                     </div>
                     <form @submit.prevent="registrar">
                         <div class="row">
-                            <div class="col-md-6"><div class="form-floating mb-4">
-                            <input type="text" class="form-control" v-model="regisData.fullName" id="fullName" placeholder="Nombre"
-                                required>
-                            <label for="fullName">Nombre</label>
-                        </div></div>
-                            <div class="col-md-6"><div class="form-floating mb-4">
-                            <input type="text" class="form-control" v-model="regisData.apellido" id="apellido" placeholder="Apellido"
-                                required>
-                            <label for="fullName">Apellido</label>
-                        </div></div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-4">
+                                    <input type="text" class="form-control" v-model="regisData.fullName" id="fullName"
+                                        placeholder="Nombre" required>
+                                    <label for="fullName">Nombre</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-4">
+                                    <input type="text" class="form-control" v-model="regisData.apellido" id="apellido"
+                                        placeholder="Apellido" required>
+                                    <label for="fullName">Apellido</label>
+                                </div>
+                            </div>
                         </div>
                         <!-- end form-floating -->
                         <div class="form-floating mb-4">
@@ -30,14 +34,14 @@
                             <label for="emailAddress">Correo</label>
                         </div>
                         <div class="form-floating mb-4">
-                            <input type="number" class="form-control" v-model="regisData.tel" id="tel" placeholder="Telefono"
-                                required>
+                            <input type="number" class="form-control" v-model="regisData.tel" id="tel"
+                                placeholder="Telefono" required>
                             <label for="userName">Telefono</label>
                         </div><!-- end form-floating -->
                         <!-- end form-floating -->
                         <div class="form-floating mb-4">
-                            <input type="password" class="form-control password" v-model="regisData.password" id="password" placeholder="Password"
-                                required>
+                            <input type="password" class="form-control password" v-model="regisData.password" id="password"
+                                placeholder="Password" required>
                             <label for="password">Password</label>
                             <a href="password" class="password-toggle" title="Toggle show/hide pasword">
                                 <em class="password-shown ni ni-eye-off"></em>
@@ -45,8 +49,8 @@
                             </a>
                         </div>
                         <div class="form-floating mb-4">
-                            <input type="text" class="form-control" v-model="regisData.direccion" id="direccion" placeholder="Direccion de entrega"
-                                required>
+                            <input type="text" class="form-control" v-model="regisData.direccion" id="direccion"
+                                placeholder="Direccion de entrega" required>
                             <label for="userName">Direccion de entrega</label>
                         </div>
                         <!-- end form-floating -->
@@ -66,16 +70,18 @@
             </div><!-- end row -->
         </div><!-- end container -->
     </section><!-- end register-section -->
+    <Notification ref="notification" />
 </template>
 <script>
 import SectionData from '@/store/store.js'
+
 export default {
     name: 'RegisterSection',
     data() {
         return {
             SectionData,
-            regisData:[],
-            UserData:[]
+            regisData: [],
+            UserData: []
         }
     },
     mounted() {
@@ -103,25 +109,18 @@ export default {
         showHidePassword(".password-toggle");
 
     },
-    methods:{
-        async registrar(){
-            const result = await this.$store.dispatch('registarusuario',this.regisData)
+    methods: {
+        async registrar() {
+            const result = await this.$store.dispatch('registarusuario', this.regisData)
+            console.log(result)
+
+        if (result.error) {
+            this.$refs.notification.showNotification('Usuario el ya existe ', '#4CAF50') 
+        }
             if (result.success) {
-                const userdata = [{
-                direccion: this.regisData.direccion,
-                nombre: this.regisData.fullName,
-                telefono: this.regisData.tel,
-               adicionalinst: [],
-                PaymentMethod: [],
-                cartinfo: [] 
-            }]
-            const parsed = JSON.stringify(userdata);
-            sessionStorage.setItem("UserData", parsed);
-            this.UserData = JSON.parse(sessionStorage.getItem("UserData"));
-            this.$store.dispatch('updatedataUser', this.UserData)
-            this.$router.push('/');
+                this.$router.push('/login');
             }
-            
+
         }
     }
 }

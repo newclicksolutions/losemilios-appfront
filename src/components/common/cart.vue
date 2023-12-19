@@ -2,7 +2,6 @@
     <transition name="sidebar-cart">
         <div class="sidebar sidebar-cart  row" v-if="stateshowcart">
             <div class="col-lg-12 sidebar-widget sidebar-widget-cart">
-
                 <div class="card card-creator-s1">
                     <div class="modal-header" data-v-289073a8="">
                         <h4 class="modal-title" data-v-289073a8="">Tu Carrito</h4><button @click="toggleCart" type="button"
@@ -94,8 +93,8 @@ export default {
         }
     },
     mounted() {
-        if (sessionStorage.getItem("shopingcart")) {
-            this.storedCart = JSON.parse(sessionStorage.getItem("shopingcart"));
+        if (localStorage.getItem("shopingcart")) {
+            this.storedCart = JSON.parse(localStorage.getItem("shopingcart"));
             if (this.storedCart.length === 0) {
                 this.emptyCart = true;
             } else {
@@ -107,7 +106,7 @@ export default {
     },
     methods: {
         setcart(){
-            this.storedCart = JSON.parse(sessionStorage.getItem("shopingcart"));
+            this.storedCart = JSON.parse(localStorage.getItem("shopingcart"));
         },
         toggleAccordion() {
             this.isAccordionOpen = !this.isAccordionOpen;
@@ -116,7 +115,7 @@ export default {
             this.$store.dispatch('hidecart');
         },
         clearCart() {
-            sessionStorage.removeItem("shopingcart")
+            localStorage.removeItem("shopingcart")
             this.$store.dispatch('setcartcount', 0);
             this.$store.dispatch('updatecart', []);
         },
@@ -125,7 +124,7 @@ export default {
             this.setcart()
             this.storedCart.find(item => item.id === index.id).cant = (index.cant + 1)
             const parsed = JSON.stringify(this.storedCart);
-            sessionStorage.setItem("shopingcart", parsed);
+            localStorage.setItem("shopingcart", parsed);
             this.$store.dispatch('updatecart', this.storedCart);
         },
         decrement(index) {
@@ -136,7 +135,7 @@ export default {
                 if (i !== -1) {
                     this.storedCart.splice(i, 1);
                     const parsed = JSON.stringify(this.storedCart);
-                    sessionStorage.setItem("shopingcart", parsed);
+                    localStorage.setItem("shopingcart", parsed);
                     this.$store.dispatch('setcartcount', this.storedCart.length);
                     this.$store.dispatch('updatecart', this.storedCart);
                 }
@@ -144,7 +143,7 @@ export default {
                 this.storedCart.find(item => item.id === index.id);
                 this.storedCart.find(item => item.id === index.id).cant = (index.cant - 1)
                 const parsed = JSON.stringify(this.storedCart);
-                sessionStorage.setItem("shopingcart", parsed);
+                localStorage.setItem("shopingcart", parsed);
                 this.$store.dispatch('updatecart', this.storedCart);
             }
 
