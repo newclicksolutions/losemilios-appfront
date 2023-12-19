@@ -9,6 +9,7 @@ npm install
 ```
 npm run serve
 ```
+pm2 serve -s dist --name emiliosFRONT
 
 ### Compiles and minifies for production
 ```

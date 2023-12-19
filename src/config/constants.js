@@ -1,12 +1,12 @@
 const CONSTANTS_TEST = {
-  URL_API: "https://acreapi.herokuapp.com/api/",
+  URL_API: "https://api.losemilios.com/api/v1",
   VERSION_API: "v1",
-  IMG_PATH: "https://acrefiles.s3.us-east-2.amazonaws.com/files/"
+  IMG_PATH: "https://api.losemilios.com/"
 };
 const CONSTANTS_PROD  = {
   URL_API:"http://localhost:3001/api/v1",
   VERSION_API: "v1",
-  IMG_PATH: "https://acrefiles.s3.us-east-2.amazonaws.com/files/"
+  IMG_PATH: "https://api.losemilios.com/"
 };
 
 const TEST_ENVIRONMENT = false;

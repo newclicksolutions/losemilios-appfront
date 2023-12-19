@@ -74,7 +74,7 @@ export default createStore({
           CONSTANTS_TEST.URL_API+"/products"
         );
         const data = await response.json();
-        commit("setData", data);
+        commit("setData", data.data);
       } catch (error) {
         commit("setError", error.message);
       } finally {
