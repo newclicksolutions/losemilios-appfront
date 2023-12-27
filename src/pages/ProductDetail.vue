@@ -15,7 +15,7 @@
           <div class="col-lg-6 pe-xl-5">
             <div class="item-detail-content">
               <div class="item-detail-img-container mb-4">
-                <img :src="imgLg" alt="" class="w-100 rounded-3" />
+                <img :src="$store.state.configvar[0]?.apiurl + imgLg" alt="" class="w-100 rounded-3" />
               </div>
 
             </div>
@@ -170,7 +170,7 @@ export default {
     }
     this.$store.state.products.forEach((element) => {
       if (this.id == element.product_id) {
-        this.imgLg = require('@/images/thumb/products/' + element.img);
+        this.imgLg = element.img;
         this.title = element.title;
         this.price = element.price;
         this.content = element.content;

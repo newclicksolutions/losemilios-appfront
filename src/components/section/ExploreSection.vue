@@ -36,7 +36,7 @@
             <div class="col-xl-3 col-lg-4 col-sm-6" v-for="product in filteredProducts" :key="product.product_id ">
               <div class="card card-product mb-0 d-flex">
                 <div class="card-image">
-                  <img :src="require('@/images/thumb/products/'+product.img)" class="card-img-top" alt="art image" />
+                  <img :src="$store.state.configvar[0]?.apiurl +product.img" class="card-img-top" alt="art image" />
                 </div>
                 <div class="card-body p-4">
                   <h5 class="card-title text-truncate mb-0">
@@ -69,7 +69,7 @@
                     imgLg: product.imgLg,
                     metaText: product.metaText,
                     metaTextTwo: product.metaTextTwo,
-                    metaTextThree: product.metaTextThree,
+                    metaTextThree: product.metaTextThree, 
                     content: product.content,
                   },
                 }">

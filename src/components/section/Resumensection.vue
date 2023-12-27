@@ -26,7 +26,7 @@
             <div class="acordeon-card" v-if="isAccordionOpen">
                 <div class="card-body d-flex align-items-center" v-for="list in storedCart" :key="list.id">
                     <div class="avatar avatar-1 flex-shrink-0">
-                        <img :src="list.imgLg" alt="avatar" />
+                        <img :src="$store.state.configvar[0]?.apiurl + list.imgLg"  alt="avatar" />
                     </div>
                     <div class="flex-grow-1">
                         <p class="card-s1-text" style="float: left: ;">

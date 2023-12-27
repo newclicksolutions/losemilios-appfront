@@ -55,7 +55,7 @@
                                     <div class="card-body d-flex align-items-center" v-for="list in orders[0]?.orderproduct"
                                         :key="list.order_products_id"> 
                                         <div class="avatar avatar-1 flex-shrink-0">
-                                            <img :src="require('@/images/thumb/products/' + list.product.img)"
+                                            <img :src="$store.state.configvar[0]?.apiurl + list.product.img"
                                                 alt="avatar" />
                                         </div>
                                         <div class="flex-grow-1">

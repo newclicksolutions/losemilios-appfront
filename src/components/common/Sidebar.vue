@@ -103,7 +103,7 @@ export default {
                     customertel: this.userdata[0].telefono,
                     customeremail: "",
                     User: [{
-                        user_id: this.userdata[0]?.user_id ?? 0,
+                        user_id: this.userdata[0]?.user_id ?? 32,
                     },
                     {
                         user_id: 32,

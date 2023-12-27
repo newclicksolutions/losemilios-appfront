@@ -33,7 +33,7 @@
                             <div class="card-body d-flex d-flex-tras align-items-center" v-for="list in cart"
                                 :key="list.id">
                                 <div class="avatar avatar-1 flex-shrink-0">
-                                    <img :src="list.imgLg" alt="avatar" />
+                                    <img :src="$store.state.configvar[0]?.apiurl + list.imgLg"  alt="avatar" />
                                 </div>
                                 <div class="flex-grow-1">
                                     <div class="dv1">
