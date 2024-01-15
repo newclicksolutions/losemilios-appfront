@@ -39,7 +39,7 @@
                   <img :src="$store.state.configvar[0]?.apiurl +product.img" class="card-img-top" alt="art image" />
                 </div>
                 <div class="card-body p-4">
-                  <h5 class="card-title text-truncate mb-0">
+                  <h5 class="card-title mb-0">
                     {{ product.title }}
                   </h5>
                   <div class="card-author mb-1 d-flex align-items-center">
@@ -147,7 +147,7 @@ export default {
         {
           id: 6,
           title: "Adiciones",
-          img: require('@/images/thumb/products/Group_33.png'),
+          img: require('@/images/thumb/products/IMG_6023.jpg'),
         },
       ],
       isFIlter: false,
