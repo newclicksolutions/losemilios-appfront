@@ -22,45 +22,42 @@
               }
             }"
             :pagination="{ clickable: true }">
-            <swiper-slide v-for="item in productosAleatorios" :key="item.id">
+            <swiper-slide v-for="product in productosAleatorios" :key="product.product_id">
                 <div class="card card-full">
-                    <div to="item.path" class="card-image">
-                        <img :src="item.img" class="card-img-top" alt="art image">
+                    <div to="product.path" class="card-image">
+                        <img :src="$store.state.configvar[0]?.apiurl +product.img"  class="card-img-top" alt="art image">
                     </div>
                     <div class="card-body p-4">
-                        <h5 class="card-title text-truncate mb-0">{{ item.title  }}</h5>
-                        <div class="card-author mb-1 d-flex align-items-center">   
+                        <h5 class="card-title text-truncate mb-0">{{ product.title  }}</h5>
+                        <div class="card-author mb-1 d-flex align-products-center">   
                         </div><!-- end card-author -->
                         <div class="custom-tooltip-wrap">
-                      <p class="item-detail-text mb-4">{{ item.content }}</p>
+                      <p class="product-detail-text mb-4">{{ product.content }}</p>
                     </div>
-                        <div class="card-price-wrap d-flex align-items-center justify-content-between mb-3">
+                        <div class="card-price-wrap d-flex align-products-center justify-content-between mb-3">
                           <div class="me-2">
                               
-                              <span class="card-price-number">${{ item.price }}</span>
+                              <span class="card-price-number">{{ $formatoMoneda(product.price) }}</span>
                           </div>
                           
                         </div><!-- end card-price-wrap -->
-                       <router-link to="item.path" class="btn btn-sm btn-primary">Lo quiero</router-link>
+                       <router-link to="product.path" class="btn btn-sm btn-primary">Lo quiero</router-link>
                     </div><!-- end card-body -->
-                    <router-link
-                    class="details"
-                    :to="{
-                        name: 'ProductDetail',
-                        params: {
-                        id: item.id,
-                        title: item.title,
-                        metaText: item.metaText,
-                        price: item.price,
-                        priceTwo: item.priceTwo,
-                        imgLg: item.imgLg,
-                        metaText: item.metaText,
-                        metaTextTwo: item.metaTextTwo,
-                        metaTextThree: item.metaTextThree,
-                        content: item.content,
-                        }
-                    }"
-                >
+                    <router-link class="details" :to="{
+                  name: 'ProductDetail',
+                  params: {
+                    id: product.product_id ,
+                    title: product.title,
+                    metaText: product.metaText,
+                    price: product.price,
+                    priceTwo: product.priceTwo,
+                    imgLg: product.imgLg,
+                    metaText: product.metaText,
+                    metaTextTwo: product.metaTextTwo,
+                    metaTextThree: product.metaTextThree, 
+                    content: product.content,
+                  },
+                }">
                 </router-link>
                 </div><!-- end card -->
             </swiper-slide>
@@ -90,7 +87,7 @@ export default {
   data() {
     return {
       SectionData,
-      Populares:"Populares"
+      Populares:"Mas vendidos"
     }
   },
   setup() {
@@ -98,10 +95,16 @@ export default {
        modules: [Pagination]
     }
   },
+  mounted() {
+    if (this.$store.state.products.length == 0) {
+      this.$store.dispatch('fetchData');
+      this.$store.dispatch('fetchOptions');
+    }
+  },
   computed: {
     productosAleatorios() {
       // Crea una copia del arreglo original y mézclala
-      return this.shuffleArray([...this.SectionData.products]);
+      return this.shuffleArray([...this.$store.state.products]);
     }
   },
   methods: {
