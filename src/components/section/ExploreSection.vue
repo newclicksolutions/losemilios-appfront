@@ -11,7 +11,7 @@
                 <button class="nav-link slider-button" :class="{ active: categoryMenu.title === 'Todos' }"
                   :id="'pills-' + categoryMenu.title + '-tab'" @click="setFilter(categoryMenu.title)">
                   <img :src="categoryMenu.img" class="imgpills" alt="Image description" />
-                  {{ categoryMenu.title }}
+                  {{ categoryMenu.h1 }}
                 </button>
                 <div class="slider-buttondot"></div>
               </div>
@@ -116,37 +116,44 @@ export default {
         {
           id: 1,
           title: "Todos",
+          h1: "Todos",
           img: require('@/images/thumb/products/todos.png'),
         },
 
         {
           id: 3,
-          title: "Hamburguesas",
+          title: "Hambueguesas",
+          h1: "Hamburguesas",
           img: require('@/images/thumb/products/image7.png'),
         },
         {
           id: 2,
           title: "Perros",
+          h1: "Perros",
           img: require('@/images/thumb/products/perros.png'),
         },
         {
           id: 4,
           title: "Salchipapas",
+          h1: "Salchipapas",
           img: require('@/images/thumb/products/salchipapa.png'),
         },
         {
           id: 5,
           title: "Asados",
+          h1: "Asados",
           img: require('@/images/thumb/products/asado.png'),
         },
         {
           id: 6,
           title: "Bebidas",
+          h1: "Bebidas",
           img: require('@/images/thumb/products/Group_33.png'),
         },
         {
           id: 6,
           title: "Adiciones",
+          h1: "Adiciones",
           img: require('@/images/thumb/products/IMG_6023.jpg'),
         },
       ],
