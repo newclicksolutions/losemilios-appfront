@@ -2622,7 +2622,11 @@ notificationSidebarData: {
         id: 1,
         title: 'Combos',
         navList: [
-          
+          {
+            title: 'Proximamente',
+            path: '/'
+          }
+        
         ]
       },
       {

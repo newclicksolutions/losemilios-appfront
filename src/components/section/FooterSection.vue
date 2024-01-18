@@ -13,7 +13,7 @@
                                 </ul>
                             </div><!-- end footer-item -->
                         </div><!-- end col-lg-3 -->
-                        <div class="col-lg-8">
+                        <div class="col-lg-8" >
                             <div class="row g-gs">
                                 <div class="col-lg-4 col-md-4 col-sm-4" v-for="item in SectionData.footerData.footerList" :key="item.id">
                                     <div class="footer-item">
