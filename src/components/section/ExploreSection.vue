@@ -121,7 +121,7 @@ export default {
 
         {
           id: 3,
-          title: "Hambueguesas",
+          title: "Hamburguesas",
           img: require('@/images/thumb/products/image7.png'),
         },
         {

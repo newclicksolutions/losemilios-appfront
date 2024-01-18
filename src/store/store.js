@@ -2622,22 +2622,7 @@ notificationSidebarData: {
         id: 1,
         title: 'Combos',
         navList: [
-          {
-            title: 'Combo 1',
-            path: 'explore'
-          },
-          {
-            title: 'Combo 2',
-            path: 'explore'
-          },
-          {
-            title: 'Combo 3',
-            path: 'explore'
-          },
-          {
-            title: 'Combo 4',
-            path: 'explore'
-          }
+          
         ]
       },
       {
