@@ -117,15 +117,15 @@ export default {
             if (this.validarCampos()) {
                 console.log(this.userdata[0]?.PaymentMethod)
 
-                this.description = "Pago Los emilios"
-                this.referenceCode = "Pago Los emilios"
+                this.description = "Domicilio Los emilios"
+                this.referenceCode = 1
                 this.amount = this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0) + (this.configvar[0].shipvalue + this.Tip)
                 this.tax = 0
                 this.taxReturnBase = 0
                 this.strigsignature = "IDmWpSGjJiiy2CpKN0m5dgyFzx~" + this.merchantId.toString() + "~" + this.referenceCode.toString() + "~" + this.amount.toString() + "~" + this.currency.toString()
                 this.signature = this.$hashText(this.strigsignature)
                 this.buyerEmail = this.userdata[0]?.email
-                this.responseUrl = "http://localhost:3000/ordencompleta-11"
+                this.responseUrl = "https://domicilios.losemilios.com/ordencompleta-11"
                 this.confirmationUrl = "https://api.losemilios.com/api/v1/transaction/"
 
                 for (const key in this.storedCart) {
@@ -182,10 +182,10 @@ export default {
                     console.log(this.userdata[0]?.PaymentMethod)
                     if (this.userdata[0]?.PaymentMethod == 3) {
                         this.amount = this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0) + (this.configvar[0].shipvalue + this.Tip)
-                        this.responseUrl = "http://localhost:3000/ordencompleta-" + result.order_id
-                        this.confirmationUrl = "https://api.losemilios.com/api/v1/transaction/"+ result.order_id
-                        this.description = "Pepido #" + result.order_id
-                        this.referenceCode = "Los emilios - #" + result.order_id
+                        this.responseUrl = "https://domicilios.losemilios.com/ordencompleta-" + result.order_id
+                        this.confirmationUrl = "https://api.losemilios.com/api/v1/transaction/payu"
+                        this.description = "Pedido #" + result.order_id
+                        this.referenceCode = result.order_id
                         this.strigsignature = "IDmWpSGjJiiy2CpKN0m5dgyFzx~" + this.merchantId.toString() + "~" + this.referenceCode.toString() + "~" + this.amount.toString() + "~" + this.currency.toString()
                         this.signature = this.$hashText(this.strigsignature)
                         setTimeout(() => {
