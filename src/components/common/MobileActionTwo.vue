@@ -18,13 +18,19 @@
         <em class="ni ni-list"></em>
         <span>Pedidos</span>
       </div> -->
-      <div v-if="Userdata.length" class="menu-item" @click="navigate('perfil')">
+      
+      <div v-if="Userdata.length" class="menu-item" @click="navigate('/Account')">
         <em class="ni ni-user"></em>
         <span>Perfil</span>
       </div>
-      <div v-else class="menu-item" @click="navigate('perfil')">
+      <div v-else class="menu-item" @click="navigate('/Login')">
         <em class="ni ni-user"></em>
         <span>Ingresar</span>
+      </div>
+      <div v-if="Userdata.length" class="menu-item" @click="sessionclose()">
+        <em class="ni ni-user"></em>
+        <span>Salir</span>
+        
       </div>
     </div>
   </div>
@@ -46,8 +52,16 @@ export default {
       this.$store.dispatch('showcart');
     },
     navigate(page) {
-
+      this.$router.push(page);
       console.log("Navegando a", page);
+    },
+    sessionclose(){
+       localStorage.removeItem("UserData")
+       localStorage.removeItem("token")
+       this.$store.dispatch('updatedataUser', [])
+       this.$store.dispatch('setcartcount', 0);
+       this.$store.dispatch('updatecart', []);
+       this.$router.push('/');
     },
   },
   computed: {

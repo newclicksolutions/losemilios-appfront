@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './bus'
-import { formatoMoneda,getFormattedTime,formattedDate } from './utils';
+import { formatoMoneda,getFormattedTime,formattedDate,hashText } from './utils';
 
 // vue app
 const app = createApp(App);
@@ -23,6 +23,7 @@ app.use(VueClipboard, {
     appendToBody: true,
 })
 app.use(store)
+app.config.globalProperties.$hashText = hashText;
 app.config.globalProperties.$formatoMoneda = formatoMoneda;
 app.config.globalProperties.$getFormattedTime = getFormattedTime;
 app.config.globalProperties.$formattedDate = formattedDate;

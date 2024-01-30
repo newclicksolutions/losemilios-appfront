@@ -58,8 +58,8 @@
                                         <label for="Telefono">Telefono</label>
                                     </div>
                                     <div class="form-floating mb-4">
-                                        <input v-model="email" type="text" class="form-control mb-3"
-                                            placeholder="Telefono" required>
+                                        <input v-model="email" type="text" class="form-control mb-3" placeholder="Telefono"
+                                            required>
                                         <label for="Telefono">Correo</label>
                                     </div>
                                     <div class="form-floating mb-4">
@@ -93,7 +93,7 @@
             <div class="acordeon-card" v-if="isAccordionOpen">
                 <div class="card-body d-flex align-items-center" v-for="list in storedCart" :key="list.id">
                     <div class="avatar avatar-1 flex-shrink-0">
-                        <img  :src="$store.state.configvar[0]?.apiurl + list.imgLg" alt="avatar" />
+                        <img :src="$store.state.configvar[0]?.apiurl + list.imgLg" alt="avatar" />
                     </div>
                     <div class="flex-grow-1">
                         <p class="card-s1-text" style="float: left: ;">
@@ -146,17 +146,13 @@
                                 v-model="selectedPaymentMethod" value="1">
                         </div>
                         <div class="form-check check-order mb-2">
-                            <label class="form-check-label form-check-label-s1" for="paymentDatafono"> Datafono</label>
-                            <input class="form-check-input check-all-input" type="checkbox" id="paymentDatafono"
-                                v-model="selectedPaymentMethod" value="2">
-                        </div>
-                        <div v-if="UserData[0]?.cartinfo.length" class="form-check check-order mb-2">
-                            <label class="form-check-label form-check-label-s1" for="paymentCredito"> Targeta de credito: {{ lastFourDigits }}</label>
+                            <label class="form-check-label form-check-label-s1" for="paymentCredito"> PayU</label>
                             <input class="form-check-input check-all-input" type="checkbox" id="paymentCredito"
                                 v-model="selectedPaymentMethod" value="3">
                         </div>
                     </div>
                 </div>
+                <img :src="PAYU" alt=""  width="150" class="rounded-3 pt-5" />
             </div>
         </div>
         <div class="card-body d-flex align-items-center">
@@ -168,8 +164,8 @@
 
                     </div>
                     <div class="tittlerigth">
-                        <a  href="#" @click="openAddNewCardModal" ref="addNewCardModal"
-                            class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#addNewCardModal">
+                        <a href="#" @click="openAddNewCardModal" ref="addNewCardModal" class="btn btn-primary mt-4"
+                            data-bs-toggle="modal" data-bs-target="#addNewCardModal">
                             Agregar targeta de credito </a>
 
                         <!-- Modal -->
@@ -223,11 +219,69 @@
                                             </div>
                                         </form>
                                     </div><!-- end modal-body -->
-                                </div><!-- end modal-content --> 
+                                </div><!-- end modal-content -->
                             </div><!-- end modal-dialog -->
                         </div><!-- end modal-->
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-creator-s1 mb-4" hidden>
+        <div class="cardflex mb-4">
+            <div class="tittleleft">
+                <h6 class="card-s1-title">Añade una propina</h6>
+            </div>
+            <div class="tittlerigth"><span></span></div>
+        </div>
+
+        <div class="card-body d-flex align-items-center">
+
+            <div class="flex-grow-1">
+                <div class="d-flex mb-4 propina-btn">
+                    <label class="form-check-label form-check-label-s1 check-order p-1 mx-2"
+                        v-for="(button, index) in buttons" :key="index" @click="activateButton(index,button)"
+                        :class="{ active: activeButton === index }">
+                        <em v-if="button === 'Otro'" class='menu-on menu-icon ni ni-user'></em>
+                        {{ button }}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="card-body d-flex align-items-center">
+
+            <transition name="slide-fade">
+                <div class="acordeon-card" v-if="isAccordionOpenpropina">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Añade una propina</h4>
+                            <button type="button" class="btn-close icon-btn" @click="isAccordionOpenpropina = false">
+                                <em class="ni ni-cross"></em>
+                            </button>
+                        </div><!-- end modal-header -->
+                        <div class="modal-body">
+                            <form @submit.prevent="agragarpropina">
+                                <div class="credit-card-form mb-4">
+                                    <div class="form-floating mb-4">
+                                        <input type="text" class="form-control" v-model="propinaprice" id="Nombre"
+                                            placeholder="$0" required>
+                                        <label for="Nombre">Ingresa el monto</label>
+                                    </div>
+
+                                </div><!-- end credit-card-form -->
+                                <button class="btn btn-primary w-100" type="submit">Agregar</button>
+                                <hr>
+                                <button class="btn btn-primary w-100" type="submit">Sin propina</button>
+                            </form>
+                        </div><!-- end modal-body -->
+                    </div>
+                </div>
+            </transition>
+            <div class="modal fade" id="addpropinaModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <!-- end modal-content -->
+                </div><!-- end modal-dialog -->
             </div>
         </div>
     </div>
@@ -250,7 +304,7 @@ export default {
             crtnumber: '',
             crtdate: '',
             crtcvc: '',
-            email:null,
+            email: null,
             direccion: null,
             nombre: null,
             telefono: null,
@@ -258,11 +312,17 @@ export default {
             adicionalinst: null,
             SectionData,
             isAccordionOpen: true,
+            isAccordionOpenpropina: false,
             storedCart: [],
             selectedPaymentMethod: [],
+            propinaprice:0,
             UserData: [],
             creditcart: [],
-            showModal: false
+            showModal: false,
+            buttons: [1000, 2000, 3000, " Otro"],
+            activeButton: null,
+            tipvalue:0,
+            PAYU: require('@/images/thumb/PAYU.png'),
         };
     },
     mounted() {
@@ -307,6 +367,14 @@ export default {
 
 
         },
+        activateButton(index,value) {
+            this.activeButton = index;
+            this.tipvalue = value
+            this.agragardireccion()
+        },
+        agragarpropina() {
+
+        },
         validateForm() {
             // Lógica de validación personalizada
             return this.crtname && this.crtnumber && this.crtdate && this.crtcvc;
@@ -318,11 +386,12 @@ export default {
             const userdata = [{
                 direccion: this.direccion,
                 nombre: this.nombre,
-                email:this.email,
+                email: this.email,
                 telefono: this.telefono,
                 adicionalinst: this.adicionalinst,
                 PaymentMethod: this.selectedPaymentMethod,
-                cartinfo: this.creditcart
+                cartinfo: this.creditcart,
+                tip: this.tipvalue
             }]
             const parsed = JSON.stringify(userdata);
             localStorage.setItem("UserData", parsed);
@@ -337,9 +406,9 @@ export default {
     },
     computed: {
         lastFourDigits() {
-                const crtnumber = parseInt(this.UserData[0]?.cartinfo[0]?.crtnumber)
-                console.log(crtnumber.toString())
-                return crtnumber.toString().slice(-4); 
+            const crtnumber = parseInt(this.UserData[0]?.cartinfo[0]?.crtnumber)
+            console.log(crtnumber.toString())
+            return crtnumber.toString().slice(-4);
         },
         cartinfo() {
             if (this.UserData.length) {
@@ -357,7 +426,7 @@ export default {
                 this.UserData[0].PaymentMethod = this.selectedPaymentMethod
                 localStorage.setItem("UserData", JSON.stringify(this.UserData));
             } else {
-                this.$refs.notification.showNotification('Debes ingresar una dirección de envío?', '#D11D23')
+                this.$refs.notification.showNotification('Debes ingresar una dirección de envío', '#D11D23')
             }
         }
     }
@@ -388,6 +457,11 @@ export default {
     height: 8.375rem;
 }
 
+.active {
+    background-color: red;
+    color: #fff;
+}
+
 .cardflex {
     display: flex;
     /* Convertir el contenedor en un contenedor flex */
@@ -412,6 +486,10 @@ export default {
 .enRnoF {
     cursor: pointer;
 }
+
+.propina-btn button {}
+
+;
 
 .tittleleft,
 .tittlerigth {

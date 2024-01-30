@@ -124,6 +124,73 @@ export default createStore({
         return error;
       }
     },
+    getuserID: async (context, payload) => {
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      try {
+        context.commit("setLoading", true);
+        const response = await fetch(
+          CONSTANTS_TEST.URL_API+"/users/" + payload,
+          options
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        context.commit("setLoading", false);
+        const responseData = await response.json();
+        return responseData;
+      } catch (error) {
+        console.error("Error:", error);
+        /// commit('setError', error.message);
+        return error;
+      }
+    },
+    async fetchUsers({ commit }) {
+      try {
+        commit("setLoading", true);
+        const response = await fetch(
+          CONSTANTS_TEST.URL_API+"/users"
+        );
+        const data = await response.json();
+        commit("updatedataUsaers", data);
+      } catch (error) {
+        commit("setError", error.message);
+      } finally {
+        commit("setLoading", false);
+      }
+    },
+    updateUser: async (context, payload) => {
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }; 
+      try {
+        context.commit("setLoading", true);
+        const response = await fetch(
+          CONSTANTS_TEST.URL_API+"/users",
+          options
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        context.commit("setLoading", false);
+        return responseData;
+      } catch (error) {
+        console.error("Error:", error);
+        /// commit('setError', error.message);
+        return error; 
+      }
+    },
     getUsers: async () => {
       const options = {
         method: "GET",
@@ -149,9 +216,66 @@ export default createStore({
         return error;
       }
     },
+    
+    createTransaction: async (context, payload) => {
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      };
+      try {
+        context.commit("setLoading", true);
+        const response = await fetch(
+          CONSTANTS_TEST.URL_API+"/transaction",
+          options
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        setTimeout(() => {
+          context.commit("setLoading", false);
+        }, 3000);
+        
+        return responseData;
+      } catch (error) {
+        console.error("Error:", error);
+        /// commit('setError', error.message);
+        return error;
+      }
+    },
     createorder: async (context, payload) => {
       const options = {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      };
+      try {
+        context.commit("setLoading", true);
+        const response = await fetch(
+          CONSTANTS_TEST.URL_API+"/order",
+          options
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        return responseData;
+      } catch (error) {
+        console.error("Error:", error);
+        /// commit('setError', error.message);
+        return error;
+      }
+    },
+    updateorder: async (context, payload) => {
+      const options = {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },

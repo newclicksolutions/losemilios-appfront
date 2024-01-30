@@ -1,7 +1,7 @@
 <template>
     <ul class="menu-list ms-lg-auto">
           <li class="menu-item " v-if="Userdata[0]?.user_id">
-              <a href="#" class="menu-link"><em class="menu-on menu-icon ni ni-user"></em></a>
+              <a href="#" class="menu-link"><em class="menu-on menu-icon ni ni-user"></em>{{ Userdata[0]?.nombre }}</a>
               <div class="menu-sub ">
                 <ul class="menu-list">
                         <li class="menu-item"><router-link to="/Account" class="menu-link">Mi cuenta</router-link></li>

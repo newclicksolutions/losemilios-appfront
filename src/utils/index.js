@@ -1,4 +1,5 @@
 import moment from 'moment';
+import CryptoJS from 'crypto-js';
 import 'moment/locale/es'; // Importa el idioma español
 
 export const formatoMoneda = (valor) => {
@@ -11,6 +12,12 @@ export const formatoMoneda = (valor) => {
   const trimmedValue = formattedValue.replace(/,00$/, '');
 
   return trimmedValue;
+};
+
+export const hashText = (valor) => {
+  const hashedText  = CryptoJS.MD5(valor).toString();
+
+  return hashedText;
 };
 
 export const getFormattedTime = () =>{

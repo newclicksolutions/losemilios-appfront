@@ -4,8 +4,9 @@
     <header class="header-section has-header-main">
         <!-- Header main -->
         <HeaderMain></HeaderMain>
-        <!-- hero -->
-        <HeroThree classname="hero-title" :title="SectionData.breadcrumbData.breadcrumbList.title" :lists="SectionData.breadcrumbData.breadcrumbList.navList"></HeroThree>
+        
+        <HeroFail v-if="state == 'DECLINED'" classname="hero-title" :title="SectionData.breadcrumbData.breadcrumbList.title" :lists="SectionData.breadcrumbData.breadcrumbList.navList"></HeroFail>
+        <HeroThree v-else classname="hero-title" :title="SectionData.breadcrumbData.breadcrumbList.title" :lists="SectionData.breadcrumbData.breadcrumbList.navList"></HeroThree>
     </header>
     <!-- Blog  -->
     <section class="section-space-b blog-section">
@@ -14,7 +15,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <Resumensection></Resumensection>
-                </div><!-- end col-lg-8 -->
+                </div><!-- end col-lg-8 --> 
             </div><!-- row -->
         </div><!-- .container -->
     </section><!-- end blog-section -->
@@ -26,16 +27,19 @@
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from '@/store/store.js'
 import HeroThree from '@/components/section/HeroThree.vue'
+import HeroFail from '@/components/section/HeroFail.vue'
 
 export default {
   name: 'ordencompleta',
   components: {
-    HeroThree
+    HeroThree,
+    HeroFail
   },
   data () {
     return {
       SectionData,
       id: this.$route.params.id,
+      state: this.$route.query.lapTransactionState
     }
   }
 }

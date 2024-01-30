@@ -26,7 +26,7 @@ export default {
   mounted(){
     if (localStorage.getItem("UserData")) {
             this.Userdata = JSON.parse(localStorage.getItem("UserData"));
-            if (this.Userdata[0].user_id) {
+            if (this.Userdata[0]?.user_id) {
               this.$router.push('/')
             }
         }

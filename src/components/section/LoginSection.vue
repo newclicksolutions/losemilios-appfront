@@ -103,7 +103,7 @@ export default {
                     user_id:resultuser.user_id,
                     direccion: resultuser.shipping_address,
                     nombre:resultuser.name +" "+resultuser.last_name,
-                    correo: resultuser.email,
+                    email: resultuser.email,
                     telefono: resultuser.phone,
                     adicionalinst: null,
                     PaymentMethod: [],
