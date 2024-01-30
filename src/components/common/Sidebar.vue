@@ -39,8 +39,7 @@
                 </div>
             </div>
             <button @click="irapagar" class="btn btn-primary d-block">Hacer pedido</button>
-
-            <form ref="payuForm" method="post" action="https://checkout.payulatam.com/ppp-web-gateway-payu/">
+            <form ref="payuForm" method="post" action="https://sandbox.checkout.payulatam.com/ppp-web-gateway-payu/">
                 <input name="merchantId" type="hidden" v-model="merchantId">
                 <input name="accountId" type="hidden" v-model="accountId">
                 <input name="description" type="hidden" v-model="description">
@@ -81,8 +80,8 @@ export default {
             load: false,
             showTip: true,
             Tip: 0,
-            merchantId: 1003003,
-            accountId: 1011705,
+            merchantId: 508029,
+            accountId: 512321,
             description: "",
             referenceCode: "TestPayU",
             amount: "",
@@ -122,7 +121,7 @@ export default {
                 this.amount = this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0) + (this.configvar[0].shipvalue + this.Tip)
                 this.tax = 0
                 this.taxReturnBase = 0
-                this.strigsignature = "IDmWpSGjJiiy2CpKN0m5dgyFzx~" + this.merchantId.toString() + "~" + this.referenceCode.toString() + "~" + this.amount.toString() + "~" + this.currency.toString()
+                this.strigsignature = "4Vj8eK4rloUd272L48hsrarnUA~" + this.merchantId.toString() + "~" + this.referenceCode.toString() + "~" + this.amount.toString() + "~" + this.currency.toString()
                 this.signature = this.$hashText(this.strigsignature)
                 this.buyerEmail = this.userdata[0]?.email
                 this.responseUrl = "https://domicilios.losemilios.com/ordencompleta-11"
@@ -186,7 +185,7 @@ export default {
                         this.confirmationUrl = "https://api.losemilios.com/api/v1/transaction/payu"
                         this.description = "Pedido #" + result.order_id
                         this.referenceCode = result.order_id
-                        this.strigsignature = "IDmWpSGjJiiy2CpKN0m5dgyFzx~" + this.merchantId.toString() + "~" + this.referenceCode.toString() + "~" + this.amount.toString() + "~" + this.currency.toString()
+                        this.strigsignature = "4Vj8eK4rloUd272L48hsrarnUA~" + this.merchantId.toString() + "~" + this.referenceCode.toString() + "~" + this.amount.toString() + "~" + this.currency.toString()
                         this.signature = this.$hashText(this.strigsignature)
                         setTimeout(() => {
                             const form = this.$refs.payuForm;

@@ -9,7 +9,7 @@ import SectionData from '@/store/store.js'
 
 export default {
   name: 'HeaderSearch',
-  props: ['classname'],
+  props: ['classname'], 
   data () {
     return {
       SectionData,
