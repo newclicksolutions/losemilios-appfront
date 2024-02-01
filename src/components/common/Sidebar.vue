@@ -39,7 +39,7 @@
                 </div>
             </div>
             <button @click="irapagar" class="btn btn-primary d-block">Hacer pedido</button>
-            <form ref="payuForm" method="post" action="https://sandbox.checkout.payulatam.com/ppp-web-gateway-payu/">
+            <form ref="payuForm" method="post" :action="payuActionUrl">
                 <input name="merchantId" type="hidden" v-model="merchantId">
                 <input name="accountId" type="hidden" v-model="accountId">
                 <input name="description" type="hidden" v-model="description">
@@ -80,20 +80,21 @@ export default {
             load: false,
             showTip: true,
             Tip: 0,
-            merchantId: 508029,
-            accountId: 512321,
+            merchantId: 0,
+            accountId: 0,
             description: "",
-            referenceCode: "TestPayU",
+            referenceCode: "0",
             amount: "",
             tax: 0,
             taxReturnBase: 0,
             currency: "COP",
             signature: "",
             strigsignature: "",
-            test: 1,
+            test: null,
             buyerEmail: "",
             responseUrl: "",
             confirmationUrl: "",
+            payuActionUrl:""
         }
     },
 
@@ -114,19 +115,16 @@ export default {
 
         async irapagar() {
             if (this.validarCampos()) {
-                console.log(this.userdata[0]?.PaymentMethod)
-
                 this.description = "Domicilio Los emilios"
-                this.referenceCode = 1
                 this.amount = this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0) + (this.configvar[0].shipvalue + this.Tip)
                 this.tax = 0
                 this.taxReturnBase = 0
-                this.strigsignature = "4Vj8eK4rloUd272L48hsrarnUA~" + this.merchantId.toString() + "~" + this.referenceCode.toString() + "~" + this.amount.toString() + "~" + this.currency.toString()
-                this.signature = this.$hashText(this.strigsignature)
                 this.buyerEmail = this.userdata[0]?.email
-                this.responseUrl = "https://domicilios.losemilios.com/ordencompleta-11"
-                this.confirmationUrl = "https://api.losemilios.com/api/v1/transaction/"
-
+                this.confirmationUrl = "https://api.losemilios.com/api/v1/transaction/payu"
+                this.payuActionUrl = this.configvar[0].payu_url
+                this.test = this.configvar[0].payu_test 
+                this.accountId = this.configvar[0].payu_accountId 
+                this.merchantId = this.configvar[0].payu_merchant_id
                 for (const key in this.storedCart) {
                     const element = this.storedCart[key];
                     this.orderproducts.push({
@@ -162,7 +160,7 @@ export default {
                     }
                     ],
                     OrderStatus: {
-                        order_status_id: 1
+                        order_status_id: this.userdata[0]?.PaymentMethod[0] == 3 ? 6 : 1
                     },
                     Paymethod: [
                         {
@@ -180,17 +178,15 @@ export default {
                     this.orderproducts = []
                     console.log(this.userdata[0]?.PaymentMethod)
                     if (this.userdata[0]?.PaymentMethod == 3) {
-                        this.amount = this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0) + (this.configvar[0].shipvalue + this.Tip)
                         this.responseUrl = "https://domicilios.losemilios.com/ordencompleta-" + result.order_id
-                        this.confirmationUrl = "https://api.losemilios.com/api/v1/transaction/payu"
                         this.description = "Pedido #" + result.order_id
                         this.referenceCode = result.order_id
-                        this.strigsignature = "4Vj8eK4rloUd272L48hsrarnUA~" + this.merchantId.toString() + "~" + this.referenceCode.toString() + "~" + this.amount.toString() + "~" + this.currency.toString()
+                        this.strigsignature = this.configvar[0].payu_apikey.toString() + "~" + this.configvar[0].payu_merchant_id.toString() + "~" + this.referenceCode.toString() + "~" + this.amount.toString() + "~" + this.currency.toString()
                         this.signature = this.$hashText(this.strigsignature)
                         setTimeout(() => {
-                            const form = this.$refs.payuForm;
-                            form.submit();
-                        }, 3000);
+                          const form = this.$refs.payuForm;
+                          form.submit();
+                        }, 2000);
 
                     } else {
                         this.$router.push('/ordencompleta-' + result.order_id)
@@ -198,8 +194,6 @@ export default {
                 } else {
                     this.$refs.notification.showNotification('Hubo un error procesando la orden, intentalo de nuevo mas tarde', '#D11D23')
                 }
-            } else {
-                this.$refs.notification.showNotification('Debes seleccionar un metodo de pago', '#D11D23')
             }
         },
         toggleTip() {
@@ -213,11 +207,31 @@ export default {
             if (this.userdata) {
                 for (const key in this.userdata) {
                     if (this.userdata[key].PaymentMethod.length === 0) {
+                        this.$refs.notification.showNotification('Selecciona un método de pago', '#D11D23')
                         return false;
                     }
+                    if (this.userdata[key].email === "") {
+                        this.$refs.notification.showNotification('Ingresa un correo electrónico!', '#D11D23')
+                        return false;
+                    }
+                    if (this.userdata[key].direccion === "") {
+                        this.$refs.notification.showNotification('Ingresa una dirección de envio!', '#D11D23')
+                        return false;
+                    }
+                    if (this.userdata[key].nombre === "") {
+                        this.$refs.notification.showNotification('Ingresa tu nombre!', '#D11D23')
+                        return false;
+                    }
+                    if (this.userdata[key].telefono === "") {
+                        this.$refs.notification.showNotification('Ingresa un numero de teléfono!', '#D11D23')
+                        return false;
+                    }
+
                 }
+
                 return true;
             }
+            this.$refs.notification.showNotification('Ingresa los datos de envio!', '#D11D23')
             return false;
         }
     },

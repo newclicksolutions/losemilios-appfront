@@ -37,6 +37,7 @@ import Menu from '@/components/common/Menu.vue'
 <style>
    .fixed-top{
     position: fixed !important;
+    box-shadow: 0 0 2rem 0 rgba(136, 152, 170, 0.15);
    }
 
 </style>

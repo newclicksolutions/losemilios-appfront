@@ -8,6 +8,7 @@ import { formatoMoneda,getFormattedTime,formattedDate,hashText } from './utils';
 const app = createApp(App);
 
 // bootstrap
+
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
 // vue select

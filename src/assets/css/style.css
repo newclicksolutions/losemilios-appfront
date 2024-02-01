@@ -126,7 +126,12 @@ body {
   color: #8091a7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 26px; }
+  line-height: 26px; 
+font-size: 16px;
+}
+p{
+  font-size: 14px !important;
+}
 
 * {
   box-sizing: border-box;

@@ -2,7 +2,7 @@
 <template>
     <div class="container">
         <div class="col-lg-12 ps-xl-12">
-            <div class="center">
+            <div class="center" v-if="!$route.query.referenceCode">
                 <h3>Buscar Pedido</h3>
                 <div class="header-search-field" :class="classname">
                     <input v-model="inputValue" @input="handleInputChange" type="search"
@@ -53,10 +53,9 @@
                                 <div class="flex-grow-1">
                                     <h4 class="card-s1-title">Resumen</h4>
                                     <div class="card-body d-flex align-items-center" v-for="list in orders[0]?.orderproduct"
-                                        :key="list.order_products_id"> 
+                                        :key="list.order_products_id">
                                         <div class="avatar avatar-1 flex-shrink-0">
-                                            <img :src="$store.state.configvar[0]?.apiurl + list.product.img"
-                                                alt="avatar" />
+                                            <img :src="$store.state.configvar[0]?.apiurl + list.product.img" alt="avatar" />
                                         </div>
                                         <div class="flex-grow-1">
                                             <p class="card-s1-text" style="float: left: ;">
@@ -98,8 +97,7 @@
                         </div>
                     </div>
                     <div v-if="results">
-                        <div 
-                            class="noresults flex justify-content-center align-items-center text-center">
+                        <div class="noresults flex justify-content-center align-items-center text-center">
                             <img :src="require('@/images/thumb/search-no-result.jpg')" class="card-img-top"
                                 alt="art image" />
                             <h3 class="mb-4">Lo sentimos</h3>
@@ -139,10 +137,15 @@ export default {
             ishow: true,
             ordeID: null,
             inputValue: null,
-            results:false
+            results: false
         }
     },
     mounted() {
+
+        if (this.$route.query.referenceCode) {
+            this.inputValue = this.$route.query.referenceCode
+            this.getorder()
+        }
 
         function checkboxAllToggle(selector, selectorInputText) {
             let checkAllBtn = document.querySelectorAll(selector)
@@ -182,9 +185,9 @@ export default {
         async getorder() {
             this.orders = await this.$store.dispatch('getorderID', this.inputValue);
             if (this.orders.length) {
-                this.results=false
-            }else{
-                this.results=true
+                this.results = false
+            } else {
+                this.results = true
             }
         }
     },
@@ -226,10 +229,12 @@ export default {
 .Cancelado {
     color: rgb(128, 26, 0);
 }
+
 .noresults img {
-  width: 25%;
+    width: 25%;
 }
 
 .fallida {
     color: rgb(128, 26, 0);
-}</style>
+}
+</style>

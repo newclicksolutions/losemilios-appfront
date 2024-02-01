@@ -10,14 +10,12 @@
                         data-bs-target="#addNewadressModal">
                         Cambiar</a></div>
             </div>
-
             <div class="card-body d-flex align-items-center">
 
                 <div class="flex-grow-1">
                     <div class="" v-if="emptyUser">
                         <a href="#" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#addNewadressModal">
                             Agregar direccion de entrga</a>
-
                     </div>
                     <h6 v-if="UserData.length" class="card-s1-title">{{ UserData[0].nombre }}</h6>
                     <h6 v-if="UserData.length" class="card-s1-title">
@@ -27,14 +25,11 @@
                     <p v-if="UserData.length" class="card-s1-text">
                         Instrucciones de entrega (opcional)
                     </p>
-                    <input v-if="UserData.length" v-model="adicionalinst" width="100%" type="area"
+                    <input v-if="UserData.length" v-model="adicionalinst" @change="addobservation" width="100%" type="area"
                         placeholder="Detalles adicionales..." aria-label="Detalles adicionales..." class="btn-dtInlm">
-
                 </div>
-
-
             </div>
-            <!-- Modal -->
+
             <div class="modal fade" id="addNewadressModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
@@ -45,7 +40,7 @@
                             </button>
                         </div><!-- end modal-header -->
                         <div class="modal-body">
-                            <form @submit.prevent="agragardireccion">
+                            <form ref="agragardireccionform" @submit.prevent="agragardireccion">
                                 <div class="credit-card-form mb-4">
                                     <div class="form-floating mb-4">
                                         <input type="text" class="form-control" v-model="nombre" id="Nombre"
@@ -68,7 +63,7 @@
                                         <label for="direccion">Escribe la direccion de entrega</label>
                                     </div>
                                 </div><!-- end credit-card-form -->
-                                <button class="btn btn-primary w-100" type="submit">Agregar</button>
+                                <button class="btn btn-primary w-100" type="submit">{{UserData.length ? "Cambiar" : "Agregar"}}</button>
                             </form>
                         </div><!-- end modal-body -->
                     </div><!-- end modal-content -->
@@ -76,7 +71,6 @@
             </div><!-- end modal-->
         </div>
     </div>
-
     <div class="card card-creator-s1 mb-4">
         <div class="cardflex mb-4">
             <div class="tittleleft">
@@ -104,10 +98,7 @@
                         <p v-if="list.cartadditions.length" class="card-s1-text">
                             <span v-for="listadd in list.cartadditions" :key="listadd">
                                 {{ listadd.title }} - </span>
-
-
                         </p>
-
                     </div>
                 </div>
             </div>
@@ -120,9 +111,7 @@
                 <h6 class="card-s1-title">47 - 62 min</h6>
             </div>
         </div>
-
     </div>
-
     <div class="card card-creator-s1 mb-4">
         <div class="cardflex mb-4">
             <div class="tittleleft">
@@ -130,14 +119,11 @@
             </div>
             <div class="tittlerigth"><span></span></div>
         </div>
-
         <div class="card-body d-flex align-items-center">
-
             <div class="flex-grow-1">
                 <div class="d-flex mb-4">
                     <div class="tittleleft">
                         <span>Métodos disponibles:</span>
-
                     </div>
                     <div class="tittlerigth">
                         <div class="form-check check-order mb-2">
@@ -152,150 +138,15 @@
                         </div>
                     </div>
                 </div>
-                <img :src="PAYU" alt=""  width="150" class="rounded-3 pt-5" />
-            </div>
-        </div>
-        <div class="card-body d-flex align-items-center">
-
-            <div class="flex-grow-1" hidden>
-                <div class="d-flex mb-4">
-                    <div class="tittleleft">
-                        <span>Agregar método de pago:</span>
-
-                    </div>
-                    <div class="tittlerigth">
-                        <a href="#" @click="openAddNewCardModal" ref="addNewCardModal" class="btn btn-primary mt-4"
-                            data-bs-toggle="modal" data-bs-target="#addNewCardModal">
-                            Agregar targeta de credito </a>
-
-                        <!-- Modal -->
-                        <div :class="{ 'modal': true, 'fade': true, 'show': showModal }" id="addNewCardModal" tabindex="-1"
-                            aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Agregar targeta de credito</h4>
-                                        <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal"
-                                            aria-label="Close">
-                                            <em class="ni ni-cross"></em>
-                                        </button>
-                                    </div><!-- end modal-header -->
-                                    <div class="modal-body">
-                                        <form @submit.prevent="savecard">
-                                            <div class="credit-card-form mb-4">
-
-
-                                                <div class="mb-3">
-                                                    <label for="crtname" class="form-label">Nombre en la Tarjeta de
-                                                        Crédito</label>
-                                                    <input v-model="crtname" type="text" class="form-control" id="crtname"
-                                                        required>
-                                                    <div v-if="!crtname" class="invalid-feedback">Este campo es obligatorio
-                                                    </div>
-                                                </div>
-
-                                                <div class="mb-3">
-                                                    <label for="crtnumber" class="form-label">Número de Tarjeta de
-                                                        Crédito</label>
-                                                    <input v-model="crtnumber" type="number" class="form-control"
-                                                        id="crtnumber" required>
-                                                </div>
-
-                                                <div class="row g-3">
-                                                    <div class="col-lg-8 mb-3">
-                                                        <label for="crtdate" class="form-label">Exp. Fecha</label>
-                                                        <input v-model="crtdate" type="date" class="form-control"
-                                                            id="crtdate" required>
-                                                    </div>
-                                                    <div class="col-lg-4 mb-3">
-                                                        <label for="crtcvc" class="form-label">CVC</label>
-                                                        <input v-model="crtcvc" type="password" class="form-control"
-                                                            id="crtcvc" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="billing-form-wrap">
-                                                <button class="btn btn-primary w-100" type="submit">Guardar tarjeta</button>
-                                            </div>
-                                        </form>
-                                    </div><!-- end modal-body -->
-                                </div><!-- end modal-content -->
-                            </div><!-- end modal-dialog -->
-                        </div><!-- end modal-->
-                    </div>
-                </div>
+                <img :src="PAYU" alt="" width="150" class="rounded-3 pt-5" />
             </div>
         </div>
     </div>
-
-    <div class="card card-creator-s1 mb-4" hidden>
-        <div class="cardflex mb-4">
-            <div class="tittleleft">
-                <h6 class="card-s1-title">Añade una propina</h6>
-            </div>
-            <div class="tittlerigth"><span></span></div>
-        </div>
-
-        <div class="card-body d-flex align-items-center">
-
-            <div class="flex-grow-1">
-                <div class="d-flex mb-4 propina-btn">
-                    <label class="form-check-label form-check-label-s1 check-order p-1 mx-2"
-                        v-for="(button, index) in buttons" :key="index" @click="activateButton(index,button)"
-                        :class="{ active: activeButton === index }">
-                        <em v-if="button === 'Otro'" class='menu-on menu-icon ni ni-user'></em>
-                        {{ button }}
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="card-body d-flex align-items-center">
-
-            <transition name="slide-fade">
-                <div class="acordeon-card" v-if="isAccordionOpenpropina">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Añade una propina</h4>
-                            <button type="button" class="btn-close icon-btn" @click="isAccordionOpenpropina = false">
-                                <em class="ni ni-cross"></em>
-                            </button>
-                        </div><!-- end modal-header -->
-                        <div class="modal-body">
-                            <form @submit.prevent="agragarpropina">
-                                <div class="credit-card-form mb-4">
-                                    <div class="form-floating mb-4">
-                                        <input type="text" class="form-control" v-model="propinaprice" id="Nombre"
-                                            placeholder="$0" required>
-                                        <label for="Nombre">Ingresa el monto</label>
-                                    </div>
-
-                                </div><!-- end credit-card-form -->
-                                <button class="btn btn-primary w-100" type="submit">Agregar</button>
-                                <hr>
-                                <button class="btn btn-primary w-100" type="submit">Sin propina</button>
-                            </form>
-                        </div><!-- end modal-body -->
-                    </div>
-                </div>
-            </transition>
-            <div class="modal fade" id="addpropinaModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                    <!-- end modal-content -->
-                </div><!-- end modal-dialog -->
-            </div>
-        </div>
-    </div>
-    <!-- end gap -->
-
-    <!-- end comment-wrapper -->
-
-    <!-- end single-entry -->
     <Notification ref="notification" />
 </template>
 <script>
-// Import component data. You can change the data in the store to reflect in all component
-import SectionData from "@/store/store.js";
 
+import SectionData from "@/store/store.js";
 export default {
     name: "PedidoDetailSection",
     data() {
@@ -311,17 +162,17 @@ export default {
             emptyUser: true,
             adicionalinst: null,
             SectionData,
-            isAccordionOpen: true,
-            isAccordionOpenpropina: false,
+            isAccordionOpen: false,
+            isAccordionOpenpropina: true,
             storedCart: [],
             selectedPaymentMethod: [],
-            propinaprice:0,
+            propinaprice: 0,
             UserData: [],
             creditcart: [],
             showModal: false,
             buttons: [1000, 2000, 3000, " Otro"],
             activeButton: null,
-            tipvalue:0,
+            tipvalue: 0,
             PAYU: require('@/images/thumb/PAYU.png'),
         };
     },
@@ -339,50 +190,33 @@ export default {
             if (this.UserData.length === 0) {
                 this.emptyUser = true;
             } else {
-                this.emptyUser = false;
+                this.emptyUser = false
+                this.email = this.UserData[0]?.email
+                this.direccion = this.UserData[0]?.direccion
+                this.nombre = this.UserData[0]?.nombre
+                this.telefono = this.UserData[0]?.telefono
+                this.adicionalinst = this.UserData[0]?.adicionalinst
+                this.selectedPaymentMethod = this.UserData[0]?.PaymentMethod
             }
             console.log(this.UserData.length)
         }
     },
     methods: {
-        savecard() {
-            if (this.UserData.length) {
-                if (this.validateForm()) {
-                    // Realiza la acción de guardar
-                    this.creditcart = [{
-                        crtname: this.crtname,
-                        crtnumber: this.crtnumber,
-                        crtdate: this.crtdate,
-                        crtcvc: this.crtcvc,
-                    }]
-                    this.UserData[0].cartinfo = this.creditcart
-                    this.UserData[0].PaymentMethod[0] = "3"
-                    localStorage.setItem("UserData", JSON.stringify(this.UserData));
-                } else {
-                    this.selectedPaymentMethod = []
-                    localStorage.setItem("UserData", JSON.stringify(this.UserData));
-                    this.$refs.notification.showNotification('Debes ingresar una dirección de envío', '#D11D23')
-                }
-            }
-
-
-        },
-        activateButton(index,value) {
-            this.activeButton = index;
-            this.tipvalue = value
-            this.agragardireccion()
-        },
-        agragarpropina() {
-
-        },
-        validateForm() {
-            // Lógica de validación personalizada
-            return this.crtname && this.crtnumber && this.crtdate && this.crtcvc;
+        addobservation() {
+            this.UserData[0].adicionalinst = this.adicionalinst
+            localStorage.setItem("UserData", JSON.stringify(this.UserData));
         },
         toggleAccordion() {
             this.isAccordionOpen = !this.isAccordionOpen;
         },
+        removeModalBackdrop() {
+            const modalBackdrop = document.querySelector('.modal-backdrop.fade.show');
+            if (modalBackdrop && modalBackdrop.parentNode) {
+                modalBackdrop.parentNode.removeChild(modalBackdrop);
+            }
+        },
         agragardireccion() {
+            
             const userdata = [{
                 direccion: this.direccion,
                 nombre: this.nombre,
@@ -398,24 +232,11 @@ export default {
             this.UserData = JSON.parse(localStorage.getItem("UserData"));
             this.emptyUser = false
             this.showModal = false;
+            this.$router.go('/pedido')
         },
-        openAddNewCardModal() {
-            this.showModal = !this.showModal;
-        },
-
     },
     computed: {
-        lastFourDigits() {
-            const crtnumber = parseInt(this.UserData[0]?.cartinfo[0]?.crtnumber)
-            console.log(crtnumber.toString())
-            return crtnumber.toString().slice(-4);
-        },
-        cartinfo() {
-            if (this.UserData.length) {
-                return this.UserData[0].cartinfo.length
-            }
-            return 0
-        }
+
     },
     watch: {
         selectedPaymentMethod(newVal) {
@@ -425,8 +246,6 @@ export default {
             if (this.UserData.length) {
                 this.UserData[0].PaymentMethod = this.selectedPaymentMethod
                 localStorage.setItem("UserData", JSON.stringify(this.UserData));
-            } else {
-                this.$refs.notification.showNotification('Debes ingresar una dirección de envío', '#D11D23')
             }
         }
     }
@@ -449,8 +268,6 @@ export default {
         width: 100% !important;
     }
 }
-
-
 
 .avatar-1 {
     width: 9.375rem;
@@ -486,10 +303,6 @@ export default {
 .enRnoF {
     cursor: pointer;
 }
-
-.propina-btn button {}
-
-;
 
 .tittleleft,
 .tittlerigth {

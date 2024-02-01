@@ -42,7 +42,7 @@ export default createStore({
       state.count++;
     },
     show(state) {
-      state.cartview = true;
+      state.cartview = !state.cartview
     },
     hide(state) {
       state.cartview = false;

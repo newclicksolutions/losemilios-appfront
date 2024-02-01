@@ -5,8 +5,7 @@
                 <div class="card card-creator-s1">
                     <div class="modal-header" data-v-289073a8="">
                         <h4 class="modal-title" data-v-289073a8="">Tu Carrito</h4><button @click="toggleCart" type="button"
-                            class="btn-close icon-btn" ><em
-                                class="ni ni-cross" data-v-289073a8=""></em></button>
+                            class="btn-close icon-btn"><em class="ni ni-cross" data-v-289073a8=""></em></button>
                     </div>
                     <div class="cardflex mb-4">
 
@@ -33,7 +32,7 @@
                             <div class="card-body d-flex d-flex-tras align-items-center" v-for="list in cart"
                                 :key="list.id">
                                 <div class="avatar avatar-1 flex-shrink-0">
-                                    <img :src="$store.state.configvar[0]?.apiurl + list.imgLg"  alt="avatar" />
+                                    <img :src="$store.state.configvar[0]?.apiurl + list.imgLg" alt="avatar" />
                                 </div>
                                 <div class="flex-grow-1">
                                     <div class="dv1">
@@ -56,17 +55,20 @@
                             </div>
                         </div>
                     </transition>
-                    <spam v-if="cart.length" class="sub-tlt">Subtotal: {{ $formatoMoneda(totalSum) }}</spam>
-                    <div class="cardflexfooter mb-4" v-if="cart.length">
-                        <div class="tittleleft">
-                            <em @click="clearCart" class="ni ni-trash" data-v-4a61c780=""></em>
-                        </div>
-                        <div class="tittlerigth">
-                            <a :disabled="isButtonDisabled" :href="SectionData.placeBidModal.btnLink"
-                                class="btn btn-primary d-block" style="width: 260px;">
-                                Ir a pagar </a>
+                    <div class="bottom-gotopay">
+                        <spam v-if="cart.length" class="sub-tlt">Subtotal: {{ $formatoMoneda(totalSum) }}</spam>
+                        <div class="cardflexfooter mb-4" v-if="cart.length">
+                            <div class="tittleleft">
+                                <em @click="clearCart" class="ni ni-trash" data-v-4a61c780=""></em>
+                            </div>
+                            <div class="tittlerigth">
+                                <a :disabled="isButtonDisabled" :href="SectionData.placeBidModal.btnLink"
+                                    class="btn btn-primary d-block" style="width: 260px;">
+                                    Ir a pagar </a>
+                            </div>
                         </div>
                     </div>
+
 
                 </div>
 
@@ -105,7 +107,7 @@ export default {
         }
     },
     methods: {
-        setcart(){
+        setcart() {
             this.storedCart = JSON.parse(localStorage.getItem("shopingcart"));
         },
         toggleAccordion() {
@@ -165,6 +167,19 @@ export default {
 </script>
 <style>
 @media (max-width: 968px) {
+    .bottom-gotopay {
+        position: fixed;
+        bottom: 50px;
+        background: white;
+        width: 100%;
+        left: 0px;
+        padding: 4px;
+    }
+
+    .acordeon-card {
+        height: 38vh;
+    }
+
     .card-creator-s1 .card-body {
         flex-direction: row;
         padding: 0px
@@ -183,6 +198,12 @@ export default {
         flex-grow: 1 !important;
         width: 100% !important;
     }
+}
+
+.acordeon-card {
+    overflow: auto;
+    min-height: 200px;
+    height: 335px;
 }
 
 .sidebar-cart-enter-active,
@@ -253,7 +274,9 @@ export default {
 .acordeon-card {
     overflow: auto;
     min-height: 100%;
+
 }
+
 
 .enRnoF {
     cursor: pointer;
@@ -293,7 +316,7 @@ export default {
     width: 100%;
     position: fixed;
     z-index: 1000;
-    background: #696969a8;
+    background: #b6b6b6a8;
 }
 
 .dv1 {

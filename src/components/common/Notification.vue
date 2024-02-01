@@ -36,7 +36,7 @@
   .notification {
     z-index: 1000;
     position: fixed;
-    top: 20px;
+    top: 80px;
     right: 20px;
     color: white;
     padding: 15px;

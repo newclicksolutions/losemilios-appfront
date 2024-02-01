@@ -52,10 +52,10 @@ export default {
 }
 </script>
 <style scoped>
-.fixed-top {
-  position: fixed !important;
-}
-
+.fixed-top{
+    position: fixed !important;
+    box-shadow: 0 0 2rem 0 rgba(136, 152, 170, 0.15);
+   }
 .load {
   width: 100%;
   position: fixed;
