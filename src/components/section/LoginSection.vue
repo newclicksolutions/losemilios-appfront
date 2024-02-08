@@ -10,7 +10,15 @@
                         <h2 class="mb-1">{{ SectionData.loginData.title }}</h2>
                         <p>{{ SectionData.loginData.subTitle }}</p>
                     </div>
-                    <form @submit.prevent="login">
+                    <form @submit.prevent="resetpassword" v-if="showreset">
+                        <div class="form-floating mb-4">
+                            <input type="email" class="form-control" v-model="usermail" id="emailAddress"
+                                placeholder="name@example.com" required>
+                            <label for="emailAddress">Correo electronico</label>
+                        </div><!-- end form-floating -->
+                        <button class="btn btn-primary w-100" type="submit">Restablecer tu contraseña</button>
+                    </form>
+                    <form @submit.prevent="login" v-else>
                         <div class="form-floating mb-4">
                             <input type="email" class="form-control" v-model="regisData.emailAddress" id="emailAddress"
                                 placeholder="name@example.com" required>
@@ -30,7 +38,7 @@
                                 <input class="form-check-input" type="checkbox" value="" id="logMeIn">
                                 <label class="form-check-label form-check-label-s1" for="logMeIn"> Recuerdame </label>
                             </div>
-                            <router-link to="login" class="btn-link form-forget-password">Olvidaste la
+                            <router-link to="login" @click="ShowReset()" class="btn-link form-forget-password">Olvidaste la
                                 contrasena?</router-link>
                         </div>
                         <button class="btn btn-primary w-100" type="submit">{{ SectionData.loginData.btnText }}</button>
@@ -61,7 +69,9 @@ export default {
     data() {
         return {
             SectionData,
-            regisData: []
+            regisData: [],
+            usermail: null,
+            showreset: false
         }
     },
     mounted() {
@@ -90,6 +100,16 @@ export default {
 
     },
     methods: {
+        ShowReset(){
+            this.showreset = !this.showreset 
+        },
+        async resetpassword(){
+            const result = await this.$store.dispatch('resetpassword', this.usermail)
+           if (result) {
+            this.$refs.notification.showNotification('Se restableció la contraseña, asegúrate de revisar el buzón de entrada de la dirección de correo electrónico', '#198754')
+            this.showreset = false
+           }
+        },
         async login() {
             const result = await this.$store.dispatch('login', this.regisData)
             console.log(result)
