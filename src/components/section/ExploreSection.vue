@@ -267,6 +267,14 @@ export default {
 </script>
 
 <style lang="css" scoped>
+
+@media only screen and (max-width: 768px) {
+  /* Estilos específicos para dispositivos móviles */
+  .swiper-button-next,
+.swiper-button-prev {
+ display: none;
+}
+}
 .details {
   position: absolute;
   top: 0;
