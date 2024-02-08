@@ -124,13 +124,19 @@ export default {
           id: 3,
           title: "Hambueguesas",
           h1: "Hamburguesas",
-          img: require('@/images/thumb/products/image7.png'),
+          img: require('@/images/thumb/products/IMG_5939.jpg'),
         },
         {
           id: 2,
           title: "Perros",
           h1: "Perros",
           img: require('@/images/thumb/products/perros.png'),
+        },
+        {
+          id: 8,
+          title: "Perra",
+          h1: "Perras",
+          img: require('@/images/thumb/products/IMG_6061.jpg'),
         },
         {
           id: 4,
@@ -151,7 +157,7 @@ export default {
           img: require('@/images/thumb/products/Group_33.png'),
         },
         {
-          id: 6,
+          id: 7,
           title: "Adiciones",
           h1: "Adiciones",
           img: require('@/images/thumb/products/IMG_6023.jpg'),
