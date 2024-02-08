@@ -3,11 +3,11 @@
         <div class="sidebar sidebar-cart  row" v-if="stateshowcart">
             <div class="col-lg-12 sidebar-widget sidebar-widget-cart">
                 <div class="card card-creator-s1">
-                    <div class="modal-header" data-v-289073a8="">
-                        <h4 class="modal-title" data-v-289073a8="">Tu Carrito</h4><button @click="toggleCart" type="button"
-                            class="btn-close icon-btn"><em class="ni ni-cross" data-v-289073a8=""></em></button>
+                    <div class="modal-header">
+                        <h4 class="modal-title" >Tu Carrito</h4><button @click="toggleCart" type="button"
+                            class="btn-close"><em class="ni ni-cross"></em></button>
                     </div>
-                    <div class="cardflex mb-4">
+                    <div class="cardflex mb-2">
 
                         <div class="tittleleft">
                             <h6 class="card-s1-title"></h6>
@@ -57,7 +57,7 @@
                     </transition>
                     <div class="bottom-gotopay">
                         <spam v-if="cart.length" class="sub-tlt">Subtotal: {{ $formatoMoneda(totalSum) }}</spam>
-                        <div class="cardflexfooter mb-4" v-if="cart.length">
+                        <div class="cardflexfooter mb-2" v-if="cart.length">
                             <div class="tittleleft">
                                 <em @click="clearCart" class="ni ni-trash" data-v-4a61c780=""></em>
                             </div>
@@ -203,7 +203,7 @@ export default {
 .acordeon-card {
     overflow: auto;
     min-height: 200px;
-    height: 335px;
+    height: 50vh;
 }
 
 .sidebar-cart-enter-active,
@@ -255,6 +255,14 @@ export default {
     padding: 10px;
 }
 
+.card-creator-s1 .modal-title {
+    font-size: 14px;
+}
+.card-creator-s1 .modal-header {
+    padding: 10px 10px;
+}
+
+
 .card-s1-text {
     font-size: 13px;
 }
@@ -280,6 +288,7 @@ export default {
 
 .enRnoF {
     cursor: pointer;
+    font-size: 13px;
 }
 
 .tittleleft em {
@@ -298,13 +307,14 @@ export default {
 
 .tittlerigth {
     flex: 1;
-    padding: 10px;
+    padding: 5px;
     text-align: end;
 
 }
 
 .sidebar-widget-cart {
     height: 100vh;
+    padding: 5px;
     width: 420px;
     position: absolute;
     right: -16px;

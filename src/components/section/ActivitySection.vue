@@ -189,12 +189,29 @@ export default {
             } else {
                 this.results = true
             }
+        },
+        getBadgeClas(status) {
+            switch (status) {
+                case 'Creada':
+                    return 'Pendiente';
+                case 'En proceso':
+                    return 'Pendiente';
+                case 'Despachada':
+                    return 'En camino';
+                case 'Completa':
+                    return 'Completa';
+                case 'Cancelado':
+                    return 'Cancelado';
+                default:
+                    return '';
+            }
         }
     },
     computed: {
         allorders() {
             return this.$store.state.order
         }
+
     }
 }
 </script>
