@@ -17,8 +17,8 @@
               </div>
             </div>
             <!-- Add Arrows (Optional) -->
-            <!-- <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div> -->
+          <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div> 
           </div>
         </div>
         <!-- end filter-box-filter -->
