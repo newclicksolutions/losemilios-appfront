@@ -107,19 +107,41 @@ export default {
         }
 
         showHidePassword(".password-toggle");
-
     },
     methods: {
         async registrar() {
-            const result = await this.$store.dispatch('registarusuario', this.regisData)
-            console.log(result)
+            const data = {
+        dealer: null,
+        deletedAt: null,
+        document: "",
+        email: this.email ?? this.user[0]?.email,
+        name: this.name ?? this.user[0]?.name,
+        last_name: this.last_name ?? this.user[0]?.last_name,
+        phone: this.phone ?? this.user[0]?.phone,
+        priority: 0,
+        reference_id: 0,
+        restaurant: [{
+          restaurant_id: this.selectedrestaurant ?? this.user[0]?.restaurant[0]?.restaurant_id
+        }],
+        shipping_address: this.shipping_address ?? this.user[0]?.shipping_address,
+        user_login: "",
+        ...(this.user_pass !== null && { user_pass: this.user_pass }),
+        user_status: 1,
+        user_type_id: {
+          user_type_id: this.selectedcategory ?? this.user[0]?.user_type_id.user_type_id
+        },
+      };
+            this.regisData.user_type_id={user_type_id : 2}
+            console.log( this.regisData)
+           const result = await this.$store.dispatch('registarusuario', this.regisData)
+           
 
-        if (result.error) {
-            this.$refs.notification.showNotification('Usuario el ya existe ', '#4CAF50') 
-        }
+            if (result.error) {
+                this.$refs.notification.showNotification('Usuario el ya existe ', '#4CAF50')
+            }
             if (result.success) {
                 this.$router.push('/login');
-            }
+            } 
 
         }
     }

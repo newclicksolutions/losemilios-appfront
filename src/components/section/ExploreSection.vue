@@ -1,7 +1,14 @@
 <template>
   <section class="explore-section pt-4">
     <div class="container">
-      <!-- filter -->
+      <!-- filter
+      
+        perro especial
+        chuzo de pollo 
+        haburgesa especil de res
+        horatio domi 5 - 12
+        
+      -->
       <div class="filter-box">
         <h3 class="mb-4">Filtrar por {{ stateshowcart }}</h3>
         <div class="filter-box-filter m-0">
@@ -17,8 +24,8 @@
               </div>
             </div>
             <!-- Add Arrows (Optional) -->
-          <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div> 
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
           </div>
         </div>
         <!-- end filter-box-filter -->
@@ -33,10 +40,10 @@
           :aria-labelledby="'pills-' + categoryMenu.title + '-tab'" v-for="categoryMenu in categoryMenu"
           :key="categoryMenu.id">
           <div class="row g-gs">
-            <div class="col-xl-3 col-lg-4 col-sm-6" v-for="product in filteredProducts" :key="product.product_id ">
+            <div class="col-xl-3 col-lg-4 col-sm-6" v-for="product in filteredProducts" :key="product.product_id">
               <div class="card card-product mb-0 d-flex">
                 <div class="card-image">
-                  <img :src="$store.state.configvar[0]?.apiurl +product.img" class="card-img-top" alt="art image" />
+                  <img :src="$store.state.configvar[0]?.apiurl + product.img" class="card-img-top" alt="art image" />
                 </div>
                 <div class="card-body p-4">
                   <h5 class="card-title mb-0">
@@ -61,7 +68,7 @@
                 <router-link class="details" :to="{
                   name: 'ProductDetail',
                   params: {
-                    id: product.product_id ,
+                    id: product.product_id,
                     title: product.title,
                     metaText: product.metaText,
                     price: product.price,
@@ -69,7 +76,7 @@
                     imgLg: product.imgLg,
                     metaText: product.metaText,
                     metaTextTwo: product.metaTextTwo,
-                    metaTextThree: product.metaTextThree, 
+                    metaTextThree: product.metaTextThree,
                     content: product.content,
                   },
                 }">
@@ -108,7 +115,7 @@ Swiper.use([Navigation]);
 export default {
   name: "ExploreSection",
   data() {
-    return { 
+    return {
       SectionData,
       filtersproduct: "",
       filtersCategory: "Todos",
@@ -175,7 +182,7 @@ export default {
       this.$store.dispatch('fetchData');
       this.$store.dispatch('fetchOptions');
     }
-    
+
     new Swiper('.swiper-container', {
       slidesPerView: 3,  // Por defecto mostrará 1 slide
       spaceBetween: 1,  // Espacio entre slides
@@ -267,14 +274,15 @@ export default {
 </script>
 
 <style lang="css" scoped>
-
 @media only screen and (max-width: 768px) {
+
   /* Estilos específicos para dispositivos móviles */
   .swiper-button-next,
-.swiper-button-prev {
- display: none;
+  .swiper-button-prev {
+    display: none;
+  }
 }
-}
+
 .details {
   position: absolute;
   top: 0;
