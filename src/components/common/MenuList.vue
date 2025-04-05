@@ -40,7 +40,7 @@ export default {
   },
   mounted() {
     if (localStorage.getItem("shopingcart")) {
-      this.storedCart = JSON.parse(localStorage.getItem("shopingcart"));
+      this.storedCart = JSON.parse( this.$GetEncryptedData("shopingcart"));
       if (this.storedCart.length === 0) {
         this.emptyCart = true;
       } else {

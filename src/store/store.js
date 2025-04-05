@@ -2634,7 +2634,7 @@ notificationSidebarData: {
         title: 'Direccion',
         navList: [
           {
-            title: 'Boulevar de la cra 70 en Medellin',
+            title: 'Boulevar Cra 70 #45e-89',
             path: 'profile'
           },
           {
@@ -2645,14 +2645,22 @@ notificationSidebarData: {
       },
       {
         id: 3,
-        title: 'Horarios',
+        title: 'Horario Domicilios',
         navList: [
           {
-            title: 'Lunes a sábado',
+            title: 'Martes y Domingo',
             path: 'about-us'
           },
           {
-            title: '6:00pm a 2:00am',
+            title: '6:30pm a 1:30am',
+            path: 'blog'
+          },
+          {
+            title: 'Lunes Festivo',
+            path: 'about-us'
+          },
+          {
+            title: '6:30pm a 1:30am',
             path: 'blog'
           }
         ]

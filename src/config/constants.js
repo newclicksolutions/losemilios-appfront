@@ -4,7 +4,7 @@ const CONSTANTS_TEST = {
   IMG_PATH: "https://api.losemilios.com/"
 };
 const CONSTANTS_PROD  = {
-  URL_API:"http://localhost:3001/api/v1",
+  URL_API:"http://localhost:6004/api/v1",
   VERSION_API: "v1",
   IMG_PATH: "https://api.losemilios.com/"
 };

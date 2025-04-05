@@ -102,7 +102,7 @@ export default {
         this.Tip = this.configvar[0].dealertip
         this.userdata = JSON.parse(localStorage.getItem("UserData"));
         if (localStorage.getItem("shopingcart")) {
-            this.storedCart = JSON.parse(localStorage.getItem("shopingcart"));
+            this.storedCart = JSON.parse( this.$GetEncryptedData("shopingcart"));
             if (this.storedCart.length === 0) {
                 this.emptyCart = true;
 
@@ -240,7 +240,7 @@ export default {
             return this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0);
         },
         configvar() {
-            return this.$store.state.configvar;
+            return JSON.parse(this.$GetEncryptedData("configvar"));
         },
 
     }

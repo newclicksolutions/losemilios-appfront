@@ -59,7 +59,7 @@
                     <button @click="add()">+</button>
                   </li>
                   <li class="dv2">
-                    <a @click="saveCart" href="#"  id="cartButton" class="btn btn-primary d-block  pulsating-button">
+                    <a @click="saveCart" href="#" id="cartButton" class="btn btn-primary d-block  pulsating-button">
                       Agregar
                       <span class="price-value">{{ $formatoMoneda(parseInt(product.total)) }}</span>
                     </a>
@@ -94,6 +94,7 @@
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from "@/store/store.js";
 import Notification from '../components/common/Notification.vue'
+import CryptoJS from 'crypto-js';
 
 export default {
   components: {
@@ -123,7 +124,8 @@ export default {
   mounted() {
     this.total = this.product.total
     if (localStorage.getItem("shopingcart")) {
-      this.storedCart = localStorage.getItem("shopingcart");
+      this.storedCart = this.$GetEncryptedData("shopingcart");
+
     }
 
   },
@@ -185,7 +187,7 @@ export default {
       }
     },
     saveCart() {
-      let storedCart = localStorage.getItem("shopingcart");
+      let storedCart =  this.$GetEncryptedData("shopingcart");
       if (storedCart) {
         this.cart = JSON.parse(storedCart);
       }
@@ -204,15 +206,17 @@ export default {
 
       // Guardar el carrito actualizado en el localStorage
       const parsed = JSON.stringify(this.cart);
-      localStorage.setItem("shopingcart", parsed);
-      this.storedCart = JSON.parse(localStorage.getItem("shopingcart"))
+      const encrypted = CryptoJS.AES.encrypt(JSON.stringify(parsed), 'Rt8wkjc##34laAD9?884**').toString();
+      localStorage.setItem("shopingcart", encrypted);
+      //localStorage.setItem("shopingcart", parsed);
+      this.storedCart = JSON.parse( this.$GetEncryptedData("shopingcart"))
       this.$store.dispatch('setcartcount', this.storedCart.length);
       this.$store.dispatch('updatecart', this.storedCart);
       const cartButton = document.getElementById('cartButton');
-        cartButton.classList.add('clicked');
-        setTimeout(() => {
-            cartButton.classList.remove('clicked');
-        }, 300);
+      cartButton.classList.add('clicked');
+      setTimeout(() => {
+        cartButton.classList.remove('clicked');
+      }, 300);
       this.$refs.notification.showNotification('“' + this.product.title + '” se ha añadido a tu carrito.', '#00870c')
     }
   },
@@ -335,13 +339,15 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
 .pulsating-button {
-    transition: transform 0.1s ease;
+  transition: transform 0.1s ease;
 }
 
 .pulsating-button.clicked {
-    transform: scale(0.9);
+  transform: scale(0.9);
 }
+
 .pulsating-button {
   position: relative;
   overflow: hidden;

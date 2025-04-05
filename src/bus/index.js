@@ -2,12 +2,13 @@
 // store.js
 import { createStore } from "vuex";
 import {CONSTANTS_TEST} from '../config/constants'
+import CryptoJS from 'crypto-js';
 
 export default createStore({
   state: {
     // tus datos o variables de estado van aquí
     products: [],
-    configvar: JSON.parse(localStorage.getItem("configvar")) || "",
+    configvar:[],
     cartcount: 0,
     cart: [],
     order: [],
@@ -88,7 +89,8 @@ export default createStore({
         );
         const responseData = await response.json();
         const parsed = JSON.stringify(responseData);
-        localStorage.setItem("configvar", parsed);
+        const encrypted = CryptoJS.AES.encrypt(JSON.stringify(parsed), 'Rt8wkjc##34laAD9?884**').toString();
+        localStorage.setItem("configvar", encrypted);
         commit("setOption", responseData);
       } catch (error) {
         commit("setError", error.message);

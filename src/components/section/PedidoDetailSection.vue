@@ -53,9 +53,9 @@
                                         <label for="Telefono">Telefono</label>
                                     </div>
                                     <div class="form-floating mb-4">
-                                        <input v-model="email" type="text" class="form-control mb-3" placeholder="Telefono"
+                                        <input v-model="email" type="email" class="form-control mb-3" placeholder="email"
                                             required>
-                                        <label for="Telefono">Correo</label>
+                                        <label for="email">Correo</label>
                                     </div>
                                     <div class="form-floating mb-4">
                                         <input type="text" class="form-control" v-model="direccion" id="direccion"
@@ -90,7 +90,7 @@
                         <img :src="$store.state.configvar[0]?.apiurl + list.imgLg" alt="avatar" />
                     </div>
                     <div class="flex-grow-1">
-                        <p class="card-s1-text" style="float: left: ;">
+                        <p class="card-s1-text" style="float: left">
                             ({{ list.cant }})
                         </p>
                         <h4 class="card-s1-title"> {{ list.title }}</h4>
@@ -178,7 +178,7 @@ export default {
     },
     mounted() {
         if (localStorage.getItem("shopingcart")) {
-            this.storedCart = JSON.parse(localStorage.getItem("shopingcart"));
+            this.storedCart = JSON.parse( this.$GetEncryptedData("shopingcart"));
             if (this.storedCart.length === 0) {
                 this.emptyCart = true;
             } else {

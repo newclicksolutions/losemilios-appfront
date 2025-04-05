@@ -110,7 +110,7 @@ export default {
     },
     methods: {
         async registrar() {
-            const data = {
+ /*            const data = {
         dealer: null,
         deletedAt: null,
         document: "",
@@ -130,7 +130,7 @@ export default {
         user_type_id: {
           user_type_id: this.selectedcategory ?? this.user[0]?.user_type_id.user_type_id
         },
-      };
+      }; */
             this.regisData.user_type_id={user_type_id : 2}
             console.log( this.regisData)
            const result = await this.$store.dispatch('registarusuario', this.regisData)

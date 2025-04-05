@@ -4,7 +4,7 @@
             <div class="col-lg-12 sidebar-widget sidebar-widget-cart">
                 <div class="card card-creator-s1">
                     <div class="modal-header">
-                        <h4 class="modal-title" >Tu Carrito</h4><button @click="toggleCart" type="button"
+                        <h4 class="modal-title">Tu Carrito</h4><button @click="toggleCart" type="button"
                             class="btn-close"><em class="ni ni-cross"></em></button>
                     </div>
                     <div class="cardflex mb-2">
@@ -81,6 +81,7 @@
 <script>
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from '@/store/store.js'
+import CryptoJS from 'crypto-js';
 
 export default {
 
@@ -96,7 +97,7 @@ export default {
     },
     mounted() {
         if (localStorage.getItem("shopingcart")) {
-            this.storedCart = JSON.parse(localStorage.getItem("shopingcart"));
+            this.storedCart = JSON.parse(this.$GetEncryptedData("shopingcart"));
             if (this.storedCart.length === 0) {
                 this.emptyCart = true;
             } else {
@@ -108,7 +109,7 @@ export default {
     },
     methods: {
         setcart() {
-            this.storedCart = JSON.parse(localStorage.getItem("shopingcart"));
+            this.storedCart = JSON.parse(this.$GetEncryptedData("shopingcart"));
         },
         toggleAccordion() {
             this.isAccordionOpen = !this.isAccordionOpen;
@@ -122,22 +123,22 @@ export default {
             this.$store.dispatch('updatecart', []);
         },
         increment(index) {
-            console.log(this.$store.state.cart)
             this.setcart()
             this.storedCart.find(item => item.id === index.id).cant = (index.cant + 1)
             const parsed = JSON.stringify(this.storedCart);
-            localStorage.setItem("shopingcart", parsed);
+            const encrypted = CryptoJS.AES.encrypt(JSON.stringify(parsed), 'Rt8wkjc##34laAD9?884**').toString();
+            localStorage.setItem("shopingcart", encrypted);
             this.$store.dispatch('updatecart', this.storedCart);
         },
         decrement(index) {
             this.setcart()
             if (index.cant == 1) {
                 const i = this.storedCart.findIndex(item => item.id === index.id);
-                console.log(i)
                 if (i !== -1) {
                     this.storedCart.splice(i, 1);
                     const parsed = JSON.stringify(this.storedCart);
-                    localStorage.setItem("shopingcart", parsed);
+                    const encrypted = CryptoJS.AES.encrypt(JSON.stringify(parsed), 'Rt8wkjc##34laAD9?884**').toString();
+                    localStorage.setItem("shopingcart", encrypted);
                     this.$store.dispatch('setcartcount', this.storedCart.length);
                     this.$store.dispatch('updatecart', this.storedCart);
                 }
@@ -145,12 +146,12 @@ export default {
                 this.storedCart.find(item => item.id === index.id);
                 this.storedCart.find(item => item.id === index.id).cant = (index.cant - 1)
                 const parsed = JSON.stringify(this.storedCart);
-                localStorage.setItem("shopingcart", parsed);
+                const encrypted = CryptoJS.AES.encrypt(JSON.stringify(parsed), 'Rt8wkjc##34laAD9?884**').toString();
+                localStorage.setItem("shopingcart", encrypted);
+
                 this.$store.dispatch('updatecart', this.storedCart);
             }
-
         },
-
     },
     computed: {
         stateshowcart() {
@@ -173,7 +174,7 @@ export default {
         background: white;
         width: 100%;
         left: 0px;
-        padding: 4px;
+        padding: 3px 4px 15px 4px;
     }
 
     .acordeon-card {
@@ -258,6 +259,7 @@ export default {
 .card-creator-s1 .modal-title {
     font-size: 14px;
 }
+
 .card-creator-s1 .modal-header {
     padding: 10px 10px;
 }

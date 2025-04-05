@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './bus'
-import { formatoMoneda,getFormattedTime,formattedDate,hashText } from './utils';
+import { formatoMoneda,getFormattedTime,formattedDate,hashText,GetEncryptedData} from './utils';
 
 // vue app
 const app = createApp(App);
@@ -16,7 +16,7 @@ import vSelect from 'vue-select'
 import "vue-select/dist/vue-select.css";
 
 app.component('v-select', vSelect)
-
+store.dispatch("fetchOptions");
 // clipboard
 import VueClipboard from 'vue3-clipboard'
 app.use(VueClipboard, {
@@ -25,6 +25,7 @@ app.use(VueClipboard, {
 })
 app.use(store)
 app.config.globalProperties.$hashText = hashText;
+app.config.globalProperties.$GetEncryptedData = GetEncryptedData;
 app.config.globalProperties.$formatoMoneda = formatoMoneda;
 app.config.globalProperties.$getFormattedTime = getFormattedTime;
 app.config.globalProperties.$formattedDate = formattedDate;
