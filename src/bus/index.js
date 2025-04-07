@@ -373,7 +373,6 @@ export default createStore({
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        console.log(responseData);
         const responseData = await response.json();
 
         context.commit("updatedataOrder", responseData);
@@ -425,9 +424,11 @@ export default createStore({
         user_status: 1,
         user_login: payload.fullName,
         document: "",
+        user_registered:payload.user_registered,
         reference_id: 1,
         priority: 1,
         dealer: null,
+        user_type_id:2
       };
 
       const options = {

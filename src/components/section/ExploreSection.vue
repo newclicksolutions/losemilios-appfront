@@ -12,7 +12,7 @@
       <div class="filter-box">
         <h3 class="mb-4">Filtrar por {{ stateshowcart }}</h3>
         <div class="filter-box-filter m-0">
-          <div class="swiper-container">
+          <div class="swiper-container" :class="{ 'sticky-swiper': isSticky }">
             <div class="swiper-wrapper">
               <div class="swiper-slide" v-for="categoryMenu in categoryMenu" :key="categoryMenu.id">
                 <button class="nav-link slider-button" :class="{ active: categoryMenu.title === 'Todos' }"
@@ -51,7 +51,7 @@
                   </h5>
                   <div class="card-author mb-1 d-flex align-items-center">
                     <div class="custom-tooltip-wrap">
-                      <p class="item-detail-text mb-4">{{ product.content }}</p>
+                      <p class="item-detail-text mb-4 truncate-text ">{{ product.content }}</p>
                     </div>
                     <!-- end custom-tooltip-wrap -->
                   </div>
@@ -116,6 +116,7 @@ export default {
   name: "ExploreSection",
   data() {
     return {
+      isSticky: false,
       SectionData,
       filtersproduct: "",
       filtersCategory: "Todos",
@@ -178,6 +179,7 @@ export default {
     };
   },
   mounted() {
+    window.addEventListener('scroll', this.checkScroll);
     if (this.$store.state.products.length == 0) {
       this.$store.dispatch('fetchData');
       this.$store.dispatch('fetchOptions');
@@ -205,7 +207,16 @@ export default {
       }
     });
   },
+  beforeMount() {
+  window.removeEventListener('scroll', this.checkScroll);
+},
   methods: {
+    checkScroll() {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const isMobile = window.innerWidth <= 768;
+
+    this.isSticky = isMobile && scrollTop > 650;
+  },
     setFilter(ct) {
       this.filtersCategory = ct;
       this.$store.dispatch('searhinput', this.inputValue);
@@ -281,7 +292,18 @@ export default {
   .swiper-button-prev {
     display: none;
   }
+
+
 }
+.sticky-swiper {
+  position: fixed;
+  top: 94px;
+  width: 100%;
+  z-index: 1000;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
 
 .details {
   position: absolute;
@@ -366,6 +388,29 @@ export default {
   height: 100%;
   padding: 0px;
   /* Esto puede ser necesario si no tienes un alto definido para tus slides */
+}
+.truncate-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* número de líneas a mostrar */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4em;
+  max-height: 2.8em; /* line-height * líneas */
+  word-break: break-word;
+  height: 40px;
+}
+
+/* Estilos opcionales si quieres marcar que hay HTML (puedes aplicar estas clases dinámicamente si lo detectas con JS/Vue) */
+.has-html .truncate-text {
+  color: #ff6600;
+}
+.card-title{
+  height: 40px;
+}
+
+.is-long .truncate-text {
+  font-weight: bold;
 }
 
 .slider-button {

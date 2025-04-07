@@ -32,7 +32,7 @@
                         <div class="card-author mb-1 d-flex align-products-center">   
                         </div><!-- end card-author -->
                         <div class="custom-tooltip-wrap">
-                      <p class="product-detail-text mb-4">{{ product.content }}</p>
+                     <!--  <p class="product-detail-text mb-4">{{ product.content }}</p> -->
                     </div>
                         <div class="card-price-wrap d-flex align-products-center justify-content-between mb-3">
                           <div class="me-2">
@@ -102,10 +102,11 @@ export default {
     }
   },
   computed: {
-    productosAleatorios() {
-      // Crea una copia del arreglo original y mézclala
-      return this.shuffleArray([...this.$store.state.products]);
-    }
+   productosAleatorios() {
+  const productos = [...this.$store.state.products];
+  const mezclados = this.shuffleArray(productos);
+  return mezclados.slice(0, 5); // Mostrar solo 5
+}
   },
   methods: {
     shuffleArray(array) {
@@ -137,5 +138,8 @@ export default {
  .author-link {
    z-index: 2;
    position: relative;
+ }
+ .card-image{
+  height: 280px;
  }
 </style>

@@ -29,7 +29,7 @@
                         <img :src="$store.state.configvar[0]?.apiurl + list.imgLg" alt="avatar" />
                     </div>
                     <div class="flex-grow-1">
-                        <p class="card-s1-text" style="float: left: ;">
+                        <p class="card-s1-text" style="float: left;">
                             ({{ list.cant }})
                         </p>
                         <h4 class="card-s1-title"> {{ list.title }}</h4>
@@ -178,7 +178,7 @@ export default {
             console.log(result)
         }
         if (localStorage.getItem("shopingcart")) {
-            this.storedCart = JSON.parse(localStorage.getItem("shopingcart"));
+            this.storedCart = JSON.parse(this.$GetEncryptedData("shopingcart"));
             if (this.storedCart.length === 0) {
                 this.emptyCart = true;
             } else {

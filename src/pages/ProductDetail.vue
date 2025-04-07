@@ -134,7 +134,6 @@ export default {
     add() {
       this.cant = (this.cant || 0) + 1;
       this.product.total = (parseInt(this.product.price) + parseInt(this.totaladitions)) * parseInt(this.cant);
-      console.log(this.cant);
     },
     remove() {
       if (this.cant > 1) {
@@ -224,7 +223,6 @@ export default {
     product() {
       let data = {}
       this.$store.state.products.forEach((element) => {
-        console.log(this.id)
         if (this.id == element.product_id) {
           data = {
             imgLg: element.img,

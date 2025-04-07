@@ -176,7 +176,6 @@ export default {
                 const result = await this.$store.dispatch('createorder', data)
                 if (result.order_id) {
                     this.orderproducts = []
-                    console.log(this.userdata[0]?.PaymentMethod)
                     if (this.userdata[0]?.PaymentMethod == 3) {
                         this.responseUrl = "https://domicilios.losemilios.com/ordencompleta-" + result.order_id
                         this.description = "Pedido #" + result.order_id

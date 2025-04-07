@@ -48,7 +48,6 @@ export const getstore = () =>{
 export const GetEncryptedData =(datasource) =>{
   const clave = 'Rt8wkjc##34laAD9?884**';
   const encrypted = localStorage.getItem(datasource);
-  console.log(encrypted)
   if (encrypted) {
     try {
       const bytes = CryptoJS.AES.decrypt(encrypted, clave);

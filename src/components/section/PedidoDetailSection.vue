@@ -198,7 +198,6 @@ export default {
                 this.adicionalinst = this.UserData[0]?.adicionalinst
                 this.selectedPaymentMethod = this.UserData[0]?.PaymentMethod
             }
-            console.log(this.UserData.length)
         }
     },
     methods: {

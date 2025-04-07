@@ -132,7 +132,8 @@ export default {
         },
       }; */
             this.regisData.user_type_id={user_type_id : 2}
-            console.log( this.regisData)
+            this.regisData.user_registered = new Date().toISOString();
+            console.log(this.regisData)
            const result = await this.$store.dispatch('registarusuario', this.regisData)
            
 

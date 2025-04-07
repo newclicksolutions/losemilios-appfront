@@ -15,8 +15,8 @@ let SectionData = {
     title: 'Registrate <span class="text-primary">Los emilios</span>',
     subTitle: 'Complete los siguientes campos para crear una cuenta',
     termText: 'Al registrarte, aceptas nuestros Términos y condiciones y Política de privacidad',
-    btnText: 'Crear cuanta',
-    haveAccountText: "Ya tienes una cuanta? ",
+    btnText: 'Crear cuenta',
+    haveAccountText: "Ya tienes una cuenta? ",
     btnTextTwo: 'Login',
     btnTextLink: 'login',
     btns: [
@@ -2668,7 +2668,7 @@ notificationSidebarData: {
     ],
     footerListTwo: [
       {
-        title: 'Buscar Pedidos',
+        title: 'Rastrear pedidos',
         path: 'pedidos'
       },
       {

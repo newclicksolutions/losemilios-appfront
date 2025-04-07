@@ -178,7 +178,7 @@ export default {
     }
 
     .acordeon-card {
-        height: 38vh;
+        height: 100%;
     }
 
     .card-creator-s1 .card-body {
@@ -204,7 +204,7 @@ export default {
 .acordeon-card {
     overflow: auto;
     min-height: 200px;
-    height: 50vh;
+    height: 100%;
 }
 
 .sidebar-cart-enter-active,

@@ -25,8 +25,8 @@
                             <label for="emailAddress">Email address</label>
                         </div><!-- end form-floating -->
                         <div class="form-floating mb-4">
-                            <input type="password" class="form-control password" v-model="regisData.password" id="password"
-                                placeholder="Password">
+                            <input type="password" class="form-control password" v-model="regisData.password"
+                                id="password" placeholder="Password">
                             <label for="password">Password</label>
                             <a href="password" class="password-toggle" title="Toggle show/hide pasword">
                                 <em class="password-shown ni ni-eye-off"></em>
@@ -38,7 +38,8 @@
                                 <input class="form-check-input" type="checkbox" value="" id="logMeIn">
                                 <label class="form-check-label form-check-label-s1" for="logMeIn"> Recuerdame </label>
                             </div>
-                            <router-link to="login" @click="ShowReset()" class="btn-link form-forget-password">Olvidaste la
+                            <router-link to="login" @click="ShowReset()" class="btn-link form-forget-password">Olvidaste
+                                la
                                 contrasena?</router-link>
                         </div>
                         <button class="btn btn-primary w-100" type="submit">{{ SectionData.loginData.btnText }}</button>
@@ -47,8 +48,10 @@
                                 <li class="flex-grow-1" v-for="(list, i) in SectionData.loginData.btns" :key="i"><router-link :to="list.path" class="btn d-block" :class="list.btnClass"><em class="ni" :class="list.icon"></em> {{ list.title }} </router-link></li>
                             </ul> -->
                         <p class="mt-3 form-text">{{ SectionData.loginData.haveAccountText }} <router-link
-                                :to="SectionData.loginData.btnTextLink" class="btn-link">{{ SectionData.loginData.btnTextTwo
-                                }}</router-link> O <router-link to="/" class="btn-link">Comprar sin una cuanta</router-link>
+                                :to="SectionData.loginData.btnTextLink" class="btn-link">{{
+                                    SectionData.loginData.btnTextTwo
+                                }}</router-link> O <router-link to="/" class="btn-link">Comprar sin una
+                                cuenta</router-link>
                         </p>
                     </form>
                 </div><!-- end col-lg-6 -->
@@ -100,41 +103,46 @@ export default {
 
     },
     methods: {
-        ShowReset(){
-            this.showreset = !this.showreset 
+        ShowReset() {
+            this.showreset = !this.showreset
         },
-        async resetpassword(){
+        async resetpassword() {
             const result = await this.$store.dispatch('resetpassword', this.usermail)
-           if (result) {
-            this.$refs.notification.showNotification('Se restableció la contraseña, asegúrate de revisar el buzón de entrada de la dirección de correo electrónico', '#198754')
-            this.showreset = false
-           }
+            if (result) {
+                this.$refs.notification.showNotification('Se restableció la contraseña, asegúrate de revisar el buzón de entrada de la dirección de correo electrónico', '#198754')
+                this.showreset = false
+            }
         },
         async login() {
             const result = await this.$store.dispatch('login', this.regisData)
-            console.log(result)
-
             if (result.accessToken) {
-                console.log("pass")
                 const resultuser = await this.$store.dispatch('getUsers')
-                console.log(resultuser)
-                 
-                 const userdata = [{
-                    user_id:resultuser.user_id,
-                    direccion: resultuser.shipping_address,
-                    nombre:resultuser.name +" "+resultuser.last_name,
-                    email: resultuser.email,
-                    telefono: resultuser.phone,
-                    adicionalinst: null,
-                    PaymentMethod: [],
-                    cartinfo: []
-                }]
-                const parsed = JSON.stringify(userdata);
-                localStorage.setItem("UserData", parsed);
-                this.UserData = JSON.parse(localStorage.getItem("UserData"));
-                this.$store.dispatch('updatedataUser', this.UserData)
-                this.$router.push('/');  
-            }else{
+                if (resultuser.user_type_id.user_type_id == 2) {
+                    const userdata = [{
+                        user_id: resultuser.user_id,
+                        direccion: resultuser.shipping_address,
+                        nombre: resultuser.name + " " + resultuser.last_name,
+                        email: resultuser.email,
+                        telefono: resultuser.phone,
+                        adicionalinst: null,
+                        PaymentMethod: [],
+                        cartinfo: []
+                    }]
+                    const parsed = JSON.stringify(userdata);
+                    localStorage.setItem("UserData", parsed);
+                    this.UserData = JSON.parse(localStorage.getItem("UserData"));
+                    this.$store.dispatch('updatedataUser', this.UserData)
+                    this.$router.push('/');
+                } else {
+                    this.$refs.notification.showNotification('Acceso denegado', '#D11D23')
+                    localStorage.removeItem("UserData")
+                    localStorage.removeItem("token")
+                    this.$store.dispatch('updatedataUser', [])
+                    this.$store.dispatch('setcartcount', 0);
+                    this.$store.dispatch('updatecart', []);
+                }
+
+            } else {
                 this.$refs.notification.showNotification('Usuario o contraseña incorrecta', '#D11D23')
             }
 
