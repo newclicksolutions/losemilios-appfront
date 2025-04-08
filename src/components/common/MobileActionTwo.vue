@@ -28,7 +28,7 @@
         <span>Ingresar</span>
       </div>
       <div v-if="Userdata.length" class="menu-item" @click="sessionclose()">
-        <em class="ni ni-user"></em>
+        <em class="ni ni-signout"></em>
         <span>Salir</span>
         
       </div>

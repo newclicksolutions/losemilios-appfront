@@ -138,7 +138,7 @@
                         </div>
                     </div>
                 </div>
-                <img :src="PAYU" alt="" width="150" class="rounded-3 pt-5" />
+                <img :src="PAYU" alt="" width="350" class="rounded-3 pt-5" />
             </div>
         </div>
     </div>

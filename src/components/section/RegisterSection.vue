@@ -40,8 +40,8 @@
                         </div><!-- end form-floating -->
                         <!-- end form-floating -->
                         <div class="form-floating mb-4">
-                            <input type="password" class="form-control password" v-model="regisData.password" id="password"
-                                placeholder="Password" required>
+                            <input type="password" class="form-control password" v-model="regisData.password"
+                                id="password" placeholder="Password" required>
                             <label for="password">Password</label>
                             <a href="password" class="password-toggle" title="Toggle show/hide pasword">
                                 <em class="password-shown ni ni-eye-off"></em>
@@ -49,13 +49,20 @@
                             </a>
                         </div>
                         <div class="form-floating mb-4">
-                            <input type="text" class="form-control" v-model="regisData.direccion" id="direccion"
+                            <input  type="text" class="form-control" v-model="regisData.direccion" id="direccion"
                                 placeholder="Direccion de entrega" required>
                             <label for="userName">Direccion de entrega</label>
                         </div>
                         <!-- end form-floating -->
-                        <p class="mb-4 form-text">{{ SectionData.registerData.termText }}</p>
-                        <button class="btn btn-primary w-100" type="submit">{{ SectionData.registerData.btnText }}</button>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" v-model="regisData.aceptaTerminos"
+                                id="aceptaTerminos" required>
+                            <label class="form-check-label" for="aceptaTerminos">
+                                {{ SectionData.registerData.termText }}
+                            </label>
+                        </div>
+                        <button class="btn btn-primary w-100" type="submit">{{ SectionData.registerData.btnText
+                            }}</button>
                         <!-- <span class="d-block my-4">— or sign up with —</span>
                         <ul class="btns-group d-flex">
                             <li class="flex-grow-1" v-for="(list, i) in SectionData.registerData.btns" :key="i"><router-link
@@ -110,46 +117,66 @@ export default {
     },
     methods: {
         async registrar() {
- /*            const data = {
-        dealer: null,
-        deletedAt: null,
-        document: "",
-        email: this.email ?? this.user[0]?.email,
-        name: this.name ?? this.user[0]?.name,
-        last_name: this.last_name ?? this.user[0]?.last_name,
-        phone: this.phone ?? this.user[0]?.phone,
-        priority: 0,
-        reference_id: 0,
-        restaurant: [{
-          restaurant_id: this.selectedrestaurant ?? this.user[0]?.restaurant[0]?.restaurant_id
-        }],
-        shipping_address: this.shipping_address ?? this.user[0]?.shipping_address,
-        user_login: "",
-        ...(this.user_pass !== null && { user_pass: this.user_pass }),
-        user_status: 1,
-        user_type_id: {
-          user_type_id: this.selectedcategory ?? this.user[0]?.user_type_id.user_type_id
-        },
-      }; */
-            this.regisData.user_type_id={user_type_id : 2}
+            /*            const data = {
+                   dealer: null,
+                   deletedAt: null,
+                   document: "",
+                   email: this.email ?? this.user[0]?.email,
+                   name: this.name ?? this.user[0]?.name,
+                   last_name: this.last_name ?? this.user[0]?.last_name,
+                   phone: this.phone ?? this.user[0]?.phone,
+                   priority: 0,
+                   reference_id: 0,
+                   restaurant: [{
+                     restaurant_id: this.selectedrestaurant ?? this.user[0]?.restaurant[0]?.restaurant_id
+                   }],
+                   shipping_address: this.shipping_address ?? this.user[0]?.shipping_address,
+                   user_login: "",
+                   ...(this.user_pass !== null && { user_pass: this.user_pass }),
+                   user_status: 1,
+                   user_type_id: {
+                     user_type_id: this.selectedcategory ?? this.user[0]?.user_type_id.user_type_id
+                   },
+                 }; */
+            this.regisData.user_type_id = { user_type_id: 2 }
             this.regisData.user_registered = new Date().toISOString();
-            console.log(this.regisData)
-           const result = await this.$store.dispatch('registarusuario', this.regisData)
-           
-
+            const result = await this.$store.dispatch('registarusuario', this.regisData)
             if (result.error) {
                 this.$refs.notification.showNotification('Usuario el ya existe ', '#4CAF50')
             }
             if (result.success) {
+                this.$refs.notification.showNotification('Tu cuenta ha sido creada correctamente y ya puedes iniciar sesión para disfrutar de todos nuestros servicios.', '#198754')
+                this.login()
+            }
+
+        },
+
+        async login() {
+            const result = await this.$store.dispatch('login', this.regisData)
+            if (result.accessToken) {
+                const resultuser = await this.$store.dispatch('getUsers')
+                const userdata = [{
+                    user_id: resultuser.user_id,
+                    direccion: resultuser.shipping_address,
+                    nombre: resultuser.name + " " + resultuser.last_name,
+                    email: resultuser.email,
+                    telefono: resultuser.phone,
+                    adicionalinst: null,
+                    PaymentMethod: [],
+                    cartinfo: []
+                }]
+                const parsed = JSON.stringify(userdata);
+                localStorage.setItem("UserData", parsed);
+                this.UserData = JSON.parse(localStorage.getItem("UserData"));
+                this.$store.dispatch('updatedataUser', this.UserData)
+                this.$router.push('/');
+
+
+            } else {
                 this.$router.push('/login');
-            } 
+            }
 
         }
     }
 }
 </script>
-
-
-
-
-

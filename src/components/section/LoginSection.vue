@@ -109,7 +109,7 @@ export default {
         async resetpassword() {
             const result = await this.$store.dispatch('resetpassword', this.usermail)
             if (result) {
-                this.$refs.notification.showNotification('Se restableció la contraseña, asegúrate de revisar el buzón de entrada de la dirección de correo electrónico', '#198754')
+                this.$refs.notification.showNotification('Se restableció la contraseña, Asegúrate de revisar el buzón de entrada de la dirección de correo electrónico', '#198754')
                 this.showreset = false
             }
         },
