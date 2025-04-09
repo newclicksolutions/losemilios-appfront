@@ -310,7 +310,8 @@ li {
 .description {
   float: left;
   color: black;
-  font-size: 12px;
+  font-size: 13px;
+  width: 188px;
 }
 
 .card-price-overflow {

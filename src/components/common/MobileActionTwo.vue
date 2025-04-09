@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 <template>
   <div id="app">
-    <div class="menu-container">
+    <div class="menu-container" style="padding: 10px 5px 0px 5px;">
       <router-link to="/">
       <div class="menu-item" @click="navigate('inicio')">
         <em class="ni ni-home"></em>

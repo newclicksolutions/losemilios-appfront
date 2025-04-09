@@ -14,7 +14,7 @@ let SectionData = {
     img: require('@/images/thumb/remote.png'),
     title: 'Registrate <span class="text-primary">Los emilios</span>',
     subTitle: 'Complete los siguientes campos para crear una cuenta',
-    termText: 'Al registrarte, aceptas nuestros Términos y condiciones y Política de privacidad',
+    termText: 'Aceptas nuestros Términos y condiciones y Política de privacidad',
     btnText: 'Crear cuenta',
     haveAccountText: "Ya tienes una cuenta? ",
     btnTextTwo: 'Login',
@@ -241,7 +241,7 @@ let SectionData = {
   // Header data
   headerData: {
     btnText: 'Connect Wallet',
-    inputPlaceholderText: 'Buscar productos aquí...',
+    inputPlaceholderText: '¿Que quieres hoy?',
     menuList: {
       title: 'Home',
       navList: [
@@ -420,13 +420,13 @@ let SectionData = {
 userdata:[
 {
   user_id: 1,
-  name: "luis",
-  last_name: "caicedo",
+  name: "Pepito",
+  last_name: "Perez",
   phone: "3245678900",
-  email: "lcaicedo@gmail.com",
+  email: "pepitoperez@gmail.com",
   user_status: 1,
   // limit: number;
-  shipping_address: '[{"name":"çasa","id":"1","value":"Carrara 21 # 33 - 106"}]',
+  shipping_address: '[{"name":"çasa","id":"1","value":"Carrara 22 # 66 - 806"}]',
 }
 ],
 

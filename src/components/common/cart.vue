@@ -167,6 +167,29 @@ export default {
 }
 </script>
 <style>
+@media (max-height: 670px) {
+    .acordeon-card {
+        height: 48vh !important;
+    }
+}
+
+@media (min-height: 671px) and (max-height: 779px) {
+    .acordeon-card {
+        height: 51vh !important;
+    }
+}
+
+@media (min-height: 780px) and (max-height: 939px) {
+    .acordeon-card {
+        height: 58vh !important;
+    }
+}
+
+@media (min-height: 940px) {
+    .acordeon-card {
+        height: 60vh !important;
+    }
+}
 @media (max-width: 968px) {
     .bottom-gotopay {
         position: fixed;
@@ -174,11 +197,8 @@ export default {
         background: white;
         width: 100%;
         left: 0px;
-        padding: 3px 4px 15px 4px;
-    }
-
-    .acordeon-card {
-        height: 100%;
+        padding: 3px 4px 10px 4px;
+        border-top: 1px #dbdbdb solid;
     }
 
     .card-creator-s1 .card-body {
@@ -204,7 +224,7 @@ export default {
 .acordeon-card {
     overflow: auto;
     min-height: 200px;
-    height: 100%;
+    height: 64vh;
 }
 
 .sidebar-cart-enter-active,
@@ -253,7 +273,7 @@ export default {
 }
 
 .card-creator-s1 {
-    padding: 10px;
+    padding: 20px 5px;
 }
 
 .card-creator-s1 .modal-title {
