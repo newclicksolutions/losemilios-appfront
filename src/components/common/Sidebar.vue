@@ -225,6 +225,11 @@ export default {
                         this.$refs.notification.showNotification('Ingresa un numero de teléfono!', '#D11D23')
                         return false;
                     }
+                    if (this.totalSum <= 15000) {
+                        this.$refs.notification.showNotification('Para completar tu pedido, el monto mínimo de compra es $15,000.00. Agrega más productos para finalizar tu orden.', '#D11D23')
+                        return false; 
+                    }
+                    
 
                 }
 
