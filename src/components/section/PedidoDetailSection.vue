@@ -14,7 +14,8 @@
 
                 <div class="flex-grow-1">
                     <div class="" v-if="emptyUser">
-                        <a href="#" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#addNewadressModal">
+                        <a href="#" class="btn btn-primary mt-4" data-bs-toggle="modal"
+                            data-bs-target="#addNewadressModal">
                             Agregar direccion de entrga</a>
                     </div>
                     <h6 v-if="UserData.length" class="card-s1-title">{{ UserData[0].nombre }}</h6>
@@ -25,8 +26,9 @@
                     <p v-if="UserData.length" class="card-s1-text">
                         Instrucciones de entrega (opcional)
                     </p>
-                    <input v-if="UserData.length" v-model="adicionalinst" @change="addobservation" width="100%" type="area"
-                        placeholder="Detalles adicionales..." aria-label="Detalles adicionales..." class="btn-dtInlm">
+                    <input v-if="UserData.length" v-model="adicionalinst" @change="addobservation" width="100%"
+                        type="area" placeholder="Detalles adicionales..." aria-label="Detalles adicionales..."
+                        class="btn-dtInlm">
                 </div>
             </div>
 
@@ -53,17 +55,25 @@
                                         <label for="Telefono">Telefono</label>
                                     </div>
                                     <div class="form-floating mb-4">
-                                        <input v-model="email" type="email" class="form-control mb-3" placeholder="email"
-                                            required>
+                                        <input v-model="email" type="email" class="form-control mb-3"
+                                            placeholder="email" required>
                                         <label for="email">Correo</label>
                                     </div>
+                                    <div class="form-floating mb-4">
+                                    <select class="form-select" v-model="barrio" id="barrio" required>
+                                        <option value="" disabled>Selecciona un barrio</option>
+                                        <option v-for="b in barriosMedellin" :key="b" :value="b">{{ b }}</option>
+                                    </select>
+                                    <label for="barrio">Barrio</label>
+                                </div>
                                     <div class="form-floating mb-4">
                                         <input type="text" class="form-control" v-model="direccion" id="direccion"
                                             placeholder="Direccion de entrega" required>
                                         <label for="direccion">Escribe la direccion de entrega</label>
                                     </div>
                                 </div><!-- end credit-card-form -->
-                                <button class="btn btn-primary w-100" type="submit">{{UserData.length ? "Cambiar" : "Agregar"}}</button>
+                                <button class="btn btn-primary w-100" type="submit">{{ UserData.length ? "Cambiar" :
+                                    "Agregar" }}</button>
                             </form>
                         </div><!-- end modal-body -->
                     </div><!-- end modal-content -->
@@ -132,9 +142,10 @@
                                 v-model="selectedPaymentMethod" value="1">
                         </div>
                         <div class="form-check check-order mb-2">
-                            <label class="form-check-label form-check-label-s1" for="paymentCredito"> PayU</label>
+                            <label class="form-check-label form-check-label-s1" for="paymentCredito">
+                                Transferencia</label>
                             <input class="form-check-input check-all-input" type="checkbox" id="paymentCredito"
-                                v-model="selectedPaymentMethod" value="3">
+                                v-model="selectedPaymentMethod" value="2">
                         </div>
                     </div>
                 </div>
@@ -169,16 +180,23 @@ export default {
             propinaprice: 0,
             UserData: [],
             creditcart: [],
+            barrio: '',
+            barriosMedellin: [
+                'Belén', 'Laureles', 'El Poblado', 'Robledo', 'Manrique',
+                'Aranjuez', 'Buenos Aires', 'San Javier', 'Castilla',
+                'Doce de Octubre', 'Villa Hermosa', 'Popular', 'Guayabal',
+                'La América', 'Santa Cruz'
+            ],
             showModal: false,
             buttons: [1000, 2000, 3000, " Otro"],
             activeButton: null,
             tipvalue: 0,
-            PAYU: require('@/images/thumb/PAYU.png'),
+            PAYU: require('@/images/thumb/CV3CPTJFK5ENNCQCDXZESDJAEA.png'),
         };
     },
     mounted() {
         if (localStorage.getItem("shopingcart")) {
-            this.storedCart = JSON.parse( this.$GetEncryptedData("shopingcart"));
+            this.storedCart = JSON.parse(this.$GetEncryptedData("shopingcart"));
             if (this.storedCart.length === 0) {
                 this.emptyCart = true;
             } else {
@@ -215,9 +233,9 @@ export default {
             }
         },
         agragardireccion() {
-            
+            const direccionSinBarrio = this.direccion.replace(/\s*\([^)]+\)\s*$/, '').trim();
             const userdata = [{
-                direccion: this.direccion,
+                direccion: `${direccionSinBarrio} (${this.barrio})`,
                 nombre: this.nombre,
                 email: this.email,
                 telefono: this.telefono,
