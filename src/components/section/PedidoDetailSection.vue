@@ -21,7 +21,7 @@
                     <h6 v-if="UserData.length" class="card-s1-title">{{ UserData[0].nombre }}</h6>
                     <h6 v-if="UserData.length" class="card-s1-title">
                         <em class="ni ni-map-pin-fill"></em>
-                        {{ UserData[0].direccion }}
+                        {{ UserData[0].direccion }} ( {{ UserData[0].neighborhood }})
                     </h6>
                     <p v-if="UserData.length" class="card-s1-text">
                         Instrucciones de entrega (opcional)
@@ -221,6 +221,7 @@ export default {
                 this.telefono = this.UserData[0]?.telefono
                 this.adicionalinst = this.UserData[0]?.adicionalinst
                 this.selectedPaymentMethod = this.UserData[0]?.PaymentMethod
+                this.barrio = this.UserData[0]?.neighborhood
             }
         }
     },
@@ -239,9 +240,9 @@ export default {
             }
         },
         agragardireccion() {
-            const direccionSinBarrio = this.direccion.replace(/\s*\([^)]+\)\s*$/, '').trim();
+           // const direccionSinBarrio = this.direccion.replace(/\s*\([^)]+\)\s*$/, '').trim();
             const userdata = [{
-                direccion: `${direccionSinBarrio} (${this.barrio})`,
+                direccion:  this.direccion,
                 nombre: this.nombre,
                 email: this.email,
                 telefono: this.telefono,

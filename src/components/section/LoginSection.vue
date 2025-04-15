@@ -121,6 +121,7 @@ export default {
                     const userdata = [{
                         user_id: resultuser.user_id,
                         direccion: resultuser.shipping_address,
+                        neighborhood:resultuser.shipping_neighborhood,
                         nombre: resultuser.name + " " + resultuser.last_name,
                         email: resultuser.email,
                         telefono: resultuser.phone,

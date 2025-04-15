@@ -71,7 +71,7 @@
                         <h6 class="card-s1-title">{{ UserData[0].nombre }}</h6>
                         <p class="card-s1-text">
                             <span>
-                                {{ UserData[0].direccion }}
+                                {{ UserData[0].direccion }} ({{ UserData[0].neighborhood }})
                             </span>
                         </p>
                         <p class="card-s1-text">

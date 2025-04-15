@@ -421,6 +421,7 @@ export default createStore({
         email: payload.emailAddress,
         user_pass: payload.password,
         shipping_address: payload.direccion,
+        shipping_neighborhood:payload.shipping_neighborhood,
         user_status: 1,
         user_login: payload.fullName,
         document: "",

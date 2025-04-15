@@ -49,7 +49,15 @@
                             </a>
                         </div>
                         <div class="form-floating mb-4">
-                            <input  type="text" class="form-control" v-model="regisData.direccion" id="direccion"
+
+                            <select class="form-control" v-model="regisData.shipping_neighborhood" id="barrio" required>
+                                <option value="" disabled>Selecciona un barrio</option>
+                                <option v-for="b in barriosMedellin" :key="b" :value="b">{{ b }}</option>
+                            </select>
+                            <label for="barrio">Barrio</label>
+                        </div>
+                        <div class="form-floating mb-4">
+                            <input type="text" class="form-control" v-model="regisData.direccion" id="direccion"
                                 placeholder="Direccion de entrega" required>
                             <label for="userName">Direccion de entrega</label>
                         </div>
@@ -62,7 +70,7 @@
                             </label>
                         </div>
                         <button class="btn btn-primary w-100" type="submit">{{ SectionData.registerData.btnText
-                            }}</button>
+                        }}</button>
                         <!-- <span class="d-block my-4">— or sign up with —</span>
                         <ul class="btns-group d-flex">
                             <li class="flex-grow-1" v-for="(list, i) in SectionData.registerData.btns" :key="i"><router-link
@@ -88,7 +96,13 @@ export default {
         return {
             SectionData,
             regisData: [],
-            UserData: []
+            UserData: [],
+            barriosMedellin: [
+                'Belén', 'Laureles', 'El Poblado', 'Robledo', 'Manrique',
+                'Aranjuez', 'Buenos Aires', 'San Javier', 'Castilla',
+                'Doce de Octubre', 'Villa Hermosa', 'Popular', 'Guayabal',
+                'La América', 'Santa Cruz'
+            ],
         }
     },
     mounted() {
@@ -161,6 +175,7 @@ export default {
                     nombre: resultuser.name + " " + resultuser.last_name,
                     email: resultuser.email,
                     telefono: resultuser.phone,
+                    neighborhood:resultuser.shipping_neighborhood,
                     adicionalinst: null,
                     PaymentMethod: [],
                     cartinfo: []

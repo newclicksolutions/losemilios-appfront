@@ -26,8 +26,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating mb-4">
-                                        <input type="text" class="form-control" v-model="regisData.last_name" id="apellido"
-                                            placeholder="Apellido" required>
+                                        <input type="text" class="form-control" v-model="regisData.last_name"
+                                            id="apellido" placeholder="Apellido" required>
                                         <label for="apellido">Aellido</label>
                                     </div>
                                 </div>
@@ -45,8 +45,17 @@
                             </div><!-- end form-floating -->
 
                             <div class="form-floating mb-4">
-                                <input type="text" class="form-control" v-model="regisData.shipping_address" id="direccion"
-                                    placeholder="Direccion de entrega" required>
+                                <select class="form-control" v-model="regisData.shipping_neighborhood" id="barrio"
+                                    required>
+                                    <option value="" disabled>Selecciona un barrio</option>
+                                    <option v-for="b in barriosMedellin" :key="b" :value="b">{{ b }}</option>
+                                </select>
+                                <label for="barrio">Barrio</label>
+                            </div>
+
+                            <div class="form-floating mb-4">
+                                <input type="text" class="form-control" v-model="regisData.shipping_address"
+                                    id="direccion" placeholder="Direccion de entrega" required>
                                 <label for="direccion">Direccion</label>
                             </div>
                             <!-- end form-floating -->
@@ -109,8 +118,14 @@ export default {
             SectionData,
             regisData: [],
             UserData: [],
+            barriosMedellin: [
+                'Belén', 'Laureles', 'El Poblado', 'Robledo', 'Manrique',
+                'Aranjuez', 'Buenos Aires', 'San Javier', 'Castilla',
+                'Doce de Octubre', 'Villa Hermosa', 'Popular', 'Guayabal',
+                'La América', 'Santa Cruz'
+            ],
             newPassword: '',
-      confirmPassword: '',
+            confirmPassword: '',
         }
     },
     async mounted() {
@@ -123,7 +138,8 @@ export default {
         this.regisData.phone = this.UserData.phone
         this.regisData.email = this.UserData.email
         this.regisData.shipping_address = this.UserData.shipping_address
-
+        this.regisData.shipping_neighborhood = this.UserData.shipping_neighborhood
+        
         /*===========SHOW UPLOADED IMAGE ================== */
         function uploadImage(selector) {
             let elem = document.querySelectorAll(selector)
@@ -181,28 +197,28 @@ export default {
     methods: {
         async actualizarPerfilpassword() {
             if (this.newPassword === this.confirmPassword) {
-              const data = {
-                user_id: this.regisData.user_id,
-                user_pass: this.confirmPassword,
+                const data = {
+                    user_id: this.regisData.user_id,
+                    user_pass: this.confirmPassword,
+                }
+                console.log(data)
+                const result = await this.$store.dispatch('updateUser', data)
+                if (result) {
+                    this.$refs.notification.showNotification('Usuario Actualizado Correctamente', '#0aa90d')
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 100);
+                }
+
+                console.log('Contraseña actualizada');
+            } else {
+                this.$refs.notification.showNotification('Las contraseñas no coinciden', '#D11D23')
+                console.error('Las contraseñas no coinciden');
             }
-            console.log(data)
-            const result = await this.$store.dispatch('updateUser', data)
-            if (result) {
-                this.$refs.notification.showNotification('Usuario Actualizado Correctamente', '#0aa90d')
-                setTimeout(() => {
-                    window.location.reload()
-                }, 100);
-            }
-
-        console.log('Contraseña actualizada');
-      } else {
-        this.$refs.notification.showNotification('Las contraseñas no coinciden', '#D11D23')
-        console.error('Las contraseñas no coinciden');
-      }
-      
 
 
-      
+
+
 
         },
         async actualizarPerfil() {
@@ -213,6 +229,7 @@ export default {
                 phone: this.regisData.phone,
                 email: this.regisData.email,
                 shipping_address: this.regisData.shipping_address,
+                shipping_neighborhood:this.regisData.shipping_neighborhood,
             }
             console.log(data)
             const result = await this.$store.dispatch('updateUser', data)
