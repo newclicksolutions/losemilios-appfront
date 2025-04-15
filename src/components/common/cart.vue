@@ -26,7 +26,6 @@
                         <a :disabled="isButtonDisabled" href="/" class="btn btn-primary d-block" style="width: 260px;">
                             Comenzar a comprar </a>
                     </div>
-
                     <transition name="slide-fade">
                         <div class="acordeon-card" v-if="isAccordionOpen">
                             <div class="card-body d-flex d-flex-tras align-items-center" v-for="list in cart"
@@ -36,16 +35,20 @@
                                 </div>
                                 <div class="flex-grow-1">
                                     <div class="dv1">
-                                        <p class="card-s1-title"> {{ list.title }}</p>
+                                        <p class="card-s5-title"> {{ list.title }}</p>
                                         <h6 class="card-s1-title"> {{ $formatoMoneda(list.total * list.cant) }}</h6>
-                                        <p v-if="list.cartadditions.length" class="card-s1-text">
-                                            <span v-for="listadd in list.cartadditions" :key="listadd">
-                                                {{ listadd.title }} - </span>
-
-
+                                        <p v-if="list.cartopcionesSeleccionadas.length" class="card-s3-text">
+                                            <label for=""><b>Opciones</b> </label><br>
+                                            <span v-for="listopt in list.cartopcionesSeleccionadas" :key="listopt">
+                                                {{ listopt.nombre }}<br> </span>
                                         </p>
-                                    </div>
+                                        <p v-if="list.cartadditions.length" class="card-s3-text">
+                                            <label for=""><b>Adiciones</b></label><br>
+                                            <span v-for="listadd in list.cartadditions" :key="listadd">
+                                                {{ listadd.title }}<br> </span>
+                                        </p>
 
+                                    </div>
                                     <div class="dv3">
                                         <button @click="increment(list)">+</button>
                                         <input type="number" v-model="list.cant" />
@@ -68,13 +71,8 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
-
-
             </div><!-- end sidebar-widget -->
-
         </div><!-- end sidebar -->
     </transition>
 </template>
@@ -190,6 +188,7 @@ export default {
         height: 60vh !important;
     }
 }
+
 @media (max-width: 968px) {
     .bottom-gotopay {
         position: fixed;
@@ -289,8 +288,16 @@ export default {
     font-size: 13px;
 }
 
-.card-s1-title {
-    font-size: 18px;
+.card-s5-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: black;
+}
+
+.card-s3-text {
+    line-height: 15px;
+    font-size: 13px;
+    color: black !;
 }
 
 .cardflexfooter {

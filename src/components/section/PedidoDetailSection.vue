@@ -60,12 +60,12 @@
                                         <label for="email">Correo</label>
                                     </div>
                                     <div class="form-floating mb-4">
-                                    <select class="form-select" v-model="barrio" id="barrio" required>
-                                        <option value="" disabled>Selecciona un barrio</option>
-                                        <option v-for="b in barriosMedellin" :key="b" :value="b">{{ b }}</option>
-                                    </select>
-                                    <label for="barrio">Barrio</label>
-                                </div>
+                                        <select class="form-select" v-model="barrio" id="barrio" required>
+                                            <option value="" disabled>Selecciona un barrio</option>
+                                            <option v-for="b in barriosMedellin" :key="b" :value="b">{{ b }}</option>
+                                        </select>
+                                        <label for="barrio">Barrio</label>
+                                    </div>
                                     <div class="form-floating mb-4">
                                         <input type="text" class="form-control" v-model="direccion" id="direccion"
                                             placeholder="Direccion de entrega" required>
@@ -105,9 +105,15 @@
                         </p>
                         <h4 class="card-s1-title"> {{ list.title }}</h4>
                         <h6 class="card-s1-title"> {{ $formatoMoneda(list.total * list.cant) }}</h6>
+                        <p v-if="list.cartopcionesSeleccionadas.length" class="card-s3-text">
+                            <label for=""><b>Opciones</b> </label><br>
+                            <span v-for="listopt in list.cartopcionesSeleccionadas" :key="listopt">
+                                {{ listopt.nombre }}<br> </span>
+                        </p>
                         <p v-if="list.cartadditions.length" class="card-s1-text">
+                            <label for=""><b>Adiciones</b> </label><br>
                             <span v-for="listadd in list.cartadditions" :key="listadd">
-                                {{ listadd.title }} - </span>
+                                {{ listadd.title }} <br></span>
                         </p>
                     </div>
                 </div>
@@ -242,7 +248,8 @@ export default {
                 adicionalinst: this.adicionalinst,
                 PaymentMethod: this.selectedPaymentMethod,
                 cartinfo: this.creditcart,
-                tip: this.tipvalue
+                tip: this.tipvalue,
+                neighborhood: this.barrio
             }]
             const parsed = JSON.stringify(userdata);
             localStorage.setItem("UserData", parsed);

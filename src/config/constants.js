@@ -9,7 +9,7 @@ const CONSTANTS_PROD  = {
   IMG_PATH: "https://api.losemilios.com/"
 };
 
-const TEST_ENVIRONMENT = false;
+const TEST_ENVIRONMENT = true;
 
 export { CONSTANTS_PROD, CONSTANTS_TEST, TEST_ENVIRONMENT };
 

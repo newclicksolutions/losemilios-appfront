@@ -137,7 +137,8 @@ export default {
                         quantity: element.cant,
                         price: element.price,
                         name: element.title,
-                        aditions: JSON.stringify(element.cartadditions)
+                        aditions: JSON.stringify(element.cartadditions),
+                        options: JSON.stringify(element.cartopcionesSeleccionadas)
                     });
                 }
                 const data = {
@@ -152,6 +153,7 @@ export default {
                     customername: this.userdata[0]?.nombre,
                     customertel: this.userdata[0]?.telefono,
                     customeremail: this.userdata[0]?.email,
+                    shipping_neighborhood: this.userdata[0]?.neighborhood,
                     User: [{
                         user_id: this.userdata[0]?.user_id ?? 32,
                     },
@@ -173,6 +175,7 @@ export default {
                     },
                     Transaction: null
                 };
+                console.log(data)
                 const result = await this.$store.dispatch('createorder', data)
                 if (result.order_id) {
                     this.orderproducts = []

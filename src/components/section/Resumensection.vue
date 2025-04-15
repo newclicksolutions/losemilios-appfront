@@ -23,7 +23,7 @@
                     </svg></span></div>
         </div>
         <transition name="slide-fade">
-            <div class="acordeon-card" v-if="isAccordionOpen">
+            <div class="acordeon-card-resumen" v-if="isAccordionOpen">
                 <div class="card-body d-flex align-items-center" v-for="list in storedCart" :key="list.id">
                     <div class="avatar avatar-1 flex-shrink-0">
                         <img :src="$store.state.configvar[0]?.apiurl + list.imgLg" alt="avatar" />
@@ -34,9 +34,15 @@
                         </p>
                         <h4 class="card-s1-title"> {{ list.title }}</h4>
                         <h6 class="card-s1-title"> {{ $formatoMoneda(list.total * list.cant) }}</h6>
+                        <p v-if="list.cartopcionesSeleccionadas.length" class="card-s3-text">
+                            <label for=""><b>Opciones</b> </label><br>
+                            <span v-for="listopt in list.cartopcionesSeleccionadas" :key="listopt">
+                                {{ listopt.nombre }}<br> </span>
+                        </p>
                         <p v-if="list.cartadditions.length" class="card-s1-text">
+                            <label for=""><b>Adiciones</b> </label><br>
                             <span v-for="listadd in list.cartadditions" :key="listadd">
-                                {{ listadd.title }} - </span>
+                                {{ listadd.title }} <br></span>
 
 
                         </p>
@@ -59,7 +65,7 @@
                     </svg></span></div>
         </div>
         <transition name="slide-fade">
-            <div class="acordeon-card" v-if="isAccordionOpen1">
+            <div class="acordeon-card-resumen" v-if="isAccordionOpen1">
                 <div class="card-body d-flex align-items-center">
                     <div v-if="UserData.length" class="flex-grow-1">
                         <h6 class="card-s1-title">{{ UserData[0].nombre }}</h6>
@@ -94,7 +100,7 @@
                     </svg></span></div>
         </div>
         <transition name="slide-fade">
-            <div class="acordeon-card" v-if="isAccordionOpen2">
+            <div class="acordeon-card-resumen" v-if="isAccordionOpen2">
                 <div class="card-body d-flex align-items-center">
                     <ul class="total-bid-list mb-4">
                         <li>
@@ -168,13 +174,13 @@ export default {
                 description: this.$route.query.description,
             }
             const result = await this.$store.dispatch('createTransaction', data);
-           /*  if (result) {
-                 await this.$store.dispatch('updateorder', {
-                    order_id: this.id, OrderStatus: {
-                        order_status_id: this.$route.query.lapTransactionState === 'DECLINED' ? 6 : 1,
-                    },
-                });
-            } */
+            /*  if (result) {
+                  await this.$store.dispatch('updateorder', {
+                     order_id: this.id, OrderStatus: {
+                         order_status_id: this.$route.query.lapTransactionState === 'DECLINED' ? 6 : 1,
+                     },
+                 });
+             } */
             console.log(result)
         }
         if (localStorage.getItem("shopingcart")) {
@@ -189,7 +195,7 @@ export default {
             this.$store.dispatch('setcartcount', 0);
             this.$store.dispatch('updatecart', []);
         } else {
-           this.$router.push('/')
+            this.$router.push('/')
         }
         if (localStorage.getItem("UserData")) {
             this.UserData = JSON.parse(localStorage.getItem("UserData"));

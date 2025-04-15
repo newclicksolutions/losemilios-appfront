@@ -25,29 +25,66 @@
           <div class="col-lg-6">
             <div class="item-detail-content mt-4 mt-lg-0">
               <h1 class="item-detail-title mb-2">{{ product.title }}</h1>
-
               <p class="item-detail-text mb-4">{{ product.content }}</p>
               <div class="card-price-wrap d-flex align-items-center justify-content-sm-between mb-3">
                 <div class="me-5 me-sm-2">
                   <span class="card-price-number">{{ $formatoMoneda(product.price) }}</span>
                 </div>
               </div>
-              <div class="card-price-wrap card-price-overflow" style="border-bottom: 1px #e1e1e1c4 solid;">
-                <div class="me-sm-2" v-if="product.additions?.length">
-                  <span class="card-price-number">Adiciones</span>
-                  <ul>
-                    <li v-for="item in product.additions" :key="item.id">
-                      <div class="dv1">
-                        <span class="description">{{ item.title }}</span>
+
+
+              <div class="card-price-wrap card-price-overflow acordeon-main"
+                style="border-bottom: 1px #e1e1e1c4 solid;">
+
+                <!-- OPCIONES AGRUPADAS -->
+                <div v-if="Object.keys(opcionesAgrupadas).length" class="acordeon-tab clickable">
+                  <div class="acordeon-header">
+                    <span class="card-price-number">Opciones</span>
+                    <span class="arrow" :class="{ open: isOpen.opciones }" @click="toggleAccordion('opciones')">▶</span>
+                  </div>
+                  <transition name="fade">
+                    <div v-show="isOpen.opciones" class="acordeon-content">
+                      <div v-for="(grupo, categoria) in opcionesAgrupadas" :key="categoria">
+                        <span class="card-price-number">{{ categoria }}</span>
+
+                        <div class="categoria-opciones">
+                          <div v-for="opcion in grupo" :key="opcion.nombre" class="opcion-item">
+                            <label class="custom-checkbox-row">
+                              <span class="opcion-nombre description">{{ opcion.nombre }}</span>
+                              <input type="checkbox" :id="opcion.nombre" :checked="isChecked(opcion)"
+                                @change="handleSeleccion(opcion)" />
+                              <span class="checkmark"></span>
+                            </label>
+                          </div>
+                        </div>
                       </div>
-                      <div class="dv2">
-                        <span class="addprice">+{{ $formatoMoneda(item.price) }}</span>
-                        <button @click="decrement(item)">-</button>
-                        <input type="number" v-model="item.value" @input="limitInput(item)" />
-                        <button @click="increment(item)">+</button>
-                      </div>
-                    </li>
-                  </ul>
+                    </div>
+                  </transition>
+                </div>
+                <!-- ADICIONES -->
+                <div class="acordeon-tab clickable" v-if="product.additions?.length">
+                  <div class="acordeon-header">
+                    <span class="card-price-number">Adiciones</span>
+                    <span class="arrow" :class="{ open: isOpen.adiciones }"
+                      @click="toggleAccordion('adiciones')">▶</span>
+                  </div>
+                  <transition name="fade">
+                    <div v-show="isOpen.adiciones" class="acordeon-content">
+                      <ul>
+                        <li v-for="item in product.additions" :key="item.id">
+                          <div class="dv1">
+                            <span class="description">{{ item.title }}</span>
+                          </div>
+                          <div class="dv2">
+                            <span class="addprice">+{{ $formatoMoneda(item.price) }}</span>
+                            <button @click.stop="decrement(item)">-</button>
+                            <input type="number" v-model="item.value" @input="limitInput(item)" />
+                            <button @click.stop="increment(item)">+</button>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </transition>
                 </div>
               </div>
               <div class="item-detail-btns mt-4">
@@ -59,7 +96,8 @@
                     <button @click="add()">+</button>
                   </li>
                   <li class="dv2">
-                    <a @click="saveCart" href="#" id="cartButton" class="btn btn-primary d-block  pulsating-button">
+                    <a @click="validarSeleccion" href="#" id="cartButton"
+                      class="btn btn-primary d-block  pulsating-button">
                       Agregar
                       <span class="price-value">{{ $formatoMoneda(parseInt(product.total)) }}</span>
                     </a>
@@ -115,7 +153,12 @@ export default {
       totaladitions: 0,
       cartadditions: [],
       cart: [],
-      storedCart: []
+      storedCart: [],
+      opcionesSeleccionadas: [],
+      isOpen: {
+        opciones: true,
+        adiciones: true
+      },
     };
   },
   created() {
@@ -127,10 +170,57 @@ export default {
       this.storedCart = this.$GetEncryptedData("shopingcart");
 
     }
+    // Buscar la opción por defecto (que no sea "Salsas")
+    const opcionPorDefecto = Object.values(this.opcionesAgrupadas)
+      .flat()
+      .find(o => o.categoria !== "Salsas");
+
+    if (opcionPorDefecto) {
+      this.opcionesSeleccionadas.push(opcionPorDefecto);
+    }
 
   },
   methods: {
+    isChecked(opcion) {
+      return this.opcionesSeleccionadas.some(
+        (o) => o.nombre === opcion.nombre && o.categoria === opcion.categoria
+      );
+    },
 
+    handleSeleccion(opcion) {
+      const mismaCategoria = (o) => o.categoria === opcion.categoria;
+      const mismaOpcion = (o) => o.nombre === opcion.nombre && o.categoria === opcion.categoria;
+
+      const yaSeleccionada = this.opcionesSeleccionadas.some(mismaOpcion);
+      const seleccionadasDeCategoria = this.opcionesSeleccionadas.filter(mismaCategoria);
+
+      if (yaSeleccionada) {
+        // Deseleccionar si ya estaba marcada
+        this.opcionesSeleccionadas = this.opcionesSeleccionadas.filter((o) => !mismaOpcion(o));
+        return;
+      }
+
+      if (opcion.categoria === "Salsas") {
+        if (seleccionadasDeCategoria.length < 5) {
+          this.opcionesSeleccionadas.push(opcion);
+        } else {
+          this.$refs.notification.showNotification("Solo puedes seleccionar hasta 5 salsas.", "#00870c");
+          this.$nextTick(() => this.forceUpdateInput(opcion));
+        }
+      } else {
+        // Desmarcar todas las de esa categoría y marcar la nueva
+        this.opcionesSeleccionadas = this.opcionesSeleccionadas.filter((o) => !mismaCategoria(o));
+        this.opcionesSeleccionadas.push(opcion);
+      }
+    },
+    forceUpdateInput(opcion) {
+      const input = document.getElementById(opcion.nombre);
+      if (input) input.checked = false;
+    },
+
+    toggleAccordion(section) {
+      this.isOpen[section] = !this.isOpen[section];
+    },
     add() {
       this.cant = (this.cant || 0) + 1;
       this.product.total = (parseInt(this.product.price) + parseInt(this.totaladitions)) * parseInt(this.cant);
@@ -185,12 +275,40 @@ export default {
         item.value = 1;
       }
     },
+
+    validarSeleccion() {
+      const categoriasRequeridas = Object.keys(this.opcionesAgrupadas);
+
+      const categoriasSeleccionadas = new Set(
+        this.opcionesSeleccionadas.map((o) => o.categoria)
+      );
+
+      const categoriasFaltantes = categoriasRequeridas.filter(
+        (categoria) => !categoriasSeleccionadas.has(categoria)
+      );
+
+      if (categoriasFaltantes.length > 0) {
+        this.$refs.notification.showNotification(
+          `Debes seleccionar al menos una opción en: ${categoriasFaltantes.join(", ")}`,
+          "#b00020"
+        );
+        return;
+      }
+
+      // Si todo está bien, continuar
+      this.saveCart(); // o el método que corresponda
+    },
+
+
+
+
     saveCart() {
-      let storedCart =  this.$GetEncryptedData("shopingcart");
+
+      let storedCart = this.$GetEncryptedData("shopingcart");
       if (storedCart) {
         this.cart = JSON.parse(storedCart);
       }
-      this.cart = this.cart.filter(cartItem => cartItem.id !== this.$route.params.id);
+      //this.cart = this.cart.filter(cartItem => cartItem.id !== this.$route.params.id);
       this.cart.push({
         id: this.$route.params.id,
         title: this.product.title,
@@ -201,6 +319,7 @@ export default {
         cant: this.cant,
         totaladitions: this.totaladitions,
         cartadditions: this.cartadditions,
+        cartopcionesSeleccionadas: this.opcionesSeleccionadas,
       });
 
       // Guardar el carrito actualizado en el localStorage
@@ -208,7 +327,7 @@ export default {
       const encrypted = CryptoJS.AES.encrypt(JSON.stringify(parsed), 'Rt8wkjc##34laAD9?884**').toString();
       localStorage.setItem("shopingcart", encrypted);
       //localStorage.setItem("shopingcart", parsed);
-      this.storedCart = JSON.parse( this.$GetEncryptedData("shopingcart"))
+      this.storedCart = JSON.parse(this.$GetEncryptedData("shopingcart"))
       this.$store.dispatch('setcartcount', this.storedCart.length);
       this.$store.dispatch('updatecart', this.storedCart);
       const cartButton = document.getElementById('cartButton');
@@ -220,10 +339,27 @@ export default {
     }
   },
   computed: {
+    opcionesAgrupadas() {
+      return this.product.options.reduce((acc, opcion) => {
+        if (!acc[opcion.categoria]) acc[opcion.categoria] = [];
+        acc[opcion.categoria].push(opcion);
+        return acc;
+      }, {});
+    },
     product() {
       let data = {}
       this.$store.state.products.forEach((element) => {
         if (this.id == element.product_id) {
+          let parsedOptions = [];
+
+          try {
+            if (element.options && element.options !== "null") {
+              parsedOptions = JSON.parse(element.options);
+            }
+          } catch (error) {
+            console.error("Error al parsear options:", error);
+          }
+
           data = {
             imgLg: element.img,
             title: element.title,
@@ -231,7 +367,8 @@ export default {
             content: element.content,
             additions: element.addition,
             total: element.price,
-          }
+            options: parsedOptions.length > 0 ? parsedOptions : [],
+          };
         }
       });
       return data
@@ -279,7 +416,7 @@ button {
   background: black;
   font-size: 18px;
   border: none;
-  margin: 8px;
+  margin: 4px;
 }
 
 li {
@@ -287,6 +424,20 @@ li {
   justify-content: space-between;
   align-items: center;
   padding: 5px 0;
+}
+
+.opcion-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 3px 28px 3px 5px;
+}
+
+.opcion-item input {
+  width: 20px;
+  height: 30px;
+  border: transparent;
+  border-radius: 25px;
 }
 
 .dvul {
@@ -315,8 +466,8 @@ li {
 }
 
 .card-price-overflow {
-  overflow: auto;
-  max-height: 400px;
+  overflow: hidden;
+  max-height: 100%;
 }
 
 .controls {
@@ -329,6 +480,8 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+
 
 .addprice {
   font-size: 12px;
@@ -370,5 +523,99 @@ input[type="number"] {
   width: 200%;
   height: 200%;
   opacity: 1;
+}
+
+
+.acordeon-tab {
+  margin-bottom: 1rem;
+}
+
+.acordeon-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.arrow {
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.arrow.open {
+  transform: rotate(90deg);
+}
+
+.acordeon-content {
+  padding: 0.5rem 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-5px);
+}
+
+.custom-checkbox-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  position: relative;
+  cursor: pointer;
+  font-size: 14px;
+  user-select: none;
+}
+
+.custom-checkbox-row input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.custom-checkbox-row .checkmark {
+  height: 20px;
+  width: 20px;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.custom-checkbox-row input:checked~.checkmark {
+  background-color: black;
+  border-color: black;
+}
+
+.custom-checkbox-row .checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.custom-checkbox-row input:checked~.checkmark::after {
+  display: block;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.opcion-nombre {
+  flex-grow: 1;
+  margin-right: 12px;
 }
 </style>
