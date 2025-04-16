@@ -208,15 +208,15 @@ export default {
     });
   },
   beforeMount() {
-  window.removeEventListener('scroll', this.checkScroll);
-},
+    window.removeEventListener('scroll', this.checkScroll);
+  },
   methods: {
     checkScroll() {
-    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    const isMobile = window.innerWidth <= 768;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const isMobile = window.innerWidth <= 768;
 
-    this.isSticky = isMobile && scrollTop > 650;
-  },
+      this.isSticky = isMobile && scrollTop > 650;
+    },
     setFilter(ct) {
       this.filtersCategory = ct;
       this.$store.dispatch('searhinput', this.inputValue);
@@ -257,23 +257,31 @@ export default {
       return this.$store.state.data;
     },
     filteredProducts() {
-      if (this.$store.state.searhinput) {
-        if (this.filtersCategory == this.$store.state.searhinput) return this.$store.state.products;
-        return this.$store.state.products.filter(
-          (product) => product.title.toLowerCase().includes(this.$store.state.searhinput.toLowerCase()) || product.Category.title.toLowerCase().includes(this.$store.state.searhinput.toLowerCase())
+      const searhinput = this.$store.state.searhinput?.toLowerCase() || "";
+      const selectedCategory = this.filtersCategory;
+      // Filtra primero solo productos con unidad "Publico"
+      const publicProducts = this.$store.state.products.filter(
+        (product) => product.unit === "Publico"
+      );
+      if (searhinput) {
+        if (selectedCategory === searhinput) {
+          return publicProducts;
+        }
+        return publicProducts.filter(product =>
+          product.title.toLowerCase().includes(searhinput) ||
+          product.Category.title.toLowerCase().includes(searhinput)
         );
       } else {
-        if (this.filtersCategory == "Todos") return this.$store.state.products;
-        return this.$store.state.products.filter(
-          (product) => product.Category.title === this.filtersCategory
+        if (selectedCategory === "Todos") {
+          return publicProducts;
+        }
+        return publicProducts.filter(product =>
+          product.Category.title === selectedCategory
         );
       }
-
     },
+
     filteredData() {
-      // if(this.isFIlter == false) {
-      //   return this.products.slice(0, this.currentPage * this.maxPerPage);
-      // }
       return this.products.filter((data) => {
         const opts = this.selectedTab.options.map((opt) => opt.category);
         return opts.includes(data.category);
@@ -295,11 +303,12 @@ export default {
 
 
 }
+
 .sticky-swiper {
   position: fixed;
   top: 94px;
   width: 100%;
-  z-index: 1;
+  z-index: 5;
   background: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -389,14 +398,17 @@ export default {
   padding: 0px;
   /* Esto puede ser necesario si no tienes un alto definido para tus slides */
 }
+
 .truncate-text {
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* número de líneas a mostrar */
+  -webkit-line-clamp: 2;
+  /* número de líneas a mostrar */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 1.4em;
-  max-height: 2.8em; /* line-height * líneas */
+  max-height: 2.8em;
+  /* line-height * líneas */
   word-break: break-word;
   height: 40px;
 }
@@ -405,7 +417,8 @@ export default {
 .has-html .truncate-text {
   color: #ff6600;
 }
-.card-title{
+
+.card-title {
   height: 40px;
 }
 

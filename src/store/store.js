@@ -2668,10 +2668,6 @@ notificationSidebarData: {
     ],
     footerListTwo: [
       {
-        title: 'Rastrear pedidos',
-        path: 'pedidos'
-      },
-      {
         title: '3137681221',
         path: 'activity'
       },
@@ -2682,7 +2678,7 @@ notificationSidebarData: {
   
     ]
   },
-  copyTitle: 'Copyright © 2023 Newclicksoluciones.com'
+  copyTitle: 'Copyright © 2025 Newclicksoluciones.com'
 }
 
 export default SectionData

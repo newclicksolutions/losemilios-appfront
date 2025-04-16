@@ -308,7 +308,7 @@ export default {
       if (storedCart) {
         this.cart = JSON.parse(storedCart);
       }
-      //this.cart = this.cart.filter(cartItem => cartItem.id !== this.$route.params.id);
+      this.cart = this.cart.filter(cartItem => cartItem.id !== this.$route.params.id);
       this.cart.push({
         id: this.$route.params.id,
         title: this.product.title,

@@ -43,6 +43,7 @@
                         </div><!-- end modal-header -->
                         <div class="modal-body">
                             <form ref="agragardireccionform" @submit.prevent="agragardireccion">
+                               
                                 <div class="credit-card-form mb-4">
                                     <div class="form-floating mb-4">
                                         <input type="text" class="form-control" v-model="nombre" id="Nombre"
@@ -62,7 +63,7 @@
                                     <div class="form-floating mb-4">
                                         <select class="form-select" v-model="barrio" id="barrio" required>
                                             <option value="" disabled>Selecciona un barrio</option>
-                                            <option v-for="b in barriosMedellin" :key="b" :value="b">{{ b }}</option>
+                                            <option v-for="b in JSON.parse(configvar[0].neighborhood_list)" :key="b" :value="b">{{ b }}</option>
                                         </select>
                                         <label for="barrio">Barrio</label>
                                     </div>
@@ -153,9 +154,16 @@
                             <input class="form-check-input check-all-input" type="checkbox" id="paymentCredito"
                                 v-model="selectedPaymentMethod" value="2">
                         </div>
+                        <div v-if="configvar[0].payu_enabled==1"  class="form-check check-order mb-2">
+                            <label class="form-check-label form-check-label-s1" for="paymentCredito">
+                                PayU</label>
+                            <input class="form-check-input check-all-input" type="checkbox" id="paymentCredito"
+                                v-model="selectedPaymentMethod" value="3">
+                        </div>
                     </div>
                 </div>
-                <img :src="PAYU" alt="" width="350" class="rounded-3 pt-5" />
+                <img :src="Transferencia" alt="" width="350" class="rounded-3 pt-5" />
+                <img v-if="configvar[0].payu_enabled==1" :src="PAYU" alt="" width="350" class="rounded-3 pt-5" />
             </div>
         </div>
     </div>
@@ -197,7 +205,8 @@ export default {
             buttons: [1000, 2000, 3000, " Otro"],
             activeButton: null,
             tipvalue: 0,
-            PAYU: require('@/images/thumb/CV3CPTJFK5ENNCQCDXZESDJAEA.png'),
+            PAYU: require('@/images/thumb/PAYU.png'),
+            Transferencia: require('@/images/thumb/CV3CPTJFK5ENNCQCDXZESDJAEA.png'),
         };
     },
     mounted() {
@@ -240,9 +249,9 @@ export default {
             }
         },
         agragardireccion() {
-           // const direccionSinBarrio = this.direccion.replace(/\s*\([^)]+\)\s*$/, '').trim();
+            // const direccionSinBarrio = this.direccion.replace(/\s*\([^)]+\)\s*$/, '').trim();
             const userdata = [{
-                direccion:  this.direccion,
+                direccion: this.direccion,
                 nombre: this.nombre,
                 email: this.email,
                 telefono: this.telefono,
@@ -261,7 +270,9 @@ export default {
         },
     },
     computed: {
-
+        configvar() {
+            return JSON.parse(this.$GetEncryptedData("configvar"));
+        }
     },
     watch: {
         selectedPaymentMethod(newVal) {
