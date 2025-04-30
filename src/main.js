@@ -16,6 +16,8 @@ import vSelect from 'vue-select'
 import "vue-select/dist/vue-select.css";
 
 app.component('v-select', vSelect)
+
+store.dispatch("fetchData");
 store.dispatch("fetchOptions");
 // clipboard
 import VueClipboard from 'vue3-clipboard'

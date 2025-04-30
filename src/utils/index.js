@@ -52,7 +52,6 @@ export const GetEncryptedData =(datasource) =>{
     try {
       const bytes = CryptoJS.AES.decrypt(encrypted, clave);
       const decrypted = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-      console.log(decrypted)
       return decrypted;
     } catch (error) {
       console.error("Error al desencriptar datos:", error);

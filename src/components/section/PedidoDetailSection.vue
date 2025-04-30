@@ -43,7 +43,7 @@
                         </div><!-- end modal-header -->
                         <div class="modal-body">
                             <form ref="agragardireccionform" @submit.prevent="agragardireccion">
-                               
+
                                 <div class="credit-card-form mb-4">
                                     <div class="form-floating mb-4">
                                         <input type="text" class="form-control" v-model="nombre" id="Nombre"
@@ -63,7 +63,8 @@
                                     <div class="form-floating mb-4">
                                         <select class="form-select" v-model="barrio" id="barrio" required>
                                             <option value="" disabled>Selecciona un barrio</option>
-                                            <option v-for="b in JSON.parse(configvar[0].neighborhood_list)" :key="b" :value="b">{{ b }}</option>
+                                            <option v-for="b in JSON.parse(configvar[0].neighborhood_list)" :key="b"
+                                                :value="b">{{ b }}</option>
                                         </select>
                                         <label for="barrio">Barrio</label>
                                     </div>
@@ -154,7 +155,7 @@
                             <input class="form-check-input check-all-input" type="checkbox" id="paymentCredito"
                                 v-model="selectedPaymentMethod" value="2">
                         </div>
-                        <div v-if="configvar[0].payu_enabled==1"  class="form-check check-order mb-2">
+                        <div v-if="configvar[0].payu_enabled == 1" class="form-check check-order mb-2">
                             <label class="form-check-label form-check-label-s1" for="paymentCredito">
                                 PayU</label>
                             <input class="form-check-input check-all-input" type="checkbox" id="paymentCredito"
@@ -163,7 +164,7 @@
                     </div>
                 </div>
                 <img :src="Transferencia" alt="" width="350" class="rounded-3 pt-5" />
-                <img v-if="configvar[0].payu_enabled==1" :src="PAYU" alt="" width="350" class="rounded-3 pt-5" />
+                <img v-if="configvar[0].payu_enabled == 1" :src="PAYU" alt="" width="350" class="rounded-3 pt-5" />
             </div>
         </div>
     </div>
@@ -248,26 +249,117 @@ export default {
                 modalBackdrop.parentNode.removeChild(modalBackdrop);
             }
         },
-        agragardireccion() {
-            // const direccionSinBarrio = this.direccion.replace(/\s*\([^)]+\)\s*$/, '').trim();
-            const userdata = [{
+        async agragardireccion() {
+    const registroPayload = {
+        direccion: this.direccion,
+        apellido: "",
+        password: "CV33?(^@#$3$?%#4#$JAE??*",
+        fullName: this.nombre,
+        emailAddress: this.email,
+        tel: this.telefono,
+        user_type_id: 2,
+        user_registered: new Date().toISOString(),
+        adicionalinst: this.adicionalinst,
+        PaymentMethod: this.selectedPaymentMethod,
+        cartinfo: this.creditcart,
+        tip: this.tipvalue,
+        shipping_neighborhood: this.barrio
+    };
+
+    const result = await this.$store.dispatch('registarusuario', registroPayload);
+
+    let userId = null;
+
+    if (result.success) {
+        const emailvalido = await this.$store.dispatch('validateEmail', { emailAddress: this.email });
+        userId = emailvalido?.data?.[0]?.user_id;
+    } else if (result.error) {
+        userId = result?.data?.[0]?.user_id;
+    }
+
+    if (userId) {
+        const userdata = {
+            direccion: this.direccion,
+            nombre: this.nombre,
+            email: this.email,
+            telefono: this.telefono,
+            adicionalinst: this.adicionalinst,
+            PaymentMethod: this.selectedPaymentMethod,
+            cartinfo: this.creditcart,
+            tip: this.tipvalue,
+            neighborhood: this.barrio,
+            user_id: userId
+        };
+
+        localStorage.setItem("UserData", JSON.stringify(userdata));
+        this.UserData = userdata;
+        this.emptyUser = false;
+        this.showModal = false;
+        this.$router.go('/pedido');
+    }
+}
+
+/*         async agragardireccion() {
+            const userdatarister = [{
                 direccion: this.direccion,
-                nombre: this.nombre,
-                email: this.email,
-                telefono: this.telefono,
+                apellido: "",
+                password: "CV33?(^@#$3$?%#4#$JAE??*",
+                fullName: this.nombre,
+                emailAddress: this.email,
+                tel: this.telefono,
+                user_type_id: 2,
+                user_registered: new Date().toISOString(),
                 adicionalinst: this.adicionalinst,
                 PaymentMethod: this.selectedPaymentMethod,
                 cartinfo: this.creditcart,
                 tip: this.tipvalue,
-                neighborhood: this.barrio
+                shipping_neighborhood: this.barrio
             }]
-            const parsed = JSON.stringify(userdata);
-            localStorage.setItem("UserData", parsed);
-            this.UserData = JSON.parse(localStorage.getItem("UserData"));
-            this.emptyUser = false
-            this.showModal = false;
-            this.$router.go('/pedido')
-        },
+            const result = await this.$store.dispatch('registarusuario', userdatarister[0])
+            if (result.error) {
+                const userdata = [{
+                    direccion: this.direccion,
+                    nombre: this.nombre,
+                    email: this.email,
+                    telefono: this.telefono,
+                    adicionalinst: this.adicionalinst,
+                    PaymentMethod: this.selectedPaymentMethod,
+                    cartinfo: this.creditcart,
+                    tip: this.tipvalue,
+                    neighborhood: this.barrio,
+                    user_id: result.data[0].user_id
+                }]
+                const parsed = JSON.stringify(userdata);
+                localStorage.setItem("UserData", parsed);
+                this.UserData = JSON.parse(localStorage.getItem("UserData"));
+                this.emptyUser = false
+                this.showModal = false;
+                this.$router.go('/pedido')
+            }
+            if (result.success) {
+
+                const emailvalido = await this.$store.dispatch('validateEmail', { emailAddress: this.email })
+                const userdata = [{
+                    direccion: this.direccion,
+                    nombre: this.nombre,
+                    email: this.email,
+                    telefono: this.telefono,
+                    adicionalinst: this.adicionalinst,
+                    PaymentMethod: this.selectedPaymentMethod,
+                    cartinfo: this.creditcart,
+                    tip: this.tipvalue,
+                    neighborhood: this.barrio,
+                    user_id: emailvalido.data[0].user_id
+                }]
+                const parsed = JSON.stringify(userdata);
+                localStorage.setItem("UserData", parsed);
+                this.UserData = JSON.parse(localStorage.getItem("UserData"));
+                this.emptyUser = false
+                this.showModal = false;
+                this.$router.go('/pedido')
+            }
+
+        }, */
     },
     computed: {
         configvar() {

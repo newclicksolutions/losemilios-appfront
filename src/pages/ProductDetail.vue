@@ -149,6 +149,7 @@ export default {
       imgLg: "",
       content: "",
       cant: 1,
+      singleproduct: [],
       additions: [],
       totaladitions: 0,
       cartadditions: [],
@@ -161,10 +162,13 @@ export default {
       },
     };
   },
+
   created() {
 
+
   },
-  mounted() {
+  async mounted() {
+    this.singleproduct = await this.$store.dispatch('getproductID', this.id);
     this.total = this.product.total
     if (localStorage.getItem("shopingcart")) {
       this.storedCart = this.$GetEncryptedData("shopingcart");
@@ -294,16 +298,10 @@ export default {
         );
         return;
       }
-
       // Si todo está bien, continuar
       this.saveCart(); // o el método que corresponda
     },
-
-
-
-
     saveCart() {
-
       let storedCart = this.$GetEncryptedData("shopingcart");
       if (storedCart) {
         this.cart = JSON.parse(storedCart);
@@ -321,7 +319,6 @@ export default {
         cartadditions: this.cartadditions,
         cartopcionesSeleccionadas: this.opcionesSeleccionadas,
       });
-
       // Guardar el carrito actualizado en el localStorage
       const parsed = JSON.stringify(this.cart);
       const encrypted = CryptoJS.AES.encrypt(JSON.stringify(parsed), 'Rt8wkjc##34laAD9?884**').toString();
@@ -339,39 +336,41 @@ export default {
     }
   },
   computed: {
+    product() {
+      console.log(this.singleproduct)
+      let data = {}
+
+
+      let parsedOptions = [];
+
+      try {
+        if (this.singleproduct.options && this.singleproduct.options !== "null") {
+          parsedOptions = JSON.parse(this.singleproduct.options);
+        }
+      } catch (error) {
+        console.error("Error al parsear options:", error);
+      }
+
+      data = {
+        imgLg: this.singleproduct.img,
+        title: this.singleproduct.title,
+        price: this.singleproduct.price,
+        content: this.singleproduct.content,
+        additions: this.singleproduct.addition,
+        total: this.singleproduct.price,
+        options: parsedOptions.length > 0 ? parsedOptions : [],
+      };
+
+
+      return data
+    },
     opcionesAgrupadas() {
+
       return this.product.options.reduce((acc, opcion) => {
         if (!acc[opcion.categoria]) acc[opcion.categoria] = [];
         acc[opcion.categoria].push(opcion);
         return acc;
       }, {});
-    },
-    product() {
-      let data = {}
-      this.$store.state.products.forEach((element) => {
-        if (this.id == element.product_id) {
-          let parsedOptions = [];
-
-          try {
-            if (element.options && element.options !== "null") {
-              parsedOptions = JSON.parse(element.options);
-            }
-          } catch (error) {
-            console.error("Error al parsear options:", error);
-          }
-
-          data = {
-            imgLg: element.img,
-            title: element.title,
-            price: element.price,
-            content: element.content,
-            additions: element.addition,
-            total: element.price,
-            options: parsedOptions.length > 0 ? parsedOptions : [],
-          };
-        }
-      });
-      return data
     },
     subtotal() {
       return this.cart.reduce((acc, item) => acc + item.total, 0);

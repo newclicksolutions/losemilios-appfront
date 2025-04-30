@@ -52,7 +52,7 @@
 
                             <select class="form-control" v-model="regisData.shipping_neighborhood" id="barrio" required>
                                 <option value="" disabled>Selecciona un barrio</option>
-                                <option v-for="b in barriosMedellin" :key="b" :value="b">{{ b }}</option>
+                                <option v-for="b in JSON.parse(configvar[0].neighborhood_list)" :key="b" :value="b">{{ b }}</option>
                             </select>
                             <label for="barrio">Barrio</label>
                         </div>
@@ -192,6 +192,11 @@ export default {
             }
 
         }
-    }
+    },
+    computed: {
+        configvar() {
+            return JSON.parse(this.$GetEncryptedData("configvar"));
+        }
+    },
 }
 </script>

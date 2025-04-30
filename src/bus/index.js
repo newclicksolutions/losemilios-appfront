@@ -8,6 +8,7 @@ export default createStore({
   state: {
     // tus datos o variables de estado van aquí
     products: [],
+    singleproduct: [],
     configvar:[],
     cartcount: 0,
     cart: [],
@@ -29,6 +30,9 @@ export default createStore({
     },
     setData(state, payload) {
       state.products = payload;
+    },
+    setDatasingleproduct(state, payload) {
+      state.singleproduct = payload;
     },
     setOption(state, payload) {
       state.configvar = payload;
@@ -71,7 +75,7 @@ export default createStore({
     async fetchData({ commit }) {
       try {
         commit("setLoading", true);
-        const response = await fetch(
+        const response = await fetch( 
           CONSTANTS_TEST.URL_API+"/products"
         );
         const data = await response.json();
@@ -80,6 +84,32 @@ export default createStore({
         commit("setError", error.message);
       } finally {
         commit("setLoading", false);
+      }
+    },
+    getproductID: async (context, payload) => {
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      try {
+        context.commit("setLoading", true);
+        const response = await fetch(
+          CONSTANTS_TEST.URL_API+"/products/" + payload,
+          options
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        context.commit("setLoading", false);
+        const responseData = await response.json();
+        return responseData[0];
+      } catch (error) {
+        console.error("Error:", error);
+        /// commit('setError', error.message);
+        return error;
       }
     },
     async fetchOptions({ commit }) { 
@@ -412,6 +442,24 @@ export default createStore({
         return error;
       }
     },
+    validateEmail: async (context, payload) => {
+      try {
+        const validemail = await fetch(
+          CONSTANTS_TEST.URL_API+"/users/validemail/" +
+            payload.emailAddress +
+            ""
+        );
+        const responseEmail = await validemail.json();
+        if (responseEmail.length) {
+          return { error: true, data: responseEmail };
+        } else {
+          return { error: false, data: [] };
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        return error;
+      }
+    },
 
     registarusuario: async (context, payload) => {
       const data = {
@@ -435,7 +483,7 @@ export default createStore({
       const options = {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", 
         },
         body: JSON.stringify(data),
       };

@@ -19,6 +19,14 @@ const routes = [
     props: true
   },
   {
+    path: '/product',
+    redirect: '/'
+  },
+  {
+    path: '/pedidos',
+    redirect: '/'
+  },
+  {
     path: '/item-details',
     name: 'itemDetails',
     component: () => import('../pages/ItemDetails.vue')
