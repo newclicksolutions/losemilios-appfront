@@ -281,16 +281,13 @@ export default {
     },
 
     validarSeleccion() {
-      const categoriasRequeridas = Object.keys(this.opcionesAgrupadas);
-
+/*       const categoriasRequeridas = Object.keys(this.opcionesAgrupadas);
       const categoriasSeleccionadas = new Set(
         this.opcionesSeleccionadas.map((o) => o.categoria)
       );
-
       const categoriasFaltantes = categoriasRequeridas.filter(
         (categoria) => !categoriasSeleccionadas.has(categoria)
       );
-
       if (categoriasFaltantes.length > 0) {
         this.$refs.notification.showNotification(
           `Debes seleccionar al menos una opción en: ${categoriasFaltantes.join(", ")}`,
@@ -298,7 +295,7 @@ export default {
         );
         return;
       }
-      // Si todo está bien, continuar
+      // Si todo está bien, continuar */
       this.saveCart(); // o el método que corresponda
     },
     saveCart() {
