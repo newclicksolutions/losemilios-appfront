@@ -281,7 +281,7 @@ export default {
     },
 
     validarSeleccion() {
-/*       const categoriasRequeridas = Object.keys(this.opcionesAgrupadas);
+     const categoriasRequeridas = Object.keys(this.opcionesAgrupadas);
       const categoriasSeleccionadas = new Set(
         this.opcionesSeleccionadas.map((o) => o.categoria)
       );
@@ -295,7 +295,7 @@ export default {
         );
         return;
       }
-      // Si todo está bien, continuar */
+      // Si todo está bien, continuar 
       this.saveCart(); // o el método que corresponda
     },
     saveCart() {

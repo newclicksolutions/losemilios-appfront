@@ -7,10 +7,10 @@
             <h1 class="item-detail-title mb-2">Comidas exprés, placer sin límites</h1>
             <p class="item-detail-text mb-4">Delicias instantáneas, sabores que perduran. ¡Tu antojo tiene su destino en
               LosEmilios!</p>
-          <!--   <button @click="irapagar" class="btn btn-primary d-block">Hacer pedido</button> -->
+            <!--   <button @click="irapagar" class="btn btn-primary d-block">Hacer pedido</button> -->
           </div>
         </div>
-        <div class="col-lg-6 pe-xl-5">
+        <div class="col-lg-6 pe-xl-5  mobileimage">
           <div class="item-detail-content">
             <div class="item-detail-img-container mb-4">
               <img :src="imgLg" alt="" class="w-70 rounded-3" />
@@ -34,3 +34,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.sub-header {
+  padding: 30px 0px 0px 0px
+}
+
+@media (max-width: 767px) {
+  .mobileimage {
+    display: none !important;
+  }
+}
+</style>

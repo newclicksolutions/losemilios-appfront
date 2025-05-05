@@ -259,26 +259,44 @@ export default {
     filteredProducts() {
       const searhinput = this.$store.state.searhinput?.toLowerCase() || "";
       const selectedCategory = this.filtersCategory;
-      // Filtra primero solo productos con unidad "Publico"
+
+      // Filtra productos con unidad "Publico"
       const publicProducts = this.$store.state.products.filter(
         (product) => product.unit === "Publico"
       );
+
+      let filtered = [];
+
       if (searhinput) {
         if (selectedCategory === searhinput) {
-          return publicProducts;
+          filtered = publicProducts;
+        } else {
+          filtered = publicProducts.filter(product =>
+            product.title.toLowerCase().includes(searhinput) ||
+            product.Category.title.toLowerCase().includes(searhinput)
+          );
         }
-        return publicProducts.filter(product =>
-          product.title.toLowerCase().includes(searhinput) ||
-          product.Category.title.toLowerCase().includes(searhinput)
-        );
       } else {
         if (selectedCategory === "Todos") {
-          return publicProducts;
+          filtered = publicProducts;
+        } else {
+          filtered = publicProducts.filter(product =>
+            product.Category.title === selectedCategory
+          );
         }
-        return publicProducts.filter(product =>
-          product.Category.title === selectedCategory
-        );
       }
+
+      // Ordenar primero los productos que contengan "hamburguesa" en el nombre
+      return filtered.sort((a, b) => {
+        const aIsHamburguesa = a.title.toLowerCase().includes("hamburguesa");
+        const bIsHamburguesa = b.title.toLowerCase().includes("hamburguesa");
+
+        if (aIsHamburguesa && !bIsHamburguesa) return -1;
+        if (!aIsHamburguesa && bIsHamburguesa) return 1;
+
+        // Si ambos son o no son hamburguesas, ordenar alfabéticamente
+        return a.title.localeCompare(b.title);
+      });
     },
 
     filteredData() {
