@@ -2,12 +2,13 @@ module.exports = {
     apps: [
       {
         name: "losemilios-FRONT",
-        script: "serve",
-        args: "-s dist -l 6004",
-        cwd: ".", // Ruta donde está la carpeta dist (generalmente en la raíz del proyecto Vue)
+        script: "node_modules/.bin/serve",  // usa la ruta completa a serve
+        args: ["-s", "dist", "-l", "6004"], // usa un array en lugar de un string
+        cwd: ".", // ajusta si tu proyecto está en otra carpeta
         env: {
           NODE_ENV: "production"
         }
       }
     ]
   };
+  
