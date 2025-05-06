@@ -9,6 +9,11 @@ npm install
 ```
 npm run serve
 ```
+\
+npm run build && pm2 start ecosystem.config.js && pm2 save && pm2 startup
+
+pm2 start "npm run serve" --name losemilios-FRONT
+
 pm2 serve -s dist --name emiliosFRONT
 
 ### Compiles and minifies for production
