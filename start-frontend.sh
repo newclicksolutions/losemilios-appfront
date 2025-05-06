@@ -1,0 +1,1 @@
+npx serve -s dist -l 0.0.0.0:6005
