@@ -1,10 +1,10 @@
 <template>
     <div class="single-entry mb-5 mb-lg-0">
         <div class="gap-2x"></div>
-        <div class="card card-creator-s1 mb-4">
-            <div class="cardflex mb-4">
+        <div class="card card-creator-s1 mb-1">
+            <div class="cardflex mb-1">
                 <div class="tittleleft">
-                    <h6 class="card-s1-title">Direcion de entrega</h6>
+                    <h6 class="card-s1-title">Dirección de entrega</h6>
                 </div>
                 <div v-if="UserData.length" class="tittlerigth"><a href="#" class="" data-bs-toggle="modal"
                         data-bs-target="#addNewadressModal">
@@ -16,19 +16,14 @@
                     <div class="" v-if="emptyUser">
                         <a href="#" class="btn btn-primary mt-4" data-bs-toggle="modal"
                             data-bs-target="#addNewadressModal">
-                            Agregar direccion de entrga</a>
+                            Agregar dirección de entrga</a>
                     </div>
                     <h6 v-if="UserData.length" class="card-s1-title">{{ UserData[0].nombre }}</h6>
                     <h6 v-if="UserData.length" class="card-s1-title">
                         <em class="ni ni-map-pin-fill"></em>
                         {{ UserData[0].direccion }} ( {{ UserData[0].neighborhood }})
                     </h6>
-                    <p v-if="UserData.length" class="card-s1-text">
-                        Instrucciones de entrega (opcional)
-                    </p>
-                    <input v-if="UserData.length" v-model="adicionalinst" @change="addobservation" width="100%"
-                        type="area" placeholder="Detalles adicionales..." aria-label="Detalles adicionales..."
-                        class="btn-dtInlm">
+
                 </div>
             </div>
 
@@ -44,23 +39,23 @@
                         <div class="modal-body">
                             <form ref="agragardireccionform" @submit.prevent="agragardireccion">
 
-                                <div class="credit-card-form mb-4">
-                                    <div class="form-floating mb-4">
+                                <div class="credit-card-form mb-1">
+                                    <div class="form-floating mb-1">
                                         <input type="text" class="form-control" v-model="nombre" id="Nombre"
                                             placeholder="Nombre" required>
                                         <label for="Nombre">Nombre</label>
                                     </div>
-                                    <div class="form-floating mb-4">
+                                    <div class="form-floating mb-1">
                                         <input v-model="telefono" type="text" class="form-control mb-3"
                                             placeholder="Telefono" required>
-                                        <label for="Telefono">Telefono</label>
+                                        <label for="Telefono">Teléfono</label>
                                     </div>
-                                    <div class="form-floating mb-4">
+                                    <div class="form-floating mb-1">
                                         <input v-model="email" type="email" class="form-control mb-3"
                                             placeholder="email" required>
                                         <label for="email">Correo</label>
                                     </div>
-                                    <div class="form-floating mb-4">
+                                    <div class="form-floating mb-1">
                                         <select class="form-select" v-model="barrio" id="barrio" required>
                                             <option value="" disabled>Selecciona un barrio</option>
                                             <option v-for="b in JSON.parse(configvar[0].neighborhood_list)" :key="b"
@@ -68,7 +63,7 @@
                                         </select>
                                         <label for="barrio">Barrio</label>
                                     </div>
-                                    <div class="form-floating mb-4">
+                                    <div class="form-floating mb-1">
                                         <input type="text" class="form-control" v-model="direccion" id="direccion"
                                             placeholder="Direccion de entrega" required>
                                         <label for="direccion">Escribe la direccion de entrega</label>
@@ -83,8 +78,8 @@
             </div><!-- end modal-->
         </div>
     </div>
-    <div class="card card-creator-s1 mb-4">
-        <div class="cardflex mb-4">
+    <div class="card card-creator-s1 mb-1">
+        <div class="cardflex mb-1">
             <div class="tittleleft">
                 <h6 class="card-s1-title">Productos</h6>
             </div>
@@ -121,7 +116,7 @@
                 </div>
             </div>
         </transition>
-        <div class="cardflexfooter mb-4">
+        <div class="cardflexfooter mb-1">
             <div class="tittleleft">
                 <span>Entrega estimada:</span>
             </div>
@@ -130,8 +125,8 @@
             </div>
         </div>
     </div>
-    <div class="card card-creator-s1 mb-4">
-        <div class="cardflex mb-4">
+    <div class="card card-creator-s1 mb-1">
+        <div class="cardflex mb-1">
             <div class="tittleleft">
                 <h6 class="card-s1-title">Método de pago</h6>
             </div>
@@ -139,7 +134,7 @@
         </div>
         <div class="card-body d-flex align-items-center">
             <div class="flex-grow-1">
-                <div class="d-flex mb-4">
+                <div class="d-flex mb-1">
                     <div class="tittleleft">
                         <span>Métodos disponibles:</span>
                     </div>
@@ -168,6 +163,29 @@
             </div>
         </div>
     </div>
+
+    <div class="card card-creator-s1 mb-1" v-if="UserData.length">
+        <div class="cardflex mb-1">
+            <div class="tittleleft">
+                <h6 class="card-s1-title">Observaciones </h6>
+            </div>
+            <div class="tittlerigth"><span></span></div>
+        </div>
+        <div class="card-body d-flex align-items-center">
+            <div class="flex-grow-1">
+                <div class="d-flex mb-1">
+                    <textarea  rows="10" cols="100" v-model="adicionalinst" @change="addobservation" width="100%"
+                        type="area" placeholder="Escribe aquí detalles adicionales del pedido" aria-label="Escribe aquí detalles adicionales del pedido"
+                        class="btn-dtInlm"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
     <Notification ref="notification" />
 </template>
 <script>
@@ -249,55 +267,55 @@ export default {
                 modalBackdrop.parentNode.removeChild(modalBackdrop);
             }
         },
-/*         async agragardireccion() {
-    const registroPayload = {
-        direccion: this.direccion,
-        apellido: "",
-        password: "CV33?(^@#$3$?%#4#$JAE??*",
-        fullName: this.nombre,
-        emailAddress: this.email,
-        tel: this.telefono,
-        user_type_id: 2,
-        user_registered: new Date().toISOString(),
-        adicionalinst: this.adicionalinst,
-        PaymentMethod: this.selectedPaymentMethod,
-        cartinfo: this.creditcart,
-        tip: this.tipvalue,
-        shipping_neighborhood: this.barrio
-    };
-
-    const result = await this.$store.dispatch('registarusuario', registroPayload);
-
-    let userId = null;
-
-    if (result.success) {
-        const emailvalido = await this.$store.dispatch('validateEmail', { emailAddress: this.email });
-        userId = emailvalido?.data?.[0]?.user_id;
-    } else if (result.error) {
-        userId = result?.data?.[0]?.user_id;
-    }
-
-    if (userId) {
-        const userdata = {
-            direccion: this.direccion,
-            nombre: this.nombre,
-            email: this.email,
-            telefono: this.telefono,
-            adicionalinst: this.adicionalinst,
-            PaymentMethod: this.selectedPaymentMethod,
-            cartinfo: this.creditcart,
-            tip: this.tipvalue,
-            neighborhood: this.barrio,
-            user_id: userId
-        };
-
-        localStorage.setItem("UserData", JSON.stringify(userdata));
-        this.UserData = userdata;
-        this.emptyUser = false;
-        this.showModal = false;
-        this.$router.go('/pedido');
-    }
-} */
+        /*         async agragardireccion() {
+            const registroPayload = {
+                direccion: this.direccion,
+                apellido: "",
+                password: "CV33?(^@#$3$?%#4#$JAE??*",
+                fullName: this.nombre,
+                emailAddress: this.email,
+                tel: this.telefono,
+                user_type_id: 2,
+                user_registered: new Date().toISOString(),
+                adicionalinst: this.adicionalinst,
+                PaymentMethod: this.selectedPaymentMethod,
+                cartinfo: this.creditcart,
+                tip: this.tipvalue,
+                shipping_neighborhood: this.barrio
+            };
+        
+            const result = await this.$store.dispatch('registarusuario', registroPayload);
+        
+            let userId = null;
+        
+            if (result.success) {
+                const emailvalido = await this.$store.dispatch('validateEmail', { emailAddress: this.email });
+                userId = emailvalido?.data?.[0]?.user_id;
+            } else if (result.error) {
+                userId = result?.data?.[0]?.user_id;
+            }
+        
+            if (userId) {
+                const userdata = {
+                    direccion: this.direccion,
+                    nombre: this.nombre,
+                    email: this.email,
+                    telefono: this.telefono,
+                    adicionalinst: this.adicionalinst,
+                    PaymentMethod: this.selectedPaymentMethod,
+                    cartinfo: this.creditcart,
+                    tip: this.tipvalue,
+                    neighborhood: this.barrio,
+                    user_id: userId
+                };
+        
+                localStorage.setItem("UserData", JSON.stringify(userdata));
+                this.UserData = userdata;
+                this.emptyUser = false;
+                this.showModal = false;
+                this.$router.go('/pedido');
+            }
+        } */
 
         async agragardireccion() {
             const userdatarister = [{
@@ -359,7 +377,7 @@ export default {
                 this.$router.go('/pedido')
             }
 
-        }, 
+        },
     },
     computed: {
         configvar() {
@@ -441,7 +459,7 @@ export default {
 
 .btn-dtInlm {
     width: 100%;
-    height: 50px;
+    height: 80px;
     background-color: #8089961a;
     border: none;
     padding: 10px;
@@ -456,6 +474,9 @@ export default {
 .slide-fade-leave-to {
     max-height: 0;
     opacity: 0;
+}
+.card-creator-s1{
+    padding: 5px 5px;
 }
 
 .card-creator-s1 .card-body {

@@ -2631,7 +2631,7 @@ notificationSidebarData: {
       },
       {
         id: 2,
-        title: 'Direccion',
+        title: 'Dirección',
         navList: [
           {
             title: 'Boulevar Cra 70 #45e-89',
@@ -2648,7 +2648,7 @@ notificationSidebarData: {
         title: 'Horario Domicilios',
         navList: [
           {
-            title: 'Martes y Domingo',
+            title: 'Martes a Domingo',
             path: 'about-us'
           },
           {
