@@ -249,7 +249,7 @@ export default {
                 modalBackdrop.parentNode.removeChild(modalBackdrop);
             }
         },
-        async agragardireccion() {
+/*         async agragardireccion() {
     const registroPayload = {
         direccion: this.direccion,
         apellido: "",
@@ -297,9 +297,9 @@ export default {
         this.showModal = false;
         this.$router.go('/pedido');
     }
-}
+} */
 
-/*         async agragardireccion() {
+        async agragardireccion() {
             const userdatarister = [{
                 direccion: this.direccion,
                 apellido: "",
@@ -359,7 +359,7 @@ export default {
                 this.$router.go('/pedido')
             }
 
-        }, */
+        }, 
     },
     computed: {
         configvar() {
