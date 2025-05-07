@@ -36,7 +36,7 @@
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title">Agregar Direccion de entrega</h4>
+                            <h4 class="modal-title">Agregar Dirección de entrega</h4>
                             <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close">
                                 <em class="ni ni-cross"></em>
                             </button>

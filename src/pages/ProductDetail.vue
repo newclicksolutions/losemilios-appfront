@@ -7,7 +7,6 @@
     </header>
 
     <section class="item-detail-section section-space">
-
       <div class="container">
         <router-link to="/"><em style="font-size: 36px;" class="ni ni-arrow-left-round-fill"
             data-v-289073a8=""></em></router-link>
