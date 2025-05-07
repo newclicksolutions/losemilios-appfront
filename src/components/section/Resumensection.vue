@@ -5,7 +5,7 @@
             <div class="tittleleft" style="padding: 48px 16px;">
                 <h6 class="card-s1-title">Recibimos tu pedido</h6>
                 <p>Creado: {{ $getFormattedTime() }}</p>
-                <p><b> Nuemero de pedido: {{ id }}</b></p>
+                <p><b> Numero de pedido: {{ id }}</b></p>
             </div>
         </div>
     </div>
