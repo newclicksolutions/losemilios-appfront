@@ -16,7 +16,7 @@
                     <div class="" v-if="emptyUser">
                         <a href="#" class="btn btn-primary mt-4" data-bs-toggle="modal"
                             data-bs-target="#addNewadressModal">
-                            Agregar dirección de entrga</a>
+                            Agregar dirección de entrega</a>
                     </div>
                     <h6 v-if="UserData.length" class="card-s1-title">{{ UserData[0].nombre }}</h6>
                     <h6 v-if="UserData.length" class="card-s1-title">
@@ -31,7 +31,7 @@
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title">Agregar Dirección de entrega</h4>
+                            <h4 class="modal-title">Agregar dirección de entrega</h4>
                             <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close">
                                 <em class="ni ni-cross"></em>
                             </button>
@@ -66,7 +66,7 @@
                                     <div class="form-floating mb-1">
                                         <input type="text" class="form-control" v-model="direccion" id="direccion"
                                             placeholder="Direccion de entrega" required>
-                                        <label for="direccion">Escribe la direccion de entrega</label>
+                                        <label for="direccion">Escribe la dirección de entrega</label>
                                     </div>
                                 </div><!-- end credit-card-form -->
                                 <button class="btn btn-primary w-100" type="submit">{{ UserData.length ? "Cambiar" :
