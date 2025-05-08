@@ -174,9 +174,9 @@
         <div class="card-body d-flex align-items-center">
             <div class="flex-grow-1">
                 <div class="d-flex mb-1">
-                    <textarea  rows="10" cols="100" v-model="adicionalinst" @change="addobservation" width="100%"
-                        type="area" placeholder="Escribe aquí detalles adicionales del pedido" aria-label="Escribe aquí detalles adicionales del pedido"
-                        class="btn-dtInlm"></textarea>
+                    <textarea rows="10" cols="100" v-model="adicionalinst" @change="addobservation" width="100%"
+                        type="area" placeholder="Escribe aquí detalles adicionales del pedido"
+                        aria-label="Escribe aquí detalles adicionales del pedido" class="btn-dtInlm"></textarea>
                 </div>
             </div>
         </div>
@@ -347,6 +347,7 @@ export default {
                     neighborhood: this.barrio,
                     user_id: result.data[0].user_id
                 }]
+               
                 const parsed = JSON.stringify(userdata);
                 localStorage.setItem("UserData", parsed);
                 this.UserData = JSON.parse(localStorage.getItem("UserData"));
@@ -355,7 +356,6 @@ export default {
                 this.$router.go('/pedido')
             }
             if (result.success) {
-
                 const emailvalido = await this.$store.dispatch('validateEmail', { emailAddress: this.email })
                 const userdata = [{
                     direccion: this.direccion,
@@ -369,6 +369,10 @@ export default {
                     neighborhood: this.barrio,
                     user_id: emailvalido.data[0].user_id
                 }]
+                await this.$store.dispatch('login', {
+                    emailAddress: this.email,
+                    password: "CV33?(^@#$3$?%#4#$JAE??*",
+                })
                 const parsed = JSON.stringify(userdata);
                 localStorage.setItem("UserData", parsed);
                 this.UserData = JSON.parse(localStorage.getItem("UserData"));
@@ -475,7 +479,8 @@ export default {
     max-height: 0;
     opacity: 0;
 }
-.card-creator-s1{
+
+.card-creator-s1 {
     padding: 5px 5px;
 }
 

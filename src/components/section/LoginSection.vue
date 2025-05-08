@@ -116,6 +116,7 @@ export default {
         async login() {
             const result = await this.$store.dispatch('login', this.regisData)
             if (result.accessToken) {
+
                 const resultuser = await this.$store.dispatch('getUsers')
                 if (resultuser.user_type_id.user_type_id == 2) {
                     const userdata = [{
