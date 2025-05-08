@@ -463,6 +463,9 @@ export default {
 .is-long .truncate-text {
   font-weight: bold;
 }
+.slider-button:hover{
+transform: scale(1.2);
+}
 
 .slider-button {
   display: flex;
