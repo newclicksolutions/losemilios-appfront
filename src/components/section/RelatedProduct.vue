@@ -23,7 +23,7 @@
             }"
             :pagination="{ clickable: true }">
             <swiper-slide v-for="product in productosAleatorios" :key="product.product_id">
-                <div class="card card-full">
+                <div class="card card-product card-full">
                     <div to="product.path" class="card-image">
                         <img :src="$store.state.configvar[0]?.apiurl +product.img"  class="card-img-top" alt="art image">
                     </div>
@@ -135,6 +135,10 @@ export default {
     height: 100%;
     z-index: 1;
  }
+
+ .card-product:hover{
+  transform: scale(1.1);
+} 
  .author-link {
    z-index: 2;
    position: relative;

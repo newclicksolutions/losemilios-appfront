@@ -1,5 +1,5 @@
 <template>
-  <section class="explore-section pt-4">
+  <section class="explore-section pt-2">
     <div class="container">
       <!-- filter
       
@@ -51,7 +51,7 @@
                   </h5>
                   <div class="card-author mb-1 d-flex align-items-center">
                     <div class="custom-tooltip-wrap">
-                      <p class="item-detail-text mb-4 truncate-text ">{{ product.content }}</p>
+                      <p class="item-detail-text mb-2 truncate-text ">{{ product.content }}</p>
                     </div>
                     <!-- end custom-tooltip-wrap -->
                   </div>
@@ -62,7 +62,7 @@
                     </div>
                   </div>
                   <!-- end card-price-wrap -->
-                  <router-link to="product" class="btn btn-sm btn-primary">LA QUIERO</router-link>
+                  <router-link to="product" class="btn btn-sm btn-primary">LO QUIERO</router-link>
                 </div>
                 <!-- end card-body -->
                 <router-link class="details" :to="{
@@ -320,6 +320,26 @@ export default {
   }
 
 
+  .card-product {
+    display: flex !important;
+    flex-direction: row-reverse;
+    align-items: center;
+  }
+
+  .card-title {
+    font-size: 13px;
+  height: auto !important;
+}
+
+.truncate-text {
+  font-size: 12px;
+}
+
+
+}
+
+.card-product:hover {
+  transform: scale(1.1);
 }
 
 .sticky-swiper {

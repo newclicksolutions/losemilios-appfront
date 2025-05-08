@@ -45,7 +45,7 @@
                     <div v-show="isOpen.opciones" class="acordeon-content">
                       <div v-for="(grupo, categoria) in opcionesAgrupadas" :key="categoria">
                         <span class="card-price-number">{{ categoria }}</span>
-
+                        <p v-if="categoria == 'Salsas'">Selecciona máximo 5 opciones</p>
                         <div class="categoria-opciones">
                           <div v-for="opcion in grupo" :key="opcion.nombre" class="opcion-item">
                             <label class="custom-checkbox-row">
@@ -280,7 +280,7 @@ export default {
     },
 
     validarSeleccion() {
-     const categoriasRequeridas = Object.keys(this.opcionesAgrupadas);
+      const categoriasRequeridas = Object.keys(this.opcionesAgrupadas);
       const categoriasSeleccionadas = new Set(
         this.opcionesSeleccionadas.map((o) => o.categoria)
       );
@@ -420,7 +420,9 @@ li {
   align-items: center;
   padding: 5px 0;
 }
-
+.ni-arrow-left-round-fill:hover{
+  transform: scale(1.1);
+} 
 .opcion-item {
   display: flex;
   flex-direction: row;
