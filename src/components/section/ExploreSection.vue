@@ -41,7 +41,7 @@
           :key="categoryMenu.id">
           <div class="row g-gs">
             <div class="col-xl-3 col-lg-4 col-sm-6" v-for="product in filteredProducts" :key="product.product_id">
-              <div class="card card-product mb-0 d-flex">
+              <div class="card card-product mb-0 d-flex" :class="{ 'disabled-card': !isWithinTimeRange() }">
                 <div class="card-image">
                   <img :src="$store.state.configvar[0]?.apiurl + product.img" class="card-img-top" alt="art image" />
                 </div>
@@ -65,7 +65,8 @@
                   <router-link to="product" class="btn btn-sm btn-primary">LO QUIERO</router-link>
                 </div>
                 <!-- end card-body -->
-                <router-link class="details" :to="{
+                <router-link class="details" 
+                :to="{
                   name: 'ProductDetail',
                   params: {
                     id: product.product_id,
@@ -110,12 +111,14 @@
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from "@/store/store.js";
 import { Swiper, Navigation } from 'swiper';
+import axios from 'axios';
 Swiper.use([Navigation]);
 
 export default {
   name: "ExploreSection",
   data() {
     return {
+      colombiaHolidays: [],
       isSticky: false,
       SectionData,
       filtersproduct: "",
@@ -184,7 +187,7 @@ export default {
       this.$store.dispatch('fetchData');
       this.$store.dispatch('fetchOptions');
     }
-
+    this.fetchColombiaHolidays();
     new Swiper('.swiper-container', {
       slidesPerView: 3,  // Por defecto mostrará 1 slide
       spaceBetween: 1,  // Espacio entre slides
@@ -211,6 +214,32 @@ export default {
     window.removeEventListener('scroll', this.checkScroll);
   },
   methods: {
+    async fetchColombiaHolidays() {
+      try {
+        const response = await axios.get('https://date.nager.at/api/v3/PublicHolidays/2025/CO');
+        console.log(response)
+        this.colombiaHolidays = response.data.map(item => item.date); // formato YYYY-MM-DD
+      } catch (error) {
+        console.error('Error al cargar festivos:', error);
+      }
+    },
+    isWithinTimeRange() {
+      const now = new Date();
+      const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
+      const todayStr = now.toISOString().split('T')[0];
+
+      const isHoliday = this.colombiaHolidays.includes(todayStr);
+
+      // Si es lunes y NO es festivo → deshabilitado todo el día
+      if (day === 1 && !isHoliday) return false;
+
+      // Horario habilitado: 6:30 PM a 1:30 AM
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      const startMinutes = 19 * 60 + 30; // 6:30 PM
+      const endMinutes = 1 * 60 + 30;    // 1:30 AM
+
+      return currentMinutes >= startMinutes || currentMinutes < endMinutes;
+    },
     checkScroll() {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
       const isMobile = window.innerWidth <= 768;
@@ -337,7 +366,11 @@ export default {
 
 
 }
-
+.disabled-card {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
 .card-product:hover {
   transform: scale(1.1);
 }

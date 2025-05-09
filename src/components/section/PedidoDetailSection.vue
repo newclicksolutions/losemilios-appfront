@@ -267,55 +267,7 @@ export default {
                 modalBackdrop.parentNode.removeChild(modalBackdrop);
             }
         },
-        /*         async agragardireccion() {
-            const registroPayload = {
-                direccion: this.direccion,
-                apellido: "",
-                password: "CV33?(^@#$3$?%#4#$JAE??*",
-                fullName: this.nombre,
-                emailAddress: this.email,
-                tel: this.telefono,
-                user_type_id: 2,
-                user_registered: new Date().toISOString(),
-                adicionalinst: this.adicionalinst,
-                PaymentMethod: this.selectedPaymentMethod,
-                cartinfo: this.creditcart,
-                tip: this.tipvalue,
-                shipping_neighborhood: this.barrio
-            };
-        
-            const result = await this.$store.dispatch('registarusuario', registroPayload);
-        
-            let userId = null;
-        
-            if (result.success) {
-                const emailvalido = await this.$store.dispatch('validateEmail', { emailAddress: this.email });
-                userId = emailvalido?.data?.[0]?.user_id;
-            } else if (result.error) {
-                userId = result?.data?.[0]?.user_id;
-            }
-        
-            if (userId) {
-                const userdata = {
-                    direccion: this.direccion,
-                    nombre: this.nombre,
-                    email: this.email,
-                    telefono: this.telefono,
-                    adicionalinst: this.adicionalinst,
-                    PaymentMethod: this.selectedPaymentMethod,
-                    cartinfo: this.creditcart,
-                    tip: this.tipvalue,
-                    neighborhood: this.barrio,
-                    user_id: userId
-                };
-        
-                localStorage.setItem("UserData", JSON.stringify(userdata));
-                this.UserData = userdata;
-                this.emptyUser = false;
-                this.showModal = false;
-                this.$router.go('/pedido');
-            }
-        } */
+   
 
         async agragardireccion() {
             const userdatarister = [{
