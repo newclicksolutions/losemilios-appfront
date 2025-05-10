@@ -10,8 +10,10 @@
         
       -->
       <div class="filter-box">
-        <p v-if="!isWithinTimeRange()">Actualmente estamos cerrados. Te esperamos entre las 6:30 p.m. y las 1:30 a.m.
-        </p>
+         <p v-if="!isWithinTimeRange()">Actualmente estamos cerrados. Te esperamos entre {{
+                    JSON.parse(this.configvar[0].configOptions)[0].apertura }} a {{
+                      JSON.parse(this.configvar[0].configOptions)[0].cierre }}
+                  </p>
         <h3 class="mb-4">Filtrar por {{ stateshowcart }}</h3>
         <div class="filter-box-filter m-0">
           <div class="swiper-container" :class="{ 'sticky-swiper': isSticky }">
