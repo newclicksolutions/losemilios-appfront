@@ -38,7 +38,8 @@
                     </div>
                 </div>
             </div>
-            <button @click="irapagar" class="btn btn-primary d-block">Hacer pedido</button>
+            <button v-if="isWithinTimeRange()" @click="irapagar" class="btn btn-primary d-block">Hacer pedido</button>
+            <p v-if="!isWithinTimeRange()">Tienda cerrada</p>
             <form ref="payuForm" method="post" :action="payuActionUrl">
                 <input name="merchantId" type="hidden" v-model="merchantId">
                 <input name="accountId" type="hidden" v-model="accountId">
@@ -64,6 +65,7 @@
 // Import component data. You can change the data in the store to reflect in all component
 import SectionData from '@/store/store.js'
 import Notification from './Notification.vue'
+import axios from 'axios';
 //import axios from '@/axiosConfig';
 
 export default {
@@ -73,6 +75,7 @@ export default {
     name: 'Sidebar',
     data() {
         return {
+            colombiaHolidays: [],
             SectionData,
             storedCart: [],
             userdata: [],
@@ -94,7 +97,7 @@ export default {
             buyerEmail: "",
             responseUrl: "",
             confirmationUrl: "",
-            payuActionUrl:""
+            payuActionUrl: ""
         }
     },
 
@@ -102,7 +105,7 @@ export default {
         this.Tip = this.configvar[0].dealertip
         this.userdata = JSON.parse(localStorage.getItem("UserData"));
         if (localStorage.getItem("shopingcart")) {
-            this.storedCart = JSON.parse( this.$GetEncryptedData("shopingcart"));
+            this.storedCart = JSON.parse(this.$GetEncryptedData("shopingcart"));
             if (this.storedCart.length === 0) {
                 this.emptyCart = true;
 
@@ -122,8 +125,8 @@ export default {
                 this.buyerEmail = this.userdata[0]?.email
                 this.confirmationUrl = "https://api.losemilios.com/api/v1/transaction/payu"
                 this.payuActionUrl = this.configvar[0].payu_url
-                this.test = this.configvar[0].payu_test 
-                this.accountId = this.configvar[0].payu_accountId 
+                this.test = this.configvar[0].payu_test
+                this.accountId = this.configvar[0].payu_accountId
                 this.merchantId = this.configvar[0].payu_merchant_id
                 for (const key in this.storedCart) {
                     const element = this.storedCart[key];
@@ -186,8 +189,8 @@ export default {
                         this.strigsignature = this.configvar[0].payu_apikey.toString() + "~" + this.configvar[0].payu_merchant_id.toString() + "~" + this.referenceCode.toString() + "~" + this.amount.toString() + "~" + this.currency.toString()
                         this.signature = this.$hashText(this.strigsignature)
                         setTimeout(() => {
-                          const form = this.$refs.payuForm;
-                          form.submit();
+                            const form = this.$refs.payuForm;
+                            form.submit();
                         }, 2000);
 
                     } else {
@@ -230,15 +233,68 @@ export default {
                     }
                     if (this.totalSum <= 15000) {
                         this.$refs.notification.showNotification('Para completar tu pedido, el monto mínimo de compra es $ 15.000. Agrega más productos para finalizar tu orden.', '#D11D23')
-                        return false; 
+                        return false;
                     }
-                    
+
                 }
 
                 return true;
             }
             this.$refs.notification.showNotification('Ingresa los datos de envio!', '#D11D23')
             return false;
+        },
+        async fetchColombiaHolidays() {
+            try {
+                const response = await axios.get('https://date.nager.at/api/v3/PublicHolidays/2025/CO');
+                console.log(response)
+                this.colombiaHolidays = response.data.map(item => item.date); // formato YYYY-MM-DD
+            } catch (error) {
+                console.error('Error al cargar festivos:', error);
+            }
+        },
+        isWithinTimeRange() {
+            const now = new Date();
+            const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
+            const todayStr = now.toISOString().split('T')[0];
+            const isHoliday = this.colombiaHolidays.includes(todayStr);
+
+            // Si es lunes y NO es festivo → deshabilitado todo el día
+            if (day === 1 && !isHoliday) return false;
+
+            // Obtener horario desde configOptions (string → objeto)
+            const config = JSON.parse(this.configvar[0].configOptions);
+            const apertura = config[0].apertura; // Ej: "6:30 pm"
+            const cierre = config[0].cierre;     // Ej: "1:30 am"
+
+            const [openHour, openMinute, openPeriod] = this.parseTime(apertura);
+            const [closeHour, closeMinute, closePeriod] = this.parseTime(cierre);
+
+            const openDate = new Date(now);
+            openDate.setHours(this.to24Hour(openHour, openPeriod), openMinute, 0, 0);
+
+            const closeDate = new Date(now);
+            closeDate.setHours(this.to24Hour(closeHour, closePeriod), closeMinute, 0, 0);
+
+            // Si el cierre es al día siguiente
+            if (closeDate <= openDate) {
+                closeDate.setDate(closeDate.getDate() + 1);
+            }
+
+            return now >= openDate && now < closeDate;
+        },
+
+        parseTime(timeStr) {
+            const [time, period] = timeStr.toLowerCase().split(' ');
+            const [hour, minute] = time.split(':').map(Number);
+            return [hour, minute, period];
+        },
+
+        to24Hour(hour, period) {
+            if (period === 'am') {
+                return hour === 12 ? 0 : hour;
+            } else {
+                return hour === 12 ? 12 : hour + 12;
+            }
         }
     },
     computed: {

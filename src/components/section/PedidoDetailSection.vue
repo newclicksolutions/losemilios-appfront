@@ -16,7 +16,7 @@
                     <div class="" v-if="emptyUser">
                         <a href="#" class="btn btn-primary mt-4" data-bs-toggle="modal"
                             data-bs-target="#addNewadressModal">
-                            Agregar dirección de entrega</a>
+                            Agregar dirección de entrga</a>
                     </div>
                     <h6 v-if="UserData.length" class="card-s1-title">{{ UserData[0].nombre }}</h6>
                     <h6 v-if="UserData.length" class="card-s1-title">
@@ -31,7 +31,7 @@
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title">Agregar dirección de entrega</h4>
+                            <h4 class="modal-title">Agregar Dirección de entrega</h4>
                             <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close">
                                 <em class="ni ni-cross"></em>
                             </button>
@@ -66,7 +66,7 @@
                                     <div class="form-floating mb-1">
                                         <input type="text" class="form-control" v-model="direccion" id="direccion"
                                             placeholder="Direccion de entrega" required>
-                                        <label for="direccion">Escribe la dirección de entrega</label>
+                                        <label for="direccion">Escribe la direccion de entrega</label>
                                     </div>
                                 </div><!-- end credit-card-form -->
                                 <button class="btn btn-primary w-100" type="submit">{{ UserData.length ? "Cambiar" :
@@ -158,8 +158,8 @@
                         </div>
                     </div>
                 </div>
-                <img :src="Transferencia" alt="" width="150" class="rounded-3 pt-1" />
-                <img v-if="configvar[0].payu_enabled == 1" :src="PAYU" alt="" width="150" class="rounded-3 pt-5" />
+                <img :src="Transferencia" alt="" width="350" class="rounded-3 pt-5" />
+                <img v-if="configvar[0].payu_enabled == 1" :src="PAYU" alt="" width="350" class="rounded-3 pt-5" />
             </div>
         </div>
     </div>
@@ -267,7 +267,55 @@ export default {
                 modalBackdrop.parentNode.removeChild(modalBackdrop);
             }
         },
-   
+        /*         async agragardireccion() {
+            const registroPayload = {
+                direccion: this.direccion,
+                apellido: "",
+                password: "CV33?(^@#$3$?%#4#$JAE??*",
+                fullName: this.nombre,
+                emailAddress: this.email,
+                tel: this.telefono,
+                user_type_id: 2,
+                user_registered: new Date().toISOString(),
+                adicionalinst: this.adicionalinst,
+                PaymentMethod: this.selectedPaymentMethod,
+                cartinfo: this.creditcart,
+                tip: this.tipvalue,
+                shipping_neighborhood: this.barrio
+            };
+        
+            const result = await this.$store.dispatch('registarusuario', registroPayload);
+        
+            let userId = null;
+        
+            if (result.success) {
+                const emailvalido = await this.$store.dispatch('validateEmail', { emailAddress: this.email });
+                userId = emailvalido?.data?.[0]?.user_id;
+            } else if (result.error) {
+                userId = result?.data?.[0]?.user_id;
+            }
+        
+            if (userId) {
+                const userdata = {
+                    direccion: this.direccion,
+                    nombre: this.nombre,
+                    email: this.email,
+                    telefono: this.telefono,
+                    adicionalinst: this.adicionalinst,
+                    PaymentMethod: this.selectedPaymentMethod,
+                    cartinfo: this.creditcart,
+                    tip: this.tipvalue,
+                    neighborhood: this.barrio,
+                    user_id: userId
+                };
+        
+                localStorage.setItem("UserData", JSON.stringify(userdata));
+                this.UserData = userdata;
+                this.emptyUser = false;
+                this.showModal = false;
+                this.$router.go('/pedido');
+            }
+        } */
 
         async agragardireccion() {
             const userdatarister = [{
