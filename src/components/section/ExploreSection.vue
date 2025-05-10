@@ -10,6 +10,8 @@
         
       -->
       <div class="filter-box">
+        <p v-if="!isWithinTimeRange()">Actualmente estamos cerrados. Te esperamos entre las 6:30 p.m. y las 1:30 a.m.
+        </p>
         <h3 class="mb-4">Filtrar por {{ stateshowcart }}</h3>
         <div class="filter-box-filter m-0">
           <div class="swiper-container" :class="{ 'sticky-swiper': isSticky }">
@@ -62,11 +64,12 @@
                     </div>
                   </div>
                   <!-- end card-price-wrap -->
-                  <router-link to="product" class="btn btn-sm btn-primary">LO QUIERO</router-link>
+                  <router-link v-if="isWithinTimeRange()" to="product" class="btn btn-sm btn-primary">LO
+                    QUIERO</router-link>
+                  <p v-if="!isWithinTimeRange()">Tienda cerrada</p>
                 </div>
                 <!-- end card-body -->
-                <router-link class="details" 
-                :to="{
+                <router-link class="details" :to="{
                   name: 'ProductDetail',
                   params: {
                     id: product.product_id,
@@ -223,23 +226,6 @@ export default {
         console.error('Error al cargar festivos:', error);
       }
     },
-    isWithinTimeRange() {
-      const now = new Date();
-      const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
-      const todayStr = now.toISOString().split('T')[0];
-
-      const isHoliday = this.colombiaHolidays.includes(todayStr);
-
-      // Si es lunes y NO es festivo → deshabilitado todo el día
-      if (day === 1 && !isHoliday) return false;
-
-      // Horario habilitado: 6:30 PM a 1:30 AM
-      const currentMinutes = now.getHours() * 60 + now.getMinutes();
-      const startMinutes = 19 * 60 + 30; // 6:30 PM
-      const endMinutes = 1 * 60 + 30;    // 1:30 AM
-
-      return currentMinutes >= startMinutes || currentMinutes < endMinutes;
-    },
     checkScroll() {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
       const isMobile = window.innerWidth <= 768;
@@ -274,6 +260,51 @@ export default {
         return "";
       }
     },
+
+     isWithinTimeRange() {
+    const now = new Date();
+    const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
+    const todayStr = now.toISOString().split('T')[0];
+    const isHoliday = this.colombiaHolidays.includes(todayStr);
+
+    // Si es lunes y NO es festivo → deshabilitado todo el día
+    if (day === 1 && !isHoliday) return false;
+
+    // Obtener horario desde configOptions (string → objeto)
+    const config = JSON.parse(this.configvar[0].configOptions);
+    const apertura = config[0].apertura; // Ej: "6:30 pm"
+    const cierre = config[0].cierre;     // Ej: "1:30 am"
+
+    const [openHour, openMinute, openPeriod] = this.parseTime(apertura);
+    const [closeHour, closeMinute, closePeriod] = this.parseTime(cierre);
+
+    const openDate = new Date(now);
+    openDate.setHours(this.to24Hour(openHour, openPeriod), openMinute, 0, 0);
+
+    const closeDate = new Date(now);
+    closeDate.setHours(this.to24Hour(closeHour, closePeriod), closeMinute, 0, 0);
+
+    // Si el cierre es al día siguiente
+    if (closeDate <= openDate) {
+      closeDate.setDate(closeDate.getDate() + 1);
+    }
+
+    return now >= openDate && now < closeDate;
+  },
+
+  parseTime(timeStr) {
+    const [time, period] = timeStr.toLowerCase().split(' ');
+    const [hour, minute] = time.split(':').map(Number);
+    return [hour, minute, period];
+  },
+
+  to24Hour(hour, period) {
+    if (period === 'am') {
+      return hour === 12 ? 0 : hour;
+    } else {
+      return hour === 12 ? 12 : hour + 12;
+    }
+  }
   },
   computed: {
     data() {
@@ -334,6 +365,9 @@ export default {
         return opts.includes(data.category);
       });
     },
+    configvar() {
+      return JSON.parse(this.$GetEncryptedData("configvar"));
+    },
   },
 };
 
@@ -357,20 +391,22 @@ export default {
 
   .card-title {
     font-size: 13px;
-  height: auto !important;
+    height: auto !important;
+  }
+
+  .truncate-text {
+    font-size: 12px;
+  }
+
+
 }
 
-.truncate-text {
-  font-size: 12px;
-}
-
-
-}
 .disabled-card {
   opacity: 0.5;
   pointer-events: none;
   user-select: none;
 }
+
 .card-product:hover {
   transform: scale(1.1);
 }
@@ -496,8 +532,9 @@ export default {
 .is-long .truncate-text {
   font-weight: bold;
 }
-.slider-button:hover{
-transform: scale(1.2);
+
+.slider-button:hover {
+  transform: scale(1.2);
 }
 
 .slider-button {

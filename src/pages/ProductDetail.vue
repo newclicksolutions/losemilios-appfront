@@ -94,13 +94,18 @@
                     <input min="1" max="99" type="number" v-model="cant" />
                     <button @click="add()">+</button>
                   </li>
-                  <li class="dv2">
+                  <li class="dv2" v-if="isWithinTimeRange()">
                     <a @click="validarSeleccion" href="#" id="cartButton"
                       class="btn btn-primary d-block  pulsating-button">
                       Agregar
                       <span class="price-value">{{ $formatoMoneda(parseInt(product.total)) }}</span>
                     </a>
+
                   </li>
+                  <p v-if="!isWithinTimeRange()">Actualmente estamos cerrados. Te esperamos entre {{
+                    JSON.parse(this.configvar[0].configOptions)[0].apertura }} a {{
+                      JSON.parse(this.configvar[0].configOptions)[0].cierre }}
+                  </p>
                 </ul>
               </div>
               <!-- end item-detail-btns -->
@@ -132,6 +137,7 @@
 import SectionData from "@/store/store.js";
 import Notification from '../components/common/Notification.vue'
 import CryptoJS from 'crypto-js';
+import axios from 'axios';
 
 export default {
   components: {
@@ -141,6 +147,7 @@ export default {
   data() {
     return {
       SectionData,
+      colombiaHolidays: [],
       id: this.$route.params.id,
       title: "",
       price: "",
@@ -329,7 +336,60 @@ export default {
         cartButton.classList.remove('clicked');
       }, 300);
       this.$refs.notification.showNotification('“' + this.product.title + '” se ha añadido a tu carrito.', '#00870c')
+    },
+    async fetchColombiaHolidays() {
+      try {
+        const response = await axios.get('https://date.nager.at/api/v3/PublicHolidays/2025/CO');
+        console.log(response)
+        this.colombiaHolidays = response.data.map(item => item.date); // formato YYYY-MM-DD
+      } catch (error) {
+        console.error('Error al cargar festivos:', error);
+      }
+    },
+   isWithinTimeRange() {
+    const now = new Date();
+    const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
+    const todayStr = now.toISOString().split('T')[0];
+    const isHoliday = this.colombiaHolidays.includes(todayStr);
+
+    // Si es lunes y NO es festivo → deshabilitado todo el día
+    if (day === 1 && !isHoliday) return false;
+
+    // Obtener horario desde configOptions (string → objeto)
+    const config = JSON.parse(this.configvar[0].configOptions);
+    const apertura = config[0].apertura; // Ej: "6:30 pm"
+    const cierre = config[0].cierre;     // Ej: "1:30 am"
+
+    const [openHour, openMinute, openPeriod] = this.parseTime(apertura);
+    const [closeHour, closeMinute, closePeriod] = this.parseTime(cierre);
+
+    const openDate = new Date(now);
+    openDate.setHours(this.to24Hour(openHour, openPeriod), openMinute, 0, 0);
+
+    const closeDate = new Date(now);
+    closeDate.setHours(this.to24Hour(closeHour, closePeriod), closeMinute, 0, 0);
+
+    // Si el cierre es al día siguiente
+    if (closeDate <= openDate) {
+      closeDate.setDate(closeDate.getDate() + 1);
     }
+
+    return now >= openDate && now < closeDate;
+  },
+
+  parseTime(timeStr) {
+    const [time, period] = timeStr.toLowerCase().split(' ');
+    const [hour, minute] = time.split(':').map(Number);
+    return [hour, minute, period];
+  },
+
+  to24Hour(hour, period) {
+    if (period === 'am') {
+      return hour === 12 ? 0 : hour;
+    } else {
+      return hour === 12 ? 12 : hour + 12;
+    }
+  }
   },
   computed: {
     product() {
@@ -388,6 +448,9 @@ export default {
         return 0;
       });
     },
+    configvar() {
+      return JSON.parse(this.$GetEncryptedData("configvar"));
+    },
   },
 };
 </script>
@@ -420,9 +483,11 @@ li {
   align-items: center;
   padding: 5px 0;
 }
-.ni-arrow-left-round-fill:hover{
+
+.ni-arrow-left-round-fill:hover {
   transform: scale(1.1);
-} 
+}
+
 .opcion-item {
   display: flex;
   flex-direction: row;
