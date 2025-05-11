@@ -263,21 +263,26 @@ export default {
     decrement(item) {
       if (item.value > 0) {
         item.value--;
-        this.totaladitions =
-          parseInt(this.totaladitions) - parseInt(item.price);
+        this.totaladitions = parseInt(this.totaladitions) - parseInt(item.price);
       }
+
       this.cartadditions = this.cartadditions.filter(
         (cartItem) => cartItem.title !== item.title
       );
-      this.cartadditions.push({
-        title: item.title,
-        value: item.value,
-        id: item.product_id,
-        price: item.price,
-        content: item.content,
-        img: item.img
-      });
+
+      if (item.value > 0) {
+        this.cartadditions.push({
+          title: item.title,
+          value: item.value,
+          id: item.product_id,
+          price: item.price,
+          content: item.content,
+          img: item.img
+        });
+      }
+
       this.product.total = (parseInt(this.product.price) + parseInt(this.totaladitions)) * this.cant;
+console.log(this.product.total);
 
     },
     limitInput(item) {
@@ -309,7 +314,11 @@ export default {
       if (storedCart) {
         this.cart = JSON.parse(storedCart);
       }
+
+      // Eliminar el producto actual del carrito si ya existe
       this.cart = this.cart.filter(cartItem => cartItem.id !== this.$route.params.id);
+
+      // Agregar el producto actualizado como nuevo
       this.cart.push({
         id: this.$route.params.id,
         title: this.product.title,
@@ -322,20 +331,24 @@ export default {
         cartadditions: this.cartadditions,
         cartopcionesSeleccionadas: this.opcionesSeleccionadas,
       });
+
       // Guardar el carrito actualizado en el localStorage
+      console.log(this.cart)
       const parsed = JSON.stringify(this.cart);
       const encrypted = CryptoJS.AES.encrypt(JSON.stringify(parsed), 'Rt8wkjc##34laAD9?884**').toString();
       localStorage.setItem("shopingcart", encrypted);
-      //localStorage.setItem("shopingcart", parsed);
-      this.storedCart = JSON.parse(this.$GetEncryptedData("shopingcart"))
+
+      this.storedCart = JSON.parse(this.$GetEncryptedData("shopingcart"));
       this.$store.dispatch('setcartcount', this.storedCart.length);
       this.$store.dispatch('updatecart', this.storedCart);
+
       const cartButton = document.getElementById('cartButton');
       cartButton.classList.add('clicked');
       setTimeout(() => {
         cartButton.classList.remove('clicked');
       }, 300);
-      this.$refs.notification.showNotification('“' + this.product.title + '” se ha añadido a tu carrito.', '#00870c')
+
+      this.$refs.notification.showNotification('“' + this.product.title + '” se ha añadido a tu carrito.', '#00870c');
     },
     async fetchColombiaHolidays() {
       try {
@@ -346,59 +359,56 @@ export default {
         console.error('Error al cargar festivos:', error);
       }
     },
-   isWithinTimeRange() {
-    const now = new Date();
-    const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
-    const todayStr = now.toISOString().split('T')[0];
-    const isHoliday = this.colombiaHolidays.includes(todayStr);
+    isWithinTimeRange() {
+      const now = new Date();
+      const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
+      const todayStr = now.toISOString().split('T')[0];
+      const isHoliday = this.colombiaHolidays.includes(todayStr);
 
-    // Si es lunes y NO es festivo → deshabilitado todo el día
-    if (day === 1 && !isHoliday) return false;
+      // Si es lunes y NO es festivo → deshabilitado todo el día
+      if (day === 1 && !isHoliday) return false;
 
-    // Obtener horario desde configOptions (string → objeto)
-    const config = JSON.parse(this.configvar[0].configOptions);
-    const apertura = config[0].apertura; // Ej: "6:30 pm"
-    const cierre = config[0].cierre;     // Ej: "1:30 am"
+      // Obtener horario desde configOptions (string → objeto)
+      const config = JSON.parse(this.configvar[0].configOptions);
+      const apertura = config[0].apertura; // Ej: "6:30 pm"
+      const cierre = config[0].cierre;     // Ej: "1:30 am"
 
-    const [openHour, openMinute, openPeriod] = this.parseTime(apertura);
-    const [closeHour, closeMinute, closePeriod] = this.parseTime(cierre);
+      const [openHour, openMinute, openPeriod] = this.parseTime(apertura);
+      const [closeHour, closeMinute, closePeriod] = this.parseTime(cierre);
 
-    const openDate = new Date(now);
-    openDate.setHours(this.to24Hour(openHour, openPeriod), openMinute, 0, 0);
+      const openDate = new Date(now);
+      openDate.setHours(this.to24Hour(openHour, openPeriod), openMinute, 0, 0);
 
-    const closeDate = new Date(now);
-    closeDate.setHours(this.to24Hour(closeHour, closePeriod), closeMinute, 0, 0);
+      const closeDate = new Date(now);
+      closeDate.setHours(this.to24Hour(closeHour, closePeriod), closeMinute, 0, 0);
 
-    // Si el cierre es al día siguiente
-    if (closeDate <= openDate) {
-      closeDate.setDate(closeDate.getDate() + 1);
+      // Si el cierre es al día siguiente
+      if (closeDate <= openDate) {
+        closeDate.setDate(closeDate.getDate() + 1);
+      }
+
+      return now >= openDate && now < closeDate;
+    },
+
+    parseTime(timeStr) {
+      const [time, period] = timeStr.toLowerCase().split(' ');
+      const [hour, minute] = time.split(':').map(Number);
+      return [hour, minute, period];
+    },
+
+    to24Hour(hour, period) {
+      if (period === 'am') {
+        return hour === 12 ? 0 : hour;
+      } else {
+        return hour === 12 ? 12 : hour + 12;
+      }
     }
-
-    return now >= openDate && now < closeDate;
-  },
-
-  parseTime(timeStr) {
-    const [time, period] = timeStr.toLowerCase().split(' ');
-    const [hour, minute] = time.split(':').map(Number);
-    return [hour, minute, period];
-  },
-
-  to24Hour(hour, period) {
-    if (period === 'am') {
-      return hour === 12 ? 0 : hour;
-    } else {
-      return hour === 12 ? 12 : hour + 12;
-    }
-  }
   },
   computed: {
     product() {
       console.log(this.singleproduct)
       let data = {}
-
-
       let parsedOptions = [];
-
       try {
         if (this.singleproduct.options && this.singleproduct.options !== "null") {
           parsedOptions = JSON.parse(this.singleproduct.options);
@@ -406,7 +416,6 @@ export default {
       } catch (error) {
         console.error("Error al parsear options:", error);
       }
-
       data = {
         imgLg: this.singleproduct.img,
         title: this.singleproduct.title,
@@ -416,8 +425,6 @@ export default {
         total: this.singleproduct.price,
         options: parsedOptions.length > 0 ? parsedOptions : [],
       };
-
-
       return data
     },
     opcionesAgrupadas() {
