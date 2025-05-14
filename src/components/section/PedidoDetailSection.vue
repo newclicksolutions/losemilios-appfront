@@ -158,7 +158,7 @@
                         </div>
                     </div>
                 </div>
-                <img :src="Transferencia" alt="" width="350" class="rounded-3 pt-5" />
+                <img :src="Transferencia" alt="" width="150" class="rounded-3 pt-5" />
                 <img v-if="configvar[0].payu_enabled == 1" :src="PAYU" alt="" width="350" class="rounded-3 pt-5" />
             </div>
         </div>

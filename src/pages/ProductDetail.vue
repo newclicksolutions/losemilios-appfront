@@ -282,7 +282,7 @@ export default {
       }
 
       this.product.total = (parseInt(this.product.price) + parseInt(this.totaladitions)) * this.cant;
-console.log(this.product.total);
+      console.log(this.product.total);
 
     },
     limitInput(item) {
@@ -314,10 +314,8 @@ console.log(this.product.total);
       if (storedCart) {
         this.cart = JSON.parse(storedCart);
       }
-
       // Eliminar el producto actual del carrito si ya existe
       this.cart = this.cart.filter(cartItem => cartItem.id !== this.$route.params.id);
-
       // Agregar el producto actualizado como nuevo
       this.cart.push({
         id: this.$route.params.id,
@@ -333,15 +331,12 @@ console.log(this.product.total);
       });
 
       // Guardar el carrito actualizado en el localStorage
-      console.log(this.cart)
       const parsed = JSON.stringify(this.cart);
       const encrypted = CryptoJS.AES.encrypt(JSON.stringify(parsed), 'Rt8wkjc##34laAD9?884**').toString();
       localStorage.setItem("shopingcart", encrypted);
-
       this.storedCart = JSON.parse(this.$GetEncryptedData("shopingcart"));
       this.$store.dispatch('setcartcount', this.storedCart.length);
       this.$store.dispatch('updatecart', this.storedCart);
-
       const cartButton = document.getElementById('cartButton');
       cartButton.classList.add('clicked');
       setTimeout(() => {
@@ -364,15 +359,12 @@ console.log(this.product.total);
       const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
       const todayStr = now.toISOString().split('T')[0];
       const isHoliday = this.colombiaHolidays.includes(todayStr);
-
       // Si es lunes y NO es festivo → deshabilitado todo el día
       if (day === 1 && !isHoliday) return false;
-
       // Obtener horario desde configOptions (string → objeto)
       const config = JSON.parse(this.configvar[0].configOptions);
       const apertura = config[0].apertura; // Ej: "6:30 pm"
       const cierre = config[0].cierre;     // Ej: "1:30 am"
-
       const [openHour, openMinute, openPeriod] = this.parseTime(apertura);
       const [closeHour, closeMinute, closePeriod] = this.parseTime(cierre);
 
@@ -406,7 +398,6 @@ console.log(this.product.total);
   },
   computed: {
     product() {
-      console.log(this.singleproduct)
       let data = {}
       let parsedOptions = [];
       try {
