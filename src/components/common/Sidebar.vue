@@ -179,7 +179,7 @@ export default {
                 };
                 console.log(data)
 
-            /*  const result = await this.$store.dispatch('createorder', data)
+            const result = await this.$store.dispatch('createorder', data)
                 if (result.order_id) {
                     this.orderproducts = []
                     if (this.userdata[0]?.PaymentMethod == 3) {
@@ -198,7 +198,7 @@ export default {
                     }
                 } else {
                     this.$refs.notification.showNotification('Hubo un error procesando la orden, intentalo de nuevo mas tarde', '#D11D23')
-                }  */
+                }  
             }
         },
         toggleTip() {
