@@ -14,7 +14,7 @@
 
                 <div class="flex-grow-1">
                     <div class="" v-if="emptyUser">
-                        <a href="#" class="btn btn-primary mt-4" data-bs-toggle="modal"
+                        <a href="#" class="btn btn-primary mt-2" data-bs-toggle="modal"
                             data-bs-target="#addNewadressModal">
                             Agregar dirección de entrga</a>
                     </div>
@@ -23,7 +23,12 @@
                         <em class="ni ni-map-pin-fill"></em>
                         {{ UserData[0].direccion }} ( {{ UserData[0].neighborhood }})
                     </h6>
-
+                    <div class="form-check mb-2 mt-4 p-0" v-if="UserData.length">
+                        <label class="form-check-label form-check-label-s1" for="paymentEfectivo">Quiero recoger en
+                            tienda</label>
+                        <input class="form-check-input check-all-input" type="checkbox" id="paymentEfectivo"
+                            v-model="selecteddeliverMethod" value="true" @change="deliverchamge">
+                    </div>
                 </div>
             </div>
 
@@ -181,11 +186,6 @@
             </div>
         </div>
     </div>
-
-
-
-
-
     <Notification ref="notification" />
 </template>
 <script>
@@ -209,6 +209,7 @@ export default {
             isAccordionOpen: false,
             isAccordionOpenpropina: true,
             storedCart: [],
+            selecteddeliverMethod: false,
             selectedPaymentMethod: [],
             propinaprice: 0,
             UserData: [],
@@ -254,6 +255,16 @@ export default {
         }
     },
     methods: {
+        deliverchamge() {
+            if (this.selecteddeliverMethod) {
+                console.log(" Quiero recoger en tienda")
+                this.$store.dispatch('settipvalue',0);
+            } else {
+                console.log("envio normal")
+                this.$store.dispatch('settipvalue',this.configvar[0].shipvalue);
+            }
+        },
+
         addobservation() {
             this.UserData[0].adicionalinst = this.adicionalinst
             localStorage.setItem("UserData", JSON.stringify(this.UserData));
@@ -347,7 +358,7 @@ export default {
                     neighborhood: this.barrio,
                     user_id: result.data[0].user_id
                 }]
-               
+
                 const parsed = JSON.stringify(userdata);
                 localStorage.setItem("UserData", parsed);
                 this.UserData = JSON.parse(localStorage.getItem("UserData"));

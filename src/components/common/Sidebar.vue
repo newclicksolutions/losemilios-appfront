@@ -21,7 +21,7 @@
                             </li>
                             <li>
                                 <span>Costo de envío</span>
-                                <p> {{ $formatoMoneda(configvar[0].shipvalue) }}</p>
+                                <p> {{ $formatoMoneda(tipvalue) }}</p>
                             </li>
                             <li class="propina">
                                 <span>Propina del Repartidor <a href="#" @click="toggleTip">Cambiar</a></span>
@@ -30,8 +30,8 @@
                             </li>
                             <li>
                                 <h4>Total</h4>
-                                <h4 v-if="Tip">{{ $formatoMoneda(totalSum + (configvar[0].shipvalue + Tip)) }}</h4>
-                                <h4 v-else>{{ $formatoMoneda(totalSum + (configvar[0].shipvalue)) }}</h4>
+                                <h4 v-if="Tip">{{ $formatoMoneda(totalSum + (tipvalue + Tip)) }}</h4>
+                                <h4 v-else>{{ $formatoMoneda(totalSum + (tipvalue)) }}</h4>
                             </li>
                         </ul>
 
@@ -119,7 +119,7 @@ export default {
         async irapagar() {
             if (this.validarCampos()) {
                 this.description = "Domicilio Los emilios"
-                this.amount = this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0) + (this.configvar[0].shipvalue + this.Tip)
+                this.amount = this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0) + (this.tipvalue + this.Tip)
                 this.tax = 0
                 this.taxReturnBase = 0
                 this.buyerEmail = this.userdata[0]?.email
@@ -146,17 +146,17 @@ export default {
                 }
                 const data = {
                     tax_amount: 0,
-                    shipping_amount: this.configvar[0].shipvalue,
+                    shipping_amount: this.tipvalue,
                     tiping_amount: this.Tip,
                     subtotal: this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0),
-                    total_sale: this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0) + (this.configvar[0].shipvalue + this.Tip),
-                    shipping: this.userdata[0]?.direccion,
+                    total_sale: this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0) + (this.tipvalue + this.Tip),
+                    shipping: this.tipvalue == 0 ? "Recoger en tienda" : this.userdata[0]?.direccion,
                     ship: this.userdata[0]?.adicionalinst ?? "",
                     reference_code: "",
                     customername: this.userdata[0]?.nombre,
                     customertel: this.userdata[0]?.telefono,
                     customeremail: this.userdata[0]?.email,
-                    shipping_neighborhood: this.userdata[0]?.neighborhood,
+                    shipping_neighborhood: this.tipvalue == 0 ? "Los emilios" : this.userdata[0]?.neighborhood,
                     User: [{
                         user_id: this.userdata[0]?.user_id ?? 32,
                     },
@@ -179,7 +179,8 @@ export default {
                     Transaction: null
                 };
                 console.log(data)
-                const result = await this.$store.dispatch('createorder', data)
+
+             const result = await this.$store.dispatch('createorder', data)
                 if (result.order_id) {
                     this.orderproducts = []
                     if (this.userdata[0]?.PaymentMethod == 3) {
@@ -198,7 +199,7 @@ export default {
                     }
                 } else {
                     this.$refs.notification.showNotification('Hubo un error procesando la orden, intentalo de nuevo mas tarde', '#D11D23')
-                }
+                } 
             }
         },
         toggleTip() {
@@ -300,6 +301,9 @@ export default {
     computed: {
         totalSum() {
             return this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0);
+        },
+        tipvalue() {
+            return this.$store.state.tipvalue;
         },
         configvar() {
             return JSON.parse(this.$GetEncryptedData("configvar"));

@@ -88,7 +88,7 @@
     <div class="card card-creator-s1 mb-4" v-if="state !== 'DECLINED'">
         <div class="cardflex mb-4">
             <div class="tittleleft">
-                <h6 class="card-s1-title">Tu cobro : {{ $formatoMoneda(totalSum + (configvar[0].shipvalue +
+                <h6 class="card-s1-title">Tu cobro : {{ $formatoMoneda(totalSum + (tipvalue +
                     configvar[0].dealertip)) }}</h6>
                 <!--      <h6 class="card-s1-title">Pago con {{  metododepago( UserData[0]?.PaymentMethod[0]) }} </h6> -->
             </div>
@@ -249,6 +249,9 @@ export default {
     computed: {
         totalSum() {
             return this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0);
+        },
+          tipvalue() {
+            return this.$store.state.tipvalue;
         },
         lastFourDigits() {
             const crtnumber = parseInt(this.UserData[0]?.cartinfo[0]?.crtnumber)

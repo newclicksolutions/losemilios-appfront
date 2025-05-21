@@ -11,6 +11,7 @@ export default createStore({
     singleproduct: [],
     configvar:[],
     cartcount: 0,
+    tipvalue:0,
     cart: [],
     order: [],
     userdata: [],
@@ -58,6 +59,11 @@ export default createStore({
     setcartcount(state, payload) {
       state.cartcount = payload;
     },
+
+     settipvalue(state, payload) {
+      state.tipvalue = payload;
+    },
+
     updatecart(state, payload) {
       state.cart = payload;
     },
@@ -122,6 +128,7 @@ export default createStore({
         const encrypted = CryptoJS.AES.encrypt(JSON.stringify(parsed), 'Rt8wkjc##34laAD9?884**').toString();
         localStorage.setItem("configvar", encrypted);
         commit("setOption", responseData);
+        commit("settipvalue", responseData[0].shipvalue);
       } catch (error) {
         commit("setError", error.message);
       }
@@ -526,6 +533,9 @@ export default createStore({
     },
     setcartcount: (context, payload) => {
       context.commit("setcartcount", payload);
+    },
+       settipvalue: (context, payload) => {
+      context.commit("settipvalue", payload);
     },
     updatecart: (context, payload) => {
       context.commit("updatecart", payload);
