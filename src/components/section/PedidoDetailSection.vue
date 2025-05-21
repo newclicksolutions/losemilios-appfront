@@ -22,28 +22,33 @@
                     <h6 v-if="UserData.length" class="card-s1-title">
                         <em class="ni ni-map-pin-fill"></em>
                         {{ UserData[0].direccion }} ( {{ UserData[0].neighborhood }})
+
+
                     </h6>
-                    <div class="form-check mb-2 mt-4 p-0" v-if="UserData.length">
-                        <label class="form-check-label form-check-label-s1" for="paymentEfectivo">Quiero recoger en
-                            tienda</label>
-                        <input class="form-check-input check-all-input" type="checkbox" id="paymentEfectivo"
-                            v-model="selecteddeliverMethod" value="true" @change="deliverchamge">
-                    </div>
+
                 </div>
             </div>
 
-            <div class="modal fade" id="addNewadressModal" tabindex="-1" aria-hidden="true">
+            <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addNewadressModal"
+                tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title">Agregar Dirección de entrega</h4>
-                            <button type="button" class="btn-close icon-btn" data-bs-dismiss="modal" aria-label="Close">
+                            <button hidden ref="closeModalBtn" type="button" class="btn-close icon-btn"
+                                data-bs-dismiss="modal" aria-label="Close">
                                 <em class="ni ni-cross"></em>
                             </button>
                         </div><!-- end modal-header -->
                         <div class="modal-body">
                             <form ref="agragardireccionform" @submit.prevent="agragardireccion">
-
+                                <div class="form-check mb-2 mt-4 p-0 " v-if="configvar[0].payu_enabled == 1">
+                                    <label class="form-check-label form-check-label-s1" for="paymentEfectivo">Quiero
+                                        recoger en
+                                        tienda</label>
+                                    <input class="form-check-input check-all-input" type="checkbox" id="paymentEfectivo"
+                                        v-model="selecteddeliverMethod" value="true" @change="deliverchamge">
+                                </div>
                                 <div class="credit-card-form mb-1">
                                     <div class="form-floating mb-1">
                                         <input type="text" class="form-control" v-model="nombre" id="Nombre"
@@ -60,7 +65,7 @@
                                             placeholder="email" required>
                                         <label for="email">Correo</label>
                                     </div>
-                                    <div class="form-floating mb-1">
+                                    <div class="form-floating mb-1" v-if="!selecteddeliverMethod">
                                         <select class="form-select" v-model="barrio" id="barrio" required>
                                             <option value="" disabled>Selecciona un barrio</option>
                                             <option v-for="b in JSON.parse(configvar[0].neighborhood_list)" :key="b"
@@ -68,11 +73,12 @@
                                         </select>
                                         <label for="barrio">Barrio</label>
                                     </div>
-                                    <div class="form-floating mb-1">
+                                    <div class="form-floating mb-1" v-if="!selecteddeliverMethod">
                                         <input type="text" class="form-control" v-model="direccion" id="direccion"
                                             placeholder="Direccion de entrega" required>
                                         <label for="direccion">Escribe la direccion de entrega</label>
                                     </div>
+
                                 </div><!-- end credit-card-form -->
                                 <button class="btn btn-primary w-100" type="submit">{{ UserData.length ? "Cambiar" :
                                     "Agregar" }}</button>
@@ -144,12 +150,12 @@
                         <span>Métodos disponibles:</span>
                     </div>
                     <div class="tittlerigth">
-                        <div class="form-check check-order mb-2">
+                        <div class="form-check check-order mb-2" v-if="!selecteddeliverMethod">
                             <label class="form-check-label form-check-label-s1" for="paymentEfectivo"> Efectivo</label>
                             <input class="form-check-input check-all-input" type="checkbox" id="paymentEfectivo"
                                 v-model="selectedPaymentMethod" value="1">
                         </div>
-                        <div class="form-check check-order mb-2">
+                        <div class="form-check check-order mb-2" v-if="!selecteddeliverMethod">
                             <label class="form-check-label form-check-label-s1" for="paymentCredito">
                                 Transferencia</label>
                             <input class="form-check-input check-all-input" type="checkbox" id="paymentCredito"
@@ -258,10 +264,18 @@ export default {
         deliverchamge() {
             if (this.selecteddeliverMethod) {
                 console.log(" Quiero recoger en tienda")
-                this.$store.dispatch('settipvalue',0);
+                this.$store.dispatch('settipvalue', 0);
+                this.$store.dispatch('setdelivervalue', 0);
+                this.direccion = "Recoger en tienda "
+                this.barrio = "Los emilios"
+                this.selectedPaymentMethod=[]
             } else {
                 console.log("envio normal")
-                this.$store.dispatch('settipvalue',this.configvar[0].shipvalue);
+                this.$store.dispatch('settipvalue', this.configvar[0].shipvalue);
+                this.$store.dispatch('setdelivervalue', this.configvar[0].dealertip);
+                this.direccion = null
+                this.barrio = null
+                this.selectedPaymentMethod=[]
             }
         },
 
@@ -364,7 +378,7 @@ export default {
                 this.UserData = JSON.parse(localStorage.getItem("UserData"));
                 this.emptyUser = false
                 this.showModal = false;
-                this.$router.go('/pedido')
+                this.$refs.closeModalBtn.click();
             }
             if (result.success) {
                 const emailvalido = await this.$store.dispatch('validateEmail', { emailAddress: this.email })
@@ -389,7 +403,7 @@ export default {
                 this.UserData = JSON.parse(localStorage.getItem("UserData"));
                 this.emptyUser = false
                 this.showModal = false;
-                this.$router.go('/pedido')
+                this.$refs.closeModalBtn.click();
             }
 
         },

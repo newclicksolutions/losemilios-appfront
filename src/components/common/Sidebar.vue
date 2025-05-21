@@ -25,12 +25,12 @@
                             </li>
                             <li class="propina">
                                 <span>Propina del Repartidor <a href="#" @click="toggleTip">Cambiar</a></span>
-                                <p v-if="showTip"> {{ $formatoMoneda(Tip) }}</p>
-                                <input v-else v-model="Tip" min=1 type="number" @change="toggleTip" required>
+                                <p v-if="showTip"> {{ $formatoMoneda(delivervalue) }}</p>
+                                <input v-else v-model="delivervalue" min=1 type="number" @change="toggleTip" required>
                             </li>
                             <li>
                                 <h4>Total</h4>
-                                <h4 v-if="Tip">{{ $formatoMoneda(totalSum + (tipvalue + Tip)) }}</h4>
+                                <h4 v-if="delivervalue">{{ $formatoMoneda(totalSum + (tipvalue + delivervalue)) }}</h4>
                                 <h4 v-else>{{ $formatoMoneda(totalSum + (tipvalue)) }}</h4>
                             </li>
                         </ul>
@@ -102,7 +102,6 @@ export default {
     },
 
     mounted() {
-        this.Tip = this.configvar[0].dealertip
         this.userdata = JSON.parse(localStorage.getItem("UserData"));
         if (localStorage.getItem("shopingcart")) {
             this.storedCart = JSON.parse(this.$GetEncryptedData("shopingcart"));
@@ -119,7 +118,7 @@ export default {
         async irapagar() {
             if (this.validarCampos()) {
                 this.description = "Domicilio Los emilios"
-                this.amount = this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0) + (this.tipvalue + this.Tip)
+                this.amount = this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0) + (this.tipvalue + this.delivervalue)
                 this.tax = 0
                 this.taxReturnBase = 0
                 this.buyerEmail = this.userdata[0]?.email
@@ -147,9 +146,9 @@ export default {
                 const data = {
                     tax_amount: 0,
                     shipping_amount: this.tipvalue,
-                    tiping_amount: this.Tip,
+                    tiping_amount: this.delivervalue,
                     subtotal: this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0),
-                    total_sale: this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0) + (this.tipvalue + this.Tip),
+                    total_sale: this.storedCart.reduce((acc, item) => acc + (item.total * item.cant), 0) + (this.tipvalue + this.delivervalue),
                     shipping: this.tipvalue == 0 ? "Recoger en tienda" : this.userdata[0]?.direccion,
                     ship: this.userdata[0]?.adicionalinst ?? "",
                     reference_code: "",
@@ -180,7 +179,7 @@ export default {
                 };
                 console.log(data)
 
-             const result = await this.$store.dispatch('createorder', data)
+            /*  const result = await this.$store.dispatch('createorder', data)
                 if (result.order_id) {
                     this.orderproducts = []
                     if (this.userdata[0]?.PaymentMethod == 3) {
@@ -199,13 +198,13 @@ export default {
                     }
                 } else {
                     this.$refs.notification.showNotification('Hubo un error procesando la orden, intentalo de nuevo mas tarde', '#D11D23')
-                } 
+                }  */
             }
         },
         toggleTip() {
             this.showTip = !this.showTip;
-            if (!this.Tip && this.Tip !== 0) {
-                this.Tip = 0; // O establece otro valor predeterminado
+            if (!this.delivervalue && this.delivervalue !== 0) {
+                this.delivervalue = 0; // O establece otro valor predeterminado
             }
         },
         validarCampos() {
@@ -304,6 +303,9 @@ export default {
         },
         tipvalue() {
             return this.$store.state.tipvalue;
+        },
+        delivervalue() {
+            return this.$store.state.delivervalue;
         },
         configvar() {
             return JSON.parse(this.$GetEncryptedData("configvar"));
