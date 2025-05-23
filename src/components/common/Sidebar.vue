@@ -122,8 +122,8 @@ export default {
                 this.tax = 0
                 this.taxReturnBase = 0
                 this.buyerEmail = this.userdata[0]?.email
-                //this.confirmationUrl = "https://api.losemilios.com/api/v1/transaction/payu"
-                this.confirmationUrl = "https://apitpa.newclicksoluciones.com/api/v1/transaction/payu"
+                this.confirmationUrl = "https://api.losemilios.com/api/v1/transaction/payu"
+               // this.confirmationUrl = "https://apitpa.newclicksoluciones.com/api/v1/transaction/payu"
                 this.payuActionUrl = this.configvar[0].payu_url
                 this.test = this.configvar[0].payu_test
                 this.accountId = this.configvar[0].payu_accountId
