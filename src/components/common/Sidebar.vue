@@ -122,7 +122,8 @@ export default {
                 this.tax = 0
                 this.taxReturnBase = 0
                 this.buyerEmail = this.userdata[0]?.email
-                this.confirmationUrl = "https://api.losemilios.com/api/v1/transaction/payu"
+                //this.confirmationUrl = "https://api.losemilios.com/api/v1/transaction/payu"
+                this.confirmationUrl = "https://apitpa.newclicksoluciones.com/api/v1/transaction/payu"
                 this.payuActionUrl = this.configvar[0].payu_url
                 this.test = this.configvar[0].payu_test
                 this.accountId = this.configvar[0].payu_accountId
@@ -155,7 +156,7 @@ export default {
                     customername: this.userdata[0]?.nombre,
                     customertel: this.userdata[0]?.telefono,
                     customeremail: this.userdata[0]?.email,
-                    shipping_neighborhood: this.tipvalue == 0 ? "Los emilios" : this.userdata[0]?.neighborhood,
+                    shipping_neighborhood: this.tipvalue == 0 ? "Florida nueva" : this.userdata[0]?.neighborhood,
                     User: [{
                         user_id: this.userdata[0]?.user_id ?? 32,
                     },
@@ -164,7 +165,8 @@ export default {
                     }
                     ],
                     OrderStatus: {
-                        order_status_id: this.userdata[0]?.PaymentMethod[0] == 3 ? 6 : 1
+                        //  order_status_id: this.userdata[0]?.PaymentMethod[0] == 3 ? 6 : 1
+                        order_status_id: 1
                     },
                     Paymethod: [
                         {
@@ -179,26 +181,26 @@ export default {
                 };
                 console.log(data)
 
-            const result = await this.$store.dispatch('createorder', data)
-                if (result.order_id) {
-                    this.orderproducts = []
-                    if (this.userdata[0]?.PaymentMethod == 3) {
-                        this.responseUrl = "https://domicilios.losemilios.com/ordencompleta-" + result.order_id
-                        this.description = "Pedido #" + result.order_id
-                        this.referenceCode = result.order_id
-                        this.strigsignature = this.configvar[0].payu_apikey.toString() + "~" + this.configvar[0].payu_merchant_id.toString() + "~" + this.referenceCode.toString() + "~" + this.amount.toString() + "~" + this.currency.toString()
-                        this.signature = this.$hashText(this.strigsignature)
-                        setTimeout(() => {
-                            const form = this.$refs.payuForm;
-                            form.submit();
-                        }, 2000);
-
-                    } else {
-                        this.$router.push('/ordencompleta-' + result.order_id)
-                    }
-                } else {
-                    this.$refs.notification.showNotification('Hubo un error procesando la orden, intentalo de nuevo mas tarde', '#D11D23')
-                }  
+              const result = await this.$store.dispatch('createorder', data)
+                      if (result.order_id) {
+                          this.orderproducts = []
+                          if (this.userdata[0]?.PaymentMethod == 3) {
+                              this.responseUrl = "https://domicilios.losemilios.com/ordencompleta-" + result.order_id
+                              this.description = "Pedido #" + result.order_id
+                              this.referenceCode = result.order_id
+                              this.strigsignature = this.configvar[0].payu_apikey.toString() + "~" + this.configvar[0].payu_merchant_id.toString() + "~" + this.referenceCode.toString() + "~" + this.amount.toString() + "~" + this.currency.toString()
+                              this.signature = this.$hashText(this.strigsignature)
+                              setTimeout(() => {
+                                  const form = this.$refs.payuForm;
+                                  form.submit();
+                              }, 2000);
+      
+                          } else {
+                              this.$router.push('/ordencompleta-' + result.order_id)
+                          }
+                      } else {
+                          this.$refs.notification.showNotification('Hubo un error procesando la orden, intentalo de nuevo mas tarde', '#D11D23')
+                      }  
             }
         },
         toggleTip() {
@@ -219,10 +221,16 @@ export default {
                         this.$refs.notification.showNotification('Ingresa un correo electrónico!', '#D11D23')
                         return false;
                     }
-                    if (this.userdata[key].direccion === "") {
-                        this.$refs.notification.showNotification('Ingresa una dirección de envio!', '#D11D23')
-                        return false;
+                    if (localStorage.getItem("deliver")) {
+                        if (localStorage.getItem("deliver") == '1') {
+                            if (this.userdata[key].direccion === null) {
+                                this.$refs.notification.showNotification('Ingresa una dirección de envio!', '#D11D23')
+                                return false;
+                            }
+                        }
+
                     }
+
                     if (this.userdata[key].nombre === "") {
                         this.$refs.notification.showNotification('Ingresa tu nombre!', '#D11D23')
                         return false;
@@ -240,7 +248,8 @@ export default {
 
                 return true;
             }
-            this.$refs.notification.showNotification('Ingresa los datos de envio!', '#D11D23')
+
+            this.$refs.notification.showNotification('Completa los datos de entrega!', '#D11D23')
             return false;
         },
         async fetchColombiaHolidays() {
