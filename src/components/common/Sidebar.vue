@@ -26,7 +26,7 @@
                             <li class="propina">
                                 <span>Propina del Repartidor <a href="#" @click="toggleTip">Cambiar</a></span>
                                 <p v-if="showTip"> {{ $formatoMoneda(delivervalue) }}</p>
-                                <input v-else v-model="delivervalue" min=1 type="number" @change="toggleTip" required>
+                                <input v-else v-model="Tip" min=1 type="number" @change="toggleTip" required>
                             </li>
                             <li>
                                 <h4>Total</h4>
@@ -82,7 +82,7 @@ export default {
             orderproducts: [],
             load: false,
             showTip: true,
-            Tip: 0,
+            Tip: 2000,
             merchantId: 0,
             accountId: 0,
             description: "",
@@ -181,7 +181,7 @@ export default {
                 };
                 console.log(data)
 
-              const result = await this.$store.dispatch('createorder', data)
+            const result = await this.$store.dispatch('createorder', data)
                       if (result.order_id) {
                           this.orderproducts = []
                           if (this.userdata[0]?.PaymentMethod == 3) {
@@ -200,13 +200,14 @@ export default {
                           }
                       } else {
                           this.$refs.notification.showNotification('Hubo un error procesando la orden, intentalo de nuevo mas tarde', '#D11D23')
-                      }  
+                      }   
             }
         },
         toggleTip() {
             this.showTip = !this.showTip;
-            if (!this.delivervalue && this.delivervalue !== 0) {
-                this.delivervalue = 0; // O establece otro valor predeterminado
+            this.$store.dispatch('setdelivervalue', this.Tip);
+            if (!this.Tip && this.Tip !== 0) {
+                this.Tip = 0; // O establece otro valor predeterminado
             }
         },
         validarCampos() {

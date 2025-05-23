@@ -226,12 +226,12 @@
                         <span>Métodos disponibles:</span>
                     </div>
                     <div class="tittlerigth">
-                        <div class="form-check check-order mb-2" v-if="setdeliver == 1">
+                        <div class="form-check check-order mb-2" v-if="setdeliver == 1 || setdeliver == null">
                             <label class="form-check-label form-check-label-s1" for="paymentEfectivo"> Efectivo</label>
                             <input class="form-check-input check-all-input" type="checkbox" id="paymentEfectivo"
                                 v-model="selectedPaymentMethod" value="1">
                         </div>
-                        <div class="form-check check-order mb-2" v-if="setdeliver == 1">
+                        <div class="form-check check-order mb-2" v-if="setdeliver == 1 || setdeliver == null">
                             <label class="form-check-label form-check-label-s1" for="paymentCredito">
                                 Transferencia</label>
                             <input class="form-check-input check-all-input" type="checkbox" id="paymentCredito"
@@ -315,11 +315,16 @@ export default {
         };
     },
     mounted() {
-        const deliver = localStorage.getItem("deliver");
-        if (deliver) {
-            this.setdeliver = deliver;
-            this.deliverchamge(deliver);
-        }
+        this.validdevilermethod()
+        setTimeout(() => {
+            this.validdevilermethod()
+        }, 100);
+          setTimeout(() => {
+            this.validdevilermethod()
+        }, 1000);
+           setTimeout(() => {
+            this.validdevilermethod()
+        }, 900000);
         if (this.configvar[0].payu_enabled == 1) {
             // this.$refs.openModalBtn.click();   
         }
@@ -348,13 +353,18 @@ export default {
         }
     },
     beforeUnmount() {
-        const deliver = localStorage.getItem("deliver");
-        if (deliver) {
-            this.setdeliver = deliver;
-            this.deliverchamge(deliver);
-        }
+        this.validdevilermethod()
     },
     methods: {
+        validdevilermethod() {
+            const deliver = localStorage.getItem("deliver");
+            if (deliver) {
+                this.setdeliver = deliver;
+                this.deliverchamge(deliver);
+            } else {
+               this.deliverchamge('1');
+            }
+        },
         deliverchamge(i) {
             if (i == '0') {
                 console.log("Quiero recoger en tienda")

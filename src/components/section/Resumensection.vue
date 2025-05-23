@@ -88,8 +88,7 @@
     <div class="card card-creator-s1 mb-4" v-if="state !== 'DECLINED'">
         <div class="cardflex mb-4">
             <div class="tittleleft">
-                <h6 class="card-s1-title">Tu cobro : {{ $formatoMoneda(totalSum + (tipvalue +
-                    configvar[0].dealertip)) }}</h6>
+                <h6 class="card-s1-title">Tu cobro : </h6>
                 <!--      <h6 class="card-s1-title">Pago con {{  metododepago( UserData[0]?.PaymentMethod[0]) }} </h6> -->
             </div>
             <div class="tittlerigth"><span @click="toggleAccordion(3)" class="enRnoF">Ver detalles<svg
@@ -252,6 +251,9 @@ export default {
         },
           tipvalue() {
             return this.$store.state.tipvalue;
+        },
+         delivervalue() {
+            return this.$store.state.delivervalue;
         },
         lastFourDigits() {
             const crtnumber = parseInt(this.UserData[0]?.cartinfo[0]?.crtnumber)
