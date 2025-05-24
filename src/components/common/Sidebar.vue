@@ -24,7 +24,7 @@
                                 <p> {{ $formatoMoneda(tipvalue) }}</p>
                             </li>
                             <li class="propina">
-                                <span>Propina del Repartidor <a href="#" @click="toggleTip">Cambiar</a></span>
+                                <span>Propina del Repartidor <a style="color: #D11D23;cursor: pointer; font-weight: 500;" @click="toggleTip">Cambiar</a></span>
                                 <p v-if="showTip"> {{ $formatoMoneda(delivervalue) }}</p>
                                 <input v-else v-model="Tip" min=1 type="number" @change="toggleTip" required>
                             </li>
