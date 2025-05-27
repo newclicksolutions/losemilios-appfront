@@ -58,9 +58,11 @@
                             </div>
                         </div>
                     </transition>
-                    <p v-if="isWithinTimeRange()">Actualmente estamos cerrados. Te esperamos entre {{
+                   <!--  <p v-if="isWithinTimeRange()">Actualmente estamos cerrados. Te esperamos entre {{
                         JSON.parse(this.configvar[0].configOptions)[0].apertura }} a {{
                             JSON.parse(this.configvar[0].configOptions)[0].cierre }}
+                    </p> -->
+                     <p v-if="isWithinTimeRange()">"¡Hola! Actualmente estamos cerrados, pero estaremos encantados de atenderte nuevamente a partir del 5 de junio. ¡Te esperamos con gusto!"
                     </p>
                     <div class="bottom-gotopay" v-if="!isWithinTimeRange()">
                         <spam v-if="cart.length" class="sub-tlt">Subtotal: {{ $formatoMoneda(totalSum) }}</spam>
@@ -159,7 +161,7 @@ export default {
         },
 
     isWithinTimeRange() {
-      const now = new Date();
+  /*     const now = new Date();
       const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
       const todayStr = now.toISOString().split('T')[0];
       const isHoliday = this.colombiaHolidays.includes(todayStr);
@@ -186,7 +188,8 @@ export default {
         closeDate.setDate(closeDate.getDate() + 1);
       }
 
-      return now >= openDate && now < closeDate;
+      return now >= openDate && now < closeDate; */
+      return true
     },
 
 

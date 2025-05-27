@@ -263,8 +263,8 @@ export default {
             }
         },
 
-    isWithinTimeRange() {
-      const now = new Date();
+     isWithinTimeRange() {
+  /*     const now = new Date();
       const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
       const todayStr = now.toISOString().split('T')[0];
       const isHoliday = this.colombiaHolidays.includes(todayStr);
@@ -291,8 +291,10 @@ export default {
         closeDate.setDate(closeDate.getDate() + 1);
       }
 
-      return now >= openDate && now < closeDate;
+      return now >= openDate && now < closeDate; */
+      return true
     },
+
 
 
         parseTime(timeStr) {
