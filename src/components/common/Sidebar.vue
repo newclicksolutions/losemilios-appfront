@@ -185,7 +185,7 @@ export default {
                       if (result.order_id) {
                           this.orderproducts = []
                           if (this.userdata[0]?.PaymentMethod == 3) {
-                              this.responseUrl = "https://domicilios.losemilios.com/ordencompleta-" + result.order_id
+                              this.responseUrl = "http://localhost:6005/ordencompleta-" + result.order_id
                               this.description = "Pedido #" + result.order_id
                               this.referenceCode = result.order_id
                               this.strigsignature = this.configvar[0].payu_apikey.toString() + "~" + this.configvar[0].payu_merchant_id.toString() + "~" + this.referenceCode.toString() + "~" + this.amount.toString() + "~" + this.currency.toString()
@@ -196,7 +196,7 @@ export default {
                               }, 2000);
       
                           } else {
-                              this.$router.push('/ordencompleta-' + result.order_id)
+                              this.$router.push('/ordencompleta-' + result.order_id+'?lapTransactionState=APPROVED')
                           }
                       } else {
                           this.$refs.notification.showNotification('Hubo un error procesando la orden, intentalo de nuevo mas tarde', '#D11D23')
@@ -240,7 +240,7 @@ export default {
                         this.$refs.notification.showNotification('Ingresa un numero de teléfono!', '#D11D23')
                         return false;
                     }
-                    if (this.totalSum <= 15000) {
+                    if (this.totalSum <= 150) {
                         this.$refs.notification.showNotification('Para completar tu pedido, el monto mínimo de compra es $ 15.000. Agrega más productos para finalizar tu orden.', '#D11D23')
                         return false;
                     }

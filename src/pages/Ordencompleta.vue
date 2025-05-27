@@ -5,8 +5,9 @@
         <!-- Header main -->
         <HeaderMain></HeaderMain>
         
-        <HeroFail v-if="state == 'DECLINED'" classname="hero-title" :title="SectionData.breadcrumbData.breadcrumbList.title" :lists="SectionData.breadcrumbData.breadcrumbList.navList"></HeroFail>
-        <HeroThree v-else classname="hero-title" :title="SectionData.breadcrumbData.breadcrumbList.title" :lists="SectionData.breadcrumbData.breadcrumbList.navList"></HeroThree>
+        
+        <HeroThree v-if="state == 'APPROVED'" classname="hero-title" :title="SectionData.breadcrumbData.breadcrumbList.title" :lists="SectionData.breadcrumbData.breadcrumbList.navList"></HeroThree>
+        <HeroFail v-else classname="hero-title" :title="SectionData.breadcrumbData.breadcrumbList.title" :lists="SectionData.breadcrumbData.breadcrumbList.navList"></HeroFail>
     </header>
     <!-- Blog  -->
     <section class="section-space-b blog-section">

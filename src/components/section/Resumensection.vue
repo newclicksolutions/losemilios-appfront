@@ -1,5 +1,5 @@
 <template>
-    <div class="single-entry mb-5 mb-lg-0" v-if="state !== 'DECLINED'">
+    <div class="single-entry mb-5 mb-lg-0" v-if="state == 'APPROVED'">
         <div class="gap-2x"></div>
         <div class="card card-creator-s1 mb-4">
             <div class="tittleleft" style="padding: 48px 16px;">
@@ -9,8 +9,8 @@
             </div>
         </div>
     </div>
-
-    <div class="card card-creator-s1 mb-4" v-if="state !== 'DECLINED'">
+ 
+    <div class="card card-creator-s1 mb-4" v-if="state == 'APPROVED'">
         <div class="cardflex mb-4">
             <div class="tittleleft">
                 <h6 class="card-s1-title">Resumen</h6>
@@ -52,7 +52,7 @@
             </div>
         </transition>
     </div>
-    <div class="card card-creator-s1 mb-4" v-if="state !== 'DECLINED'">
+    <div class="card card-creator-s1 mb-4" v-if="state == 'APPROVED'">
         <div class="cardflex mb-4">
             <div class="tittleleft">
                 <h6 class="card-s1-title">Detalles de envio</h6>
@@ -85,7 +85,7 @@
             </div>
         </transition>
     </div>
-    <div class="card card-creator-s1 mb-4" v-if="state !== 'DECLINED'">
+    <div class="card card-creator-s1 mb-4" v-if="state == 'APPROVED'">
         <div class="cardflex mb-4">
             <div class="tittleleft">
                 <h6 class="card-s1-title">Tu cobro : </h6>
