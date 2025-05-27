@@ -111,7 +111,7 @@
                             <p> {{ $formatoMoneda(OrderData[0].shipping_amount) }}</p>
                         </li>
                         <li>
-                            <span>Propina del Repartidor: </span>
+                            <span>Propina equipo de trabajo de hoy: </span>
                             <p> {{ $formatoMoneda(OrderData[0].tiping_amount) }}</p>
                         </li>
                         <li>
