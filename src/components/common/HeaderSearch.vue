@@ -1,4 +1,5 @@
 <template>
+ 
     <div class="header-search-field" :class="classname">
         <input v-model="inputValue" @input="handleInputChange" type="search" class="form-control form-control-s1" :placeholder="[[ SectionData.headerData.inputPlaceholderText ]]">
     </div>

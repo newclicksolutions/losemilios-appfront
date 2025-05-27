@@ -10,10 +10,10 @@
         
       -->
       <div class="filter-box">
-         <p v-if="!isWithinTimeRange()">Actualmente estamos cerrados. Te esperamos entre {{
-                    JSON.parse(this.configvar[0].configOptions)[0].apertura }} a {{
-                      JSON.parse(this.configvar[0].configOptions)[0].cierre }}
-                  </p>
+        <p v-if="isWithinTimeRange()">Actualmente estamos cerrados. Te esperamos entre {{
+          JSON.parse(this.configvar[0].configOptions)[0].apertura }} a {{
+            JSON.parse(this.configvar[0].configOptions)[0].cierre }}
+        </p>
         <h3 class="mb-4">Filtrar por {{ stateshowcart }}</h3>
         <div class="filter-box-filter m-0">
           <div class="swiper-container" :class="{ 'sticky-swiper': isSticky }">
@@ -45,7 +45,7 @@
           :key="categoryMenu.id">
           <div class="row g-gs">
             <div class="col-xl-3 col-lg-4 col-sm-6" v-for="product in filteredProducts" :key="product.product_id">
-              <div class="card card-product mb-0 d-flex" :class="{ 'disabled-card': !isWithinTimeRange() }">
+              <div class="card card-product mb-0 d-flex" :class="{ 'disabled-card': isWithinTimeRange() }">
                 <div class="card-image">
                   <img :src="$store.state.configvar[0]?.apiurl + product.img" class="card-img-top" alt="art image" />
                 </div>
@@ -66,9 +66,9 @@
                     </div>
                   </div>
                   <!-- end card-price-wrap -->
-                  <router-link v-if="isWithinTimeRange()" to="product" class="btn btn-sm btn-primary">LO
+                  <router-link v-if="!isWithinTimeRange()" to="product" class="btn btn-sm btn-primary">LO
                     QUIERO</router-link>
-                  <p v-if="!isWithinTimeRange()">Tienda cerrada</p>
+                  <p v-if="isWithinTimeRange()">Tienda cerrada</p>
                 </div>
                 <!-- end card-body -->
                 <router-link class="details" :to="{
@@ -219,15 +219,7 @@ export default {
     window.removeEventListener('scroll', this.checkScroll);
   },
   methods: {
-    async fetchColombiaHolidays() {
-      try {
-        const response = await axios.get('https://date.nager.at/api/v3/PublicHolidays/2025/CO');
-        console.log(response)
-        this.colombiaHolidays = response.data.map(item => item.date); // formato YYYY-MM-DD
-      } catch (error) {
-        console.error('Error al cargar festivos:', error);
-      }
-    },
+
     checkScroll() {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
       const isMobile = window.innerWidth <= 768;
@@ -263,50 +255,60 @@ export default {
       }
     },
 
-     isWithinTimeRange() {
-    const now = new Date();
-    const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
-    const todayStr = now.toISOString().split('T')[0];
-    const isHoliday = this.colombiaHolidays.includes(todayStr);
+    async fetchColombiaHolidays() {
+      try {
+        const response = await axios.get('https://date.nager.at/api/v3/PublicHolidays/2025/CO');
+        console.log(response)
+        this.colombiaHolidays = response.data.map(item => item.date); // formato YYYY-MM-DD
+      } catch (error) {
+        console.error('Error al cargar festivos:', error);
+      }
+    },
 
-    // Si es lunes y NO es festivo → deshabilitado todo el día
-    if (day === 1 && !isHoliday) return false;
+    isWithinTimeRange() {
+      const now = new Date();
+      const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
+      const todayStr = now.toISOString().split('T')[0];
+      const isHoliday = this.colombiaHolidays.includes(todayStr);
 
-    // Obtener horario desde configOptions (string → objeto)
-    const config = JSON.parse(this.configvar[0].configOptions);
-    const apertura = config[0].apertura; // Ej: "6:30 pm"
-    const cierre = config[0].cierre;     // Ej: "1:30 am"
+      // Si es lunes y NO es festivo → deshabilitado todo el día
+      if (day === 1 && !isHoliday) return true;
 
-    const [openHour, openMinute, openPeriod] = this.parseTime(apertura);
-    const [closeHour, closeMinute, closePeriod] = this.parseTime(cierre);
+      // Obtener horario desde configOptions (string → objeto)
+      const config = JSON.parse(this.configvar[0].configOptions);
+      const apertura = config[0].cierre;// Ej: "6:30 pm"
+      const cierre = config[0].apertura;      // Ej: "1:30 am"
 
-    const openDate = new Date(now);
-    openDate.setHours(this.to24Hour(openHour, openPeriod), openMinute, 0, 0);
+      const [openHour, openMinute, openPeriod] = this.parseTime(apertura);
+      const [closeHour, closeMinute, closePeriod] = this.parseTime(cierre);
 
-    const closeDate = new Date(now);
-    closeDate.setHours(this.to24Hour(closeHour, closePeriod), closeMinute, 0, 0);
+      const openDate = new Date(now);
+      openDate.setHours(this.to24Hour(openHour, openPeriod), openMinute, 0, 0);
 
-    // Si el cierre es al día siguiente
-    if (closeDate <= openDate) {
-      closeDate.setDate(closeDate.getDate() + 1);
+      const closeDate = new Date(now);
+      closeDate.setHours(this.to24Hour(closeHour, closePeriod), closeMinute, 0, 0);
+
+      // Si el cierre es al día siguiente
+      if (closeDate <= openDate) {
+        closeDate.setDate(closeDate.getDate() + 1);
+      }
+
+      return now >= openDate && now < closeDate;
+    },
+
+    parseTime(timeStr) {
+      const [time, period] = timeStr.toLowerCase().split(' ');
+      const [hour, minute] = time.split(':').map(Number);
+      return [hour, minute, period];
+    },
+
+    to24Hour(hour, period) {
+      if (period === 'am') {
+        return hour === 12 ? 0 : hour;
+      } else {
+        return hour === 12 ? 12 : hour + 12;
+      }
     }
-
-    return now >= openDate && now < closeDate;
-  },
-
-  parseTime(timeStr) {
-    const [time, period] = timeStr.toLowerCase().split(' ');
-    const [hour, minute] = time.split(':').map(Number);
-    return [hour, minute, period];
-  },
-
-  to24Hour(hour, period) {
-    if (period === 'am') {
-      return hour === 12 ? 0 : hour;
-    } else {
-      return hour === 12 ? 12 : hour + 12;
-    }
-  }
   },
   computed: {
     data() {

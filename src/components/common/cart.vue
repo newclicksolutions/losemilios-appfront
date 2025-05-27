@@ -58,11 +58,11 @@
                             </div>
                         </div>
                     </transition>
-                    <p v-if="!isWithinTimeRange()">Actualmente estamos cerrados. Te esperamos entre {{
+                    <p v-if="isWithinTimeRange()">Actualmente estamos cerrados. Te esperamos entre {{
                         JSON.parse(this.configvar[0].configOptions)[0].apertura }} a {{
                             JSON.parse(this.configvar[0].configOptions)[0].cierre }}
                     </p>
-                    <div class="bottom-gotopay" v-if="isWithinTimeRange()">
+                    <div class="bottom-gotopay" v-if="!isWithinTimeRange()">
                         <spam v-if="cart.length" class="sub-tlt">Subtotal: {{ $formatoMoneda(totalSum) }}</spam>
                         <div class="cardflexfooter mb-2" v-if="cart.length">
                             <div class="tittleleft">
@@ -157,36 +157,38 @@ export default {
                 this.$store.dispatch('updatecart', this.storedCart);
             }
         },
-        isWithinTimeRange() {
-            const now = new Date();
-            const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
-            const todayStr = now.toISOString().split('T')[0];
-            const isHoliday = this.colombiaHolidays.includes(todayStr);
 
-            // Si es lunes y NO es festivo → deshabilitado todo el día
-            if (day === 1 && !isHoliday) return false;
+    isWithinTimeRange() {
+      const now = new Date();
+      const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
+      const todayStr = now.toISOString().split('T')[0];
+      const isHoliday = this.colombiaHolidays.includes(todayStr);
 
-            // Obtener horario desde configOptions (string → objeto)
-            const config = JSON.parse(this.configvar[0].configOptions);
-            const apertura = config[0].apertura; // Ej: "6:30 pm"
-            const cierre = config[0].cierre;     // Ej: "1:30 am"
+      // Si es lunes y NO es festivo → deshabilitado todo el día
+      if (day === 1 && !isHoliday) return true;
 
-            const [openHour, openMinute, openPeriod] = this.parseTime(apertura);
-            const [closeHour, closeMinute, closePeriod] = this.parseTime(cierre);
+      // Obtener horario desde configOptions (string → objeto)
+      const config = JSON.parse(this.configvar[0].configOptions);
+      const apertura = config[0].cierre;// Ej: "6:30 pm"
+      const cierre = config[0].apertura;      // Ej: "1:30 am"
 
-            const openDate = new Date(now);
-            openDate.setHours(this.to24Hour(openHour, openPeriod), openMinute, 0, 0);
+      const [openHour, openMinute, openPeriod] = this.parseTime(apertura);
+      const [closeHour, closeMinute, closePeriod] = this.parseTime(cierre);
 
-            const closeDate = new Date(now);
-            closeDate.setHours(this.to24Hour(closeHour, closePeriod), closeMinute, 0, 0);
+      const openDate = new Date(now);
+      openDate.setHours(this.to24Hour(openHour, openPeriod), openMinute, 0, 0);
 
-            // Si el cierre es al día siguiente
-            if (closeDate <= openDate) {
-                closeDate.setDate(closeDate.getDate() + 1);
-            }
+      const closeDate = new Date(now);
+      closeDate.setHours(this.to24Hour(closeHour, closePeriod), closeMinute, 0, 0);
 
-            return now >= openDate && now < closeDate;
-        },
+      // Si el cierre es al día siguiente
+      if (closeDate <= openDate) {
+        closeDate.setDate(closeDate.getDate() + 1);
+      }
+
+      return now >= openDate && now < closeDate;
+    },
+
 
         parseTime(timeStr) {
             const [time, period] = timeStr.toLowerCase().split(' ');

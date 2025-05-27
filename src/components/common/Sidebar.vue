@@ -24,7 +24,7 @@
                                 <p> {{ $formatoMoneda(tipvalue) }}</p>
                             </li>
                             <li class="propina">
-                                <span>Propina del Repartidor <a style="color: #D11D23;cursor: pointer; font-weight: 500;" @click="toggleTip">Cambiar</a></span>
+                                <span>Propina equipo de trabajo de hoy <a style="color: #D11D23;cursor: pointer; font-weight: 500;" @click="toggleTip"> Cambiar</a></span>
                                 <p v-if="showTip"> {{ $formatoMoneda(delivervalue) }}</p>
                                 <input v-else v-model="Tip" min=1 type="number" @change="toggleTip" required>
                             </li>
@@ -38,8 +38,8 @@
                     </div>
                 </div>
             </div>
-            <button v-if="isWithinTimeRange()" @click="irapagar" class="btn btn-primary d-block">Hacer pedido</button>
-            <p v-if="!isWithinTimeRange()">Tienda cerrada</p>
+            <button v-if="!isWithinTimeRange()" @click="irapagar" class="btn btn-primary d-block">Hacer pedido</button>
+            <p v-if="isWithinTimeRange()">Tienda cerrada</p>
             <form ref="payuForm" method="post" :action="payuActionUrl">
                 <input name="merchantId" type="hidden" v-model="merchantId">
                 <input name="accountId" type="hidden" v-model="accountId">
@@ -122,8 +122,8 @@ export default {
                 this.tax = 0
                 this.taxReturnBase = 0
                 this.buyerEmail = this.userdata[0]?.email
-                this.confirmationUrl = "https://api.losemilios.com/api/v1/transaction/payu"
-               // this.confirmationUrl = "https://apitpa.newclicksoluciones.com/api/v1/transaction/payu"
+                //this.confirmationUrl = "https://api.losemilios.com/api/v1/transaction/payu"
+                this.confirmationUrl = "https://apitpa.newclicksoluciones.com/api/v1/transaction/payu"
                 this.payuActionUrl = this.configvar[0].payu_url
                 this.test = this.configvar[0].payu_test
                 this.accountId = this.configvar[0].payu_accountId
@@ -262,36 +262,38 @@ export default {
                 console.error('Error al cargar festivos:', error);
             }
         },
-        isWithinTimeRange() {
-            const now = new Date();
-            const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
-            const todayStr = now.toISOString().split('T')[0];
-            const isHoliday = this.colombiaHolidays.includes(todayStr);
 
-            // Si es lunes y NO es festivo → deshabilitado todo el día
-            if (day === 1 && !isHoliday) return false;
+    isWithinTimeRange() {
+      const now = new Date();
+      const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
+      const todayStr = now.toISOString().split('T')[0];
+      const isHoliday = this.colombiaHolidays.includes(todayStr);
 
-            // Obtener horario desde configOptions (string → objeto)
-            const config = JSON.parse(this.configvar[0].configOptions);
-            const apertura = config[0].apertura; // Ej: "6:30 pm"
-            const cierre = config[0].cierre;     // Ej: "1:30 am"
+      // Si es lunes y NO es festivo → deshabilitado todo el día
+      if (day === 1 && !isHoliday) return true;
 
-            const [openHour, openMinute, openPeriod] = this.parseTime(apertura);
-            const [closeHour, closeMinute, closePeriod] = this.parseTime(cierre);
+      // Obtener horario desde configOptions (string → objeto)
+      const config = JSON.parse(this.configvar[0].configOptions);
+      const apertura = config[0].cierre;// Ej: "6:30 pm"
+      const cierre = config[0].apertura;      // Ej: "1:30 am"
 
-            const openDate = new Date(now);
-            openDate.setHours(this.to24Hour(openHour, openPeriod), openMinute, 0, 0);
+      const [openHour, openMinute, openPeriod] = this.parseTime(apertura);
+      const [closeHour, closeMinute, closePeriod] = this.parseTime(cierre);
 
-            const closeDate = new Date(now);
-            closeDate.setHours(this.to24Hour(closeHour, closePeriod), closeMinute, 0, 0);
+      const openDate = new Date(now);
+      openDate.setHours(this.to24Hour(openHour, openPeriod), openMinute, 0, 0);
 
-            // Si el cierre es al día siguiente
-            if (closeDate <= openDate) {
-                closeDate.setDate(closeDate.getDate() + 1);
-            }
+      const closeDate = new Date(now);
+      closeDate.setHours(this.to24Hour(closeHour, closePeriod), closeMinute, 0, 0);
 
-            return now >= openDate && now < closeDate;
-        },
+      // Si el cierre es al día siguiente
+      if (closeDate <= openDate) {
+        closeDate.setDate(closeDate.getDate() + 1);
+      }
+
+      return now >= openDate && now < closeDate;
+    },
+
 
         parseTime(timeStr) {
             const [time, period] = timeStr.toLowerCase().split(' ');

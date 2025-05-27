@@ -94,7 +94,7 @@
                     <input min="1" max="99" type="number" v-model="cant" />
                     <button @click="add()">+</button>
                   </li>
-                  <li class="dv2" v-if="isWithinTimeRange()">
+                  <li class="dv2" v-if="!isWithinTimeRange()">
                     <a @click="validarSeleccion" href="#" id="cartButton"
                       class="btn btn-primary d-block  pulsating-button">
                       Agregar
@@ -102,7 +102,7 @@
                     </a>
 
                   </li>
-                  <p v-if="!isWithinTimeRange()">Actualmente estamos cerrados. Te esperamos entre {{
+                  <p v-if="isWithinTimeRange()">Actualmente estamos cerrados. Te esperamos entre {{
                     JSON.parse(this.configvar[0].configOptions)[0].apertura }} a {{
                       JSON.parse(this.configvar[0].configOptions)[0].cierre }}
                   </p>
@@ -354,17 +354,21 @@ export default {
         console.error('Error al cargar festivos:', error);
       }
     },
+
     isWithinTimeRange() {
       const now = new Date();
       const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
       const todayStr = now.toISOString().split('T')[0];
       const isHoliday = this.colombiaHolidays.includes(todayStr);
+
       // Si es lunes y NO es festivo → deshabilitado todo el día
-      if (day === 1 && !isHoliday) return false;
+      if (day === 1 && !isHoliday) return true;
+
       // Obtener horario desde configOptions (string → objeto)
       const config = JSON.parse(this.configvar[0].configOptions);
-      const apertura = config[0].apertura; // Ej: "6:30 pm"
-      const cierre = config[0].cierre;     // Ej: "1:30 am"
+      const apertura = config[0].cierre;// Ej: "6:30 pm"
+      const cierre = config[0].apertura;      // Ej: "1:30 am"
+
       const [openHour, openMinute, openPeriod] = this.parseTime(apertura);
       const [closeHour, closeMinute, closePeriod] = this.parseTime(cierre);
 
@@ -381,6 +385,7 @@ export default {
 
       return now >= openDate && now < closeDate;
     },
+
 
     parseTime(timeStr) {
       const [time, period] = timeStr.toLowerCase().split(' ');
