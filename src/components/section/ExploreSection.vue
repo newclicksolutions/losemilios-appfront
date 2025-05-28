@@ -10,11 +10,7 @@
         
       -->
       <div class="filter-box">
-       <!--  <p v-if="isWithinTimeRange()">Actualmente estamos cerrados. Te esperamos entre {{
-          JSON.parse(this.configvar[0].configOptions)[0].apertura }} a {{
-            JSON.parse(this.configvar[0].configOptions)[0].cierre }}
-        </p> -->
-        <p v-if="isWithinTimeRange()">"¡Hola! Actualmente estamos cerrados, pero estaremos encantados de atenderte nuevamente a partir del 5 de junio. ¡Te esperamos con gusto!"
+        <p v-if="isWithinTimeRange()">{{ JSON.parse(this.configvar[0].configOptions)[0].message }}
         </p>
         <h3 class="mb-4">Filtrar por {{ stateshowcart }}</h3>
         <div class="filter-box-filter m-0">
@@ -268,35 +264,34 @@ export default {
     },
 
     isWithinTimeRange() {
-  /*     const now = new Date();
+      const config = JSON.parse(this.configvar[0].configOptions);
+      console.log(config[0].isopen)
+      if (config[0].isopen) {
+        console.log(" cerrada la tienda ")
+        return true
+      }
+       console.log(" abierta la tienda ")
+      const now = new Date();
       const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
       const todayStr = now.toISOString().split('T')[0];
       const isHoliday = this.colombiaHolidays.includes(todayStr);
-
       // Si es lunes y NO es festivo → deshabilitado todo el día
       if (day === 1 && !isHoliday) return true;
-
       // Obtener horario desde configOptions (string → objeto)
-      const config = JSON.parse(this.configvar[0].configOptions);
       const apertura = config[0].cierre;// Ej: "6:30 pm"
       const cierre = config[0].apertura;      // Ej: "1:30 am"
-
       const [openHour, openMinute, openPeriod] = this.parseTime(apertura);
       const [closeHour, closeMinute, closePeriod] = this.parseTime(cierre);
-
       const openDate = new Date(now);
       openDate.setHours(this.to24Hour(openHour, openPeriod), openMinute, 0, 0);
-
       const closeDate = new Date(now);
       closeDate.setHours(this.to24Hour(closeHour, closePeriod), closeMinute, 0, 0);
-
       // Si el cierre es al día siguiente
       if (closeDate <= openDate) {
         closeDate.setDate(closeDate.getDate() + 1);
       }
 
-      return now >= openDate && now < closeDate; */
-      return true
+      return now >= openDate && now < closeDate;
     },
 
     parseTime(timeStr) {
