@@ -41,6 +41,7 @@ import Logo from '@/components/common/Logo.vue'
 import MobileAction from '@/components/common/MobileActionTwo.vue'
 import HeaderSearch from '@/components/common/HeaderSearch.vue'
 import Menu from '@/components/common/Menu.vue'
+import axios from 'axios';
 
 export default {
   name: 'HeaderMain',
