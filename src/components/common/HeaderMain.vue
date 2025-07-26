@@ -1,10 +1,10 @@
 <template>
   <div v-if="load" class="load">
-    <div class="load-gf"> <img :src="imgLg"  class="centered-image" alt="avatar" />
-    <p>Un momento porfavor</p>
+    <div class="load-gf"> <img :src="imgLg" class="centered-image" alt="avatar" />
+      <p>Un momento porfavor</p>
     </div>
   </div>
-  <div  class="modal-overlay">
+  <div class="modal-overlay" v-if="isWithinTimeRange()">
     <div class="modal-content">
       <!-- <button class="modal-close" @click="closeModal">&times;</button> -->
       <h2 class="modal-title">¡Atención!</h2>
@@ -12,11 +12,7 @@
         Por ahora, estaremos atendiendo todos los pedidos a través de WhatsApp.
         Escríbenos al <strong>313 768 1221</strong> y con gusto te ayudaremos.
       </p>
-      <a
-        href="https://wa.me/573137681221"
-        target="_blank"
-        class="modal-button"
-      >
+      <a href="https://wa.me/573137681221" target="_blank" class="modal-button">
         Pedir por WhatsApp
       </a>
     </div>
@@ -57,22 +53,80 @@ export default {
   },
   data() {
     return {
-      imgLg: require('@/images/thumb/load.gif')
+      imgLg: require('@/images/thumb/load.gif'),
+      colombiaHolidays: [],
     }
   },
+  methods: {
+    async fetchColombiaHolidays() {
+      try {
+        const response = await axios.get('https://date.nager.at/api/v3/PublicHolidays/2025/CO');
+        console.log(response)
+        this.colombiaHolidays = response.data.map(item => item.date); // formato YYYY-MM-DD
+      } catch (error) {
+        console.error('Error al cargar festivos:', error);
+      }
+    },
+    isWithinTimeRange() {
+      const config = JSON.parse(this.configvar[0].configOptions);
+      console.log(config[0].isopen)
+      if (config[0].isopen) {
+        console.log(" cerrada la tienda ")
+        return true
+      }
+      console.log(" abierta la tienda ")
+      const now = new Date();
+      const day = now.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
+      const todayStr = now.toISOString().split('T')[0];
+      const isHoliday = this.colombiaHolidays.includes(todayStr);
+      // Si es lunes y NO es festivo → deshabilitado todo el día
+      if (day === 1 && !isHoliday) return true;
+      // Obtener horario desde configOptions (string → objeto)
+      const apertura = config[0].cierre;// Ej: "6:30 pm"
+      const cierre = config[0].apertura;      // Ej: "1:30 am"
+      const [openHour, openMinute, openPeriod] = this.parseTime(apertura);
+      const [closeHour, closeMinute, closePeriod] = this.parseTime(cierre);
+      const openDate = new Date(now);
+      openDate.setHours(this.to24Hour(openHour, openPeriod), openMinute, 0, 0);
+      const closeDate = new Date(now);
+      closeDate.setHours(this.to24Hour(closeHour, closePeriod), closeMinute, 0, 0);
+      // Si el cierre es al día siguiente
+      if (closeDate <= openDate) {
+        closeDate.setDate(closeDate.getDate() + 1);
+      }
 
+      return now >= openDate && now < closeDate;
+    },
+    parseTime(timeStr) {
+      const [time, period] = timeStr.toLowerCase().split(' ');
+      const [hour, minute] = time.split(':').map(Number);
+      return [hour, minute, period];
+    },
+
+    to24Hour(hour, period) {
+      if (period === 'am') {
+        return hour === 12 ? 0 : hour;
+      } else {
+        return hour === 12 ? 12 : hour + 12;
+      }
+    }
+  },
   computed: {
     load() {
       return this.$store.state.loading;
+    },
+    configvar() {
+      return JSON.parse(this.$GetEncryptedData("configvar"));
     },
   },
 }
 </script>
 <style scoped>
-.fixed-top{
-    position: fixed !important;
-    box-shadow: 0 0 2rem 0 rgba(136, 152, 170, 0.15);
-   }
+.fixed-top {
+  position: fixed !important;
+  box-shadow: 0 0 2rem 0 rgba(136, 152, 170, 0.15);
+}
+
 .load {
   width: 100%;
   position: fixed;
@@ -133,6 +187,7 @@ export default {
   cursor: pointer;
   transition: color 0.2s;
 }
+
 .modal-close:hover {
   color: #e00;
 }
@@ -158,8 +213,8 @@ export default {
   font-weight: bold;
   transition: background-color 0.2s ease;
 }
+
 .modal-button:hover {
   background-color: #1ebe5d;
 }
-
 </style>
